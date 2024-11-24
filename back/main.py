@@ -1,11 +1,14 @@
-from typing import Union
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from back.SystemRole.router import router as router_roles
+from back.User.router import router as router_users
 
 app = FastAPI(
-    title="SATS",
-    description="Привет, Вадим Васильев)"
+    title="SATS"
 )
+
+app.include_router(router_roles)
+app.include_router(router_users)
 
 origins = [
     "http://localhost",
@@ -22,7 +25,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.get("/")
-async def read_root():
-    return {"Hello": "World"}
