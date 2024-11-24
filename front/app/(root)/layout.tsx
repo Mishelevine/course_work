@@ -10,7 +10,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <main className='relative'>
       {/* <Navbar /> */}
-      <h1>Hello, this is header!</h1>
+      <h1>Hello, this is Navbar!</h1>
       <div className='flex'>
           {/* <Sidebar /> */}
           <h1>This is Sidebar if needed :)</h1>
