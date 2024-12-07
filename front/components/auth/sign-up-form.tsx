@@ -15,14 +15,13 @@ import { useState } from "react"
 import { API_URL } from "@/constants"
 import RegistrationPageField from "./registration-page-field"
 
-export type RegistrationFieldName = "first_name" | "last_name" | "paternity" | "email" | "post" | "department" | "hashed_password";
+export type RegistrationFieldName = "first_name" | "last_name" | "paternity" | "login" | "post" | "department" | "hashed_password";
 
 const registrationFields = [
     {
-        name: "email",
-        label: "Электронная почта",
-        placeholder: "email@example.com",
-        type: "email",
+        name: "login",
+        label: "Логин",
+        placeholder: "Ваш логин",
     },
     {
         name: "first_name",
@@ -64,7 +63,7 @@ export const SignUpForm = () => {
     const form = useForm<z.infer<typeof SignUpSchema>>({
         resolver: zodResolver(SignUpSchema),
         defaultValues: {
-            email: "",
+            login: "",
             first_name: "",
             last_name: "",
             paternity: "",
@@ -81,31 +80,25 @@ export const SignUpForm = () => {
         axios.post(API_URL + "/auth/signup", values)
             .then((data) => {
                 setError("");
-                setSuccess("На указанный адрес электронной почты отправлено письмо для подтверждения регистрации!");
+                setSuccess("Пользователь зарегистрирован!");
             })
             .catch((e) => {
-                const expectedErr = "Email already in use";
+                const expectedErr = "Login already in use";
                 if (e.response.status !== 400 || e.response.data.detail !== expectedErr) {
                     throw e;
                 }
-                setError("Пользователь с такой почтой уже зарегистрирован!")
+                setError("Пользователь с таким логином уже зарегистрирован!")
                 console.log('Error on Authentication')
                 console.log(e)
             })
             .catch((e) => {
-                const expectedErr = "Only email addresses ending with @edu.hse.ru are allowed";
-                if (e.response.status !== 400 || e.response.data.detail !== expectedErr) {
-                    throw '';
-                }
-                setError("Допускаются только почты, оканчивающиеся на @edu.hse.ru")
-                console.log('Error on Authentication')
-                console.log(e)
+                setError("Произошла непредвиденная ошибка.")
             })
     }
 
     return (
         <CardWrapper
-            headerLabel="Присоединяйтесь к нашей системе!"
+            headerLabel="Добавьте нового пользователя!"
             backButtonLabel="Уже есть аккаунт? Авторизуйтесь!"
             backButtonHref="/sign-in"
         >

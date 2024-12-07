@@ -1,7 +1,7 @@
 "use client";
 
-// import Navbar from '@/components/Navbar'
-// import Sidebar from '@/components/Sidebar'
+import Navbar from '@/components/navbar'
+import Sidebar from '@/components/sidebar'
 // import { Toaster } from 'sonner';
 
 import React, { ReactNode } from 'react'
@@ -9,14 +9,12 @@ import React, { ReactNode } from 'react'
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <main className='relative'>
-      {/* <Navbar /> */}
-      <h1>Hello, this is Navbar!</h1>
+      <Navbar />
       <div className='flex'>
-          {/* <Sidebar /> */}
-          <h1>This is Sidebar if needed :)</h1>
+          <Sidebar />
           <section className='flex min-h-screen flex-1 flex-col
                               max-sm:px-0 max-sm:pt-24 px-6 pb-6
-                              pt-28 max-md:pb-14 sm:px-10'>
+                              pt-28 max-md:pb-14 sm:px-10 bg-gray-100'>
               <div className='w-full'>
                   {children}
               </div>

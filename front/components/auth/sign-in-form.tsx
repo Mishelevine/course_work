@@ -6,15 +6,31 @@ import axios from "axios"
 import { useForm } from "react-hook-form"
 import { useRouter } from 'next/navigation';
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormLabel, FormItem, FormMessage } from "@/components/ui/form"
+import { Form } from "@/components/ui/form"
 
 import { SignInSchema } from "@/schemas"
 import { CardWrapper } from "./card-wrapper"
-import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { FormError } from "../form-error"
 import { useState } from "react"
 import { API_URL } from "@/constants"
+import LoginPageField from "./login-page-field"
+
+export type LoginFieldName = "login" | "password";
+
+const loginFields = [
+    {
+        name: "login",
+        label: "Логин",
+        placeholder: "Ваш логин",
+    },
+    {
+        name: "password",
+        label: "Пароль",
+        placeholder: "******",
+        type: "password"
+    }
+]
 
 export const SignInForm = () => {
     const [error, setError] = useState<string | undefined>("");
@@ -23,7 +39,7 @@ export const SignInForm = () => {
     const form = useForm<z.infer<typeof SignInSchema>>({
         resolver: zodResolver(SignInSchema),
         defaultValues: {
-            username: "",
+            login: "",
             password: ""
         },
     })
@@ -45,7 +61,7 @@ export const SignInForm = () => {
                 throw '';
             }
             setError("Неверный логин или пароль");
-            //console.log('No such user');
+
         })
         .catch((e) => {
             setError("Произошла непредвиденная ошибка");
@@ -66,40 +82,16 @@ export const SignInForm = () => {
                     className="space-y-6"
                 >
                     <div className="space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="username"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Электронная почта</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder="email@example.com"
-                                            type="email"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Пароль</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder="******"
-                                            type="password"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                        {loginFields.map((formItem, index) => {
+                            return <LoginPageField
+                                key={index}
+                                control={form.control}
+                                name={formItem.name as LoginFieldName}
+                                label={formItem.label}
+                                placeholder={formItem.placeholder}
+                                type={formItem.type ? formItem.type : undefined}
+                            />
+                        })}
                     </div>
                     <FormError message={error}/>
                     <Button
