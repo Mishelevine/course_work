@@ -4,7 +4,7 @@ class SUserBase(BaseModel):
     first_name: str
     last_name: str
     paternity: str | None = None
-    email: str
+    username: str
     post: str
     department: str
 
@@ -12,7 +12,7 @@ class SUserCreate(SUserBase):
     hashed_password: str
 
 class SUserAuth(BaseModel):
-    email: str
+    username: str
     password: str
 
 class SUser(SUserBase):

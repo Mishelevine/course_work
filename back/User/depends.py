@@ -18,7 +18,7 @@ def get_current_user(token: str = Depends(get_token)):
         payload = jwt.decode(
             token, settings.SECRET_KEY, settings.ALGORITHM
         )
-        user = crud.get_user_by_email(email=payload.get("sub"))
+        user = crud.get_user_by_username(username=payload.get("sub"))
         if user is None:
             raise HTTPException(status_code=401, detail="Invalid user")
         return user
