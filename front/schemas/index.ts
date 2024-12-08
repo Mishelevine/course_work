@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const SignInSchema = z.object({
-    login: z.string().min(1, {
+    username: z.string().min(1, {
         message: "Пожалуйста, введите ваш логин"
     }),
     password: z.string().min(1, {
@@ -23,7 +23,7 @@ export const SignUpSchema = z.object({
     paternity: z.string().max(50, {
         message: "Отчество не может содержать более 50 символов"
     }),
-    login: z.string().min(1, {
+    username: z.string().min(1, {
         message: "Пожалуйста, введите ваш логин"
     }),
     post: z.string().min(1, {

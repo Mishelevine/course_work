@@ -16,11 +16,11 @@ import { useState } from "react"
 import { API_URL } from "@/constants"
 import LoginPageField from "./login-page-field"
 
-export type LoginFieldName = "login" | "password";
+export type LoginFieldName = "username" | "password";
 
 const loginFields = [
     {
-        name: "login",
+        name: "username",
         label: "Логин",
         placeholder: "Ваш логин",
     },
@@ -39,7 +39,7 @@ export const SignInForm = () => {
     const form = useForm<z.infer<typeof SignInSchema>>({
         resolver: zodResolver(SignInSchema),
         defaultValues: {
-            login: "",
+            username: "",
             password: ""
         },
     })

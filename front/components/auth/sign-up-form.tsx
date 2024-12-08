@@ -15,11 +15,11 @@ import { useState } from "react"
 import { API_URL } from "@/constants"
 import RegistrationPageField from "./registration-page-field"
 
-export type RegistrationFieldName = "first_name" | "last_name" | "paternity" | "login" | "post" | "department" | "hashed_password";
+export type RegistrationFieldName = "first_name" | "last_name" | "paternity" | "username" | "post" | "department" | "hashed_password";
 
 const registrationFields = [
     {
-        name: "login",
+        name: "username",
         label: "Логин",
         placeholder: "Ваш логин",
     },
@@ -63,7 +63,7 @@ export const SignUpForm = () => {
     const form = useForm<z.infer<typeof SignUpSchema>>({
         resolver: zodResolver(SignUpSchema),
         defaultValues: {
-            login: "",
+            username: "",
             first_name: "",
             last_name: "",
             paternity: "",
