@@ -5,16 +5,16 @@ from back.User.schemas import SUserCreate
 from back.database import session_maker
 from passlib.hash import bcrypt
 
-def get_user_by_email(email: str):
+def get_user_by_username(username: str):
     with session_maker() as session:  
-        query = select(User).filter(User.email == email)
+        query = select(User).filter(User.username == username)
         result = session.execute(query)
         return result.scalar_one_or_none()
     
 def create_user(user: SUserCreate, system_role_id:int):
     with session_maker() as session:
         db_user = User(
-            email=user.email,
+            username=user.username,
             system_role_id=system_role_id,
             hashed_password=bcrypt.hash(user.hashed_password),
             first_name=user.first_name,
