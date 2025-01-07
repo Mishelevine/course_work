@@ -33,14 +33,14 @@ email_regex = r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*
 def create_user(user: SUserCreate) -> SUser:
     system_role_id = 1
 
-    db_user = crud.get_user_by_login(login=user.username)
+    db_user = crud.get_user_by_username(username=user.username)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already in use")
         
     access_token_expires = timedelta(
         minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = auth.create_access_token(
-        data={"sub": user.login}, expires_delta=access_token_expires
+        data={"sub": user.username}, expires_delta=access_token_expires
     )
     print(access_token)
     return crud.create_user(user=user, system_role_id=system_role_id)

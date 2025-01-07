@@ -5,17 +5,17 @@ export default function middleware(req: NextRequest){
   const isAuthorized = req.cookies.get("Authorization");
   const url = req.url
 
-  // if(imgExtensions.some(elem => url.includes(elem))){
-  //   return NextResponse.next()
-  // }
+  if(imgExtensions.some(elem => url.includes(elem))){
+    return NextResponse.next()
+  }
 
-  // if(!isAuthorized && !signingPages.some(link => url.includes(link))){
-  //   return NextResponse.redirect(WEBSITE_URL + '/sign-in')
-  // }
+  if(!isAuthorized && !signingPages.some(link => url.includes(link))){
+    return NextResponse.redirect(WEBSITE_URL + '/sign-in')
+  }
 
-  // if (isAuthorized && signingPages.some(link => url.includes(link))){
-  //   return NextResponse.redirect(WEBSITE_URL)
-  // }
+  if (isAuthorized && signingPages.some(link => url.includes(link))){
+    return NextResponse.redirect(WEBSITE_URL)
+  }
 
   // if (isAuthorized && closedPages.some(link => url.includes(link))){
   //   return NextResponse.redirect(WEBSITE_URL)
