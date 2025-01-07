@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     
     @model_validator(mode="before")
     def get_database_url(cls, v):
-        v["DATABASE_URL"] = f"sqlite:///./{v['DB_NAME']}"
+        v["DATABASE_URL"] = f"sqlite+aiosqlite:///./{v['DB_NAME']}"
         return v
 
     SECRET_KEY: str

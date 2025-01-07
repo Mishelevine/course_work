@@ -12,9 +12,13 @@ class User(Base):
     first_name = Column(String(50), nullable=False)
     last_name = Column(String(50), nullable=False)
     paternity = Column(String(50), nullable=True)
-    post = Column(String(100), nullable=False)
-    department = Column(String(100), nullable=False)
+    job_id = Column(Integer, ForeignKey("jobs.id", ondelete='CASCADE'))
+    office_id = Column(Integer, ForeignKey("offices.id", ondelete='CASCADE'))
     system_role_id = Column(Integer, ForeignKey('system_roles.id', ondelete='CASCADE'), default=1)
+    
+    job = relationship("Job", back_populates="users", cascade='save-update, merge, delete', passive_deletes=True)
+    office = relationship("Office", back_populates="users", cascade='save-update, merge, delete', passive_deletes=True)
+    system_role = relationship("SystemRole", back_populates="users", cascade='save-update, merge, delete', passive_deletes=True)
     
     
     def verify_password(self, password: str):

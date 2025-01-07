@@ -5,8 +5,8 @@ class SUserBase(BaseModel):
     last_name: str
     paternity: str | None = None
     username: str
-    post: str
-    department: str
+    job_id: int
+    office_id: int
 
 class SUserCreate(SUserBase):
     hashed_password: str

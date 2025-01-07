@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from back.SystemRole.router import router as router_roles
 from back.User.router import router as router_users
+from back.Job.router import router as router_jobs
+from back.Office.router import router as router_offices
 
 app = FastAPI(
     title="SATS"
@@ -9,6 +11,9 @@ app = FastAPI(
 
 app.include_router(router_roles)
 app.include_router(router_users)
+app.include_router(router_jobs)
+app.include_router(router_offices)
+
 
 origins = [
     "http://localhost",

@@ -9,3 +9,5 @@ class SystemRole(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     role_name = Column(String(50), nullable=False)
     
+    users = relationship("User", back_populates="system_role", cascade='save-update, merge, delete')
+    
