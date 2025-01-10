@@ -12,14 +12,19 @@ sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 
 from back.database import Base
 from back.SystemRole.models import SystemRole
+from back.Job.models import Job
+from back.Office.models import Office
 from back.User.models import User
+from back.License.models import License
+from back.Contract.models import Contract
+from back.Software.models import Software
 from back.config import settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
-config.set_main_option("sqlalchemy.url", "sqlite:///sats.db")
+config.set_main_option("sqlalchemy.url", "sqlite:///./sats.db")
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
