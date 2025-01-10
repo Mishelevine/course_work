@@ -15,6 +15,9 @@ from back.SystemRole.models import SystemRole
 from back.Job.models import Job
 from back.Office.models import Office
 from back.User.models import User
+from back.License.models import License
+from back.Contract.models import Contract
+from back.Software.models import Software
 from back.config import settings
 
 # this is the Alembic Config object, which provides

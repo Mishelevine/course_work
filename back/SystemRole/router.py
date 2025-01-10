@@ -10,7 +10,7 @@ router = APIRouter(
     tags= ["Работа с системными ролями"]
 )
 
-@router.post("/roles", response_model=SSystemRole)
+@router.post("/create", response_model=SSystemRole)
 async def create_role(role: SSystemRoleCreate):
     db_role = await crud.get_system_role_by_name(system_role_name=role.role_name)
     if db_role:
@@ -24,7 +24,7 @@ async def get_role(role_id: int):
         raise HTTPException(status_code=404, detail="Role not found")
     return role
 
-@router.put("/roles/{role_id}", response_model=SSystemRole)
+@router.put("/roles/{role_id}/update", response_model=SSystemRole)
 async def update_role(role_id: int, updated_role: SSystemRoleCreate):
     existing_role = await crud.get_system_role(system_role_id=role_id)
     if not existing_role:
@@ -40,7 +40,6 @@ async def update_role(role_id: int, updated_role: SSystemRoleCreate):
     
     return existing_role
 
-@router.delete("/roles/{role_id}", response_model=dict)
+@router.delete("/roles/{role_id}/delete", response_model=dict)
 async def delete_role(role_id: int):
-    # Call the CRUD function to delete the role
     return await crud.delete_system_role(system_role_id=role_id)

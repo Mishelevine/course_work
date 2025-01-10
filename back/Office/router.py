@@ -7,7 +7,7 @@ router = APIRouter(
     tags=["Работа с подразделениями"]
 )
 
-@router.post("/offices", response_model=SOffice)
+@router.post("/create", response_model=SOffice)
 async def create_office(office: SOfficeCreate):
     db_office = await crud.get_office_by_name(office_name=office.office_name)
     if db_office:
@@ -21,7 +21,7 @@ async def get_office(office_id: int):
         raise HTTPException(status_code=404, detail="Office not found")
     return office
 
-@router.put("/offices/{office_id}", response_model=SOffice)
+@router.put("/offices/{office_id}/update", response_model=SOffice)
 async def update_office(office_id: int, updated_office: SOfficeCreate):
     existing_office = await crud.get_office(office_id)
     if not existing_office:
@@ -33,6 +33,6 @@ async def update_office(office_id: int, updated_office: SOfficeCreate):
     
     return await crud.update_office_name(office_id=office_id, new_office_name=updated_office.office_name)
 
-@router.delete("/offices/{office_id}", response_model=dict)
+@router.delete("/offices/{office_id}/delete", response_model=dict)
 async def delete_office(office_id: int):
     return await crud.delete_office(office_id=office_id)

@@ -19,7 +19,7 @@ class User(Base):
     job = relationship("Job", back_populates="users", cascade='save-update, merge, delete', passive_deletes=True)
     office = relationship("Office", back_populates="users", cascade='save-update, merge, delete', passive_deletes=True)
     system_role = relationship("SystemRole", back_populates="users", cascade='save-update, merge, delete', passive_deletes=True)
-    
+    session_logs = relationship("SessionLog", back_populates="users", cascade="all, delete")
     
     def verify_password(self, password: str):
         return passlib.hash.bcrypt.verify(password, self.hashed_password)

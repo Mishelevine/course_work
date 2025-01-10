@@ -8,4 +8,4 @@ class Office(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     office_name = Column(String(100), nullable=False)
 
-    users = relationship("User", back_populates="office")
+    users = relationship("User", back_populates="office", cascade='save-update, merge, delete')
