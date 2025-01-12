@@ -18,6 +18,7 @@ from back.User.models import User
 from back.License.models import License
 from back.Contract.models import Contract
 from back.Software.models import Software
+from back.SessionLog.models import SessionLog
 from back.config import settings
 
 # this is the Alembic Config object, which provides

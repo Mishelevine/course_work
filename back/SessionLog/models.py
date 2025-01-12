@@ -8,8 +8,9 @@ class SessionLog(Base):
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    user_role = Column(String, ForeignKey('users.system_role_id', ondelete='CASCADE'), nullable=False)
-    start_time = Column(DateTime, default=datetime.utcnow, nullable=False)
+    user_role = Column(String, nullable=False)
+    event_type = Column(String, nullable=False)
+    time = Column(DateTime, default=datetime.utcnow, nullable=False)
     user_agent = Column(String(200), nullable=True)
 
     users = relationship("User", back_populates="session_logs")

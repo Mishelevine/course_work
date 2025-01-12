@@ -8,7 +8,7 @@ from typing import List
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, Response, Cookie
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import JWTException
-from jose import jwt
+from jose import JWTError, jwt
 import os
 import uuid
 from fastapi.responses import FileResponse
@@ -21,6 +21,8 @@ from back import auth
 from back.config import settings
 from back.User import crud
 from sqlalchemy.ext.asyncio import AsyncSession
+from back.SessionLog.crud import session_log_event
+from back.SessionLog.schemas import SSessionLogCreate
 
 router = APIRouter(
     prefix="/auth",
@@ -39,9 +41,11 @@ async def create_user(user: SUserCreate):
         raise HTTPException(status_code=400, detail="Email already in use")
         
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    
     access_token = auth.create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
+    
     print(access_token)
     new_user = await crud.create_user(user=user, system_role_id=system_role_id)
     return new_user
@@ -55,16 +59,56 @@ async def login_for_access_token(response: Response, form_data: OAuth2PasswordRe
         raise HTTPException(status_code=401, detail="Incorrect email or password")
     
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    refresh_token_expires = timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+    
     access_token = auth.create_access_token(
         data={"sub": db_user.username}, expires_delta=access_token_expires
     )
+    refresh_token = auth.create_refresh_token(
+        data={"sub": db_user.username}, expires_delta=refresh_token_expires
+    )
+    
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        secure=True,
+        samesite="strict"
+    )
+    
     response.set_cookie(key="Authorization", value=access_token, httponly=True)
+    
+    await session_log_event(session_log= SSessionLogCreate(event_type="login", user_agent=""), user=db_user)
+    
     return {"access_token": access_token, "token_type": "bearer"}
 
+@router.post("/token/refresh", response_model=Token)
+async def refresh_access_token(response: Response, refresh_token: str = Cookie(None), db_user: dict = Depends(get_current_user)):
+    if not refresh_token:
+        raise HTTPException(status_code=401, detail="No refresh token provided")
+    
+    try:
+        payload = jwt.decode(refresh_token, auth.SECRET_KEY, algorithms=[auth.ALGORITHM])
+        username = payload.get("sub")
+        if not username:
+            raise HTTPException(status_code=401, detail="Invalid token payload")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
+    
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = auth.create_access_token(data={"sub": username}, expires_delta=access_token_expires)
+    
+    response.set_cookie(key="Authorization", value=access_token, httponly=True)
+    
+    await session_log_event(session_log= SSessionLogCreate(event_type="refresh", user_agent=""), user=db_user)
+    
+    return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/logout")
-async def logout(response: Response):
+async def logout(response: Response, db_user: dict = Depends(get_current_user)):
     response.delete_cookie("Authorization")
+    response.delete_cookie("refresh_token")
+    await session_log_event(session_log= SSessionLogCreate(event_type="logout", user_agent=""), user=db_user)
     return {"message": "Successfully logged out"}
 
 
