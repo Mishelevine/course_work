@@ -69,3 +69,15 @@ export const CreateEventSchema = z.object({
     isStudentOnly: z.boolean(),
     organisation_id: z.optional(z.number())
 })
+
+export const SoftwareSchema = z.object({
+    name: z.string(),
+    short_name: z.string(),
+    program_link: z.string(),
+    version: z.string(),
+    version_date: z.string(),
+    license_type: z.string(),
+    contract_number: z.string(),
+    contract_date: z.string(),
+    id: z.number()
+})

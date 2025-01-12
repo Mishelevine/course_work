@@ -60,4 +60,8 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  .font-outline-small {
+    -webkit-text-stroke: 0.15px black;
+  }
 }

@@ -1,9 +1,9 @@
-"use client";
+import SoftwareTable from "@/components/software-table/software-table"
 
-const Home = () => {
-  return (
-    <p>Hello this is Home Page!</p>
-  )
+async function Home() {
+    return (
+        <SoftwareTable/>
+    )
 }
 
 export default Home
