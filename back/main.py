@@ -7,6 +7,7 @@ from back.Office.router import router as router_offices
 from back.License.router import router as router_license
 from back.Contract.router import router as router_contract
 from back.Software.router import router as router_software
+from back.SessionLog.router import router as router_session_log
 
 app = FastAPI(
     title="SATS"
@@ -19,6 +20,7 @@ app.include_router(router_offices)
 app.include_router(router_license)
 app.include_router(router_contract)
 app.include_router(router_software)
+app.include_router(router_session_log)
 
 
 origins = [
