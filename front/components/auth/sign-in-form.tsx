@@ -51,8 +51,6 @@ export const SignInForm = () => {
 
         axios.post(API_URL + "/auth/login", new FormData(formValues))
         .then((data) => {
-            //console.log('Authenticated');
-            //console.log(data);
             setError("");
             router.push('/')
         })
@@ -65,7 +63,6 @@ export const SignInForm = () => {
         })
         .catch((e) => {
             setError("Произошла непредвиденная ошибка");
-            //console.log('Unlucky');
             console.log(e)
         })
     }
