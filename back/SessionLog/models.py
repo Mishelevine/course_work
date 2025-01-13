@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, String
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from back.database import Base
 
 class SessionLog(Base):
@@ -10,7 +10,7 @@ class SessionLog(Base):
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     user_role = Column(String, nullable=False)
     event_type = Column(String, nullable=False)
-    time = Column(DateTime, default=datetime.utcnow, nullable=False)
+    time = Column(DateTime, default=datetime.now(tz= timezone(timedelta(hours=5))), nullable=False)
     user_agent = Column(String(200), nullable=True)
 
     users = relationship("User", back_populates="session_logs")

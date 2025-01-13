@@ -19,3 +19,9 @@ async def session_log_event(session_log: SSessionLogCreate, user: User = Depends
         await session.commit()
         await session.refresh(db_session_log)
         return db_session_log
+    
+async def get_log() -> list[SessionLog]:
+    async with async_session() as session:
+        query = select(SessionLog)
+        result = await session.execute(query)
+        return result.scalars().all()

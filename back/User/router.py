@@ -13,7 +13,7 @@ import os
 import uuid
 from fastapi.responses import FileResponse
 
-from back.User.depends import get_current_user
+from back.User.depends import get_current_user, get_user_refresh_token
 from back.Token.schemas import Token
 from back.User.models import User
 from back.User.schemas import SUser, SUserCreate
@@ -83,7 +83,7 @@ async def login_for_access_token(response: Response, form_data: OAuth2PasswordRe
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/token/refresh", response_model=Token)
-async def refresh_access_token(response: Response, refresh_token: str = Cookie(None), db_user: dict = Depends(get_current_user)):
+async def refresh_access_token(response: Response, refresh_token: str = Cookie(None), db_user: User = Depends(get_user_refresh_token)):
     if not refresh_token:
         raise HTTPException(status_code=401, detail="No refresh token provided")
     
@@ -105,7 +105,7 @@ async def refresh_access_token(response: Response, refresh_token: str = Cookie(N
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/logout")
-async def logout(response: Response, db_user: dict = Depends(get_current_user)):
+async def logout(response: Response, db_user: User = Depends(get_user_refresh_token)):
     response.delete_cookie("Authorization")
     response.delete_cookie("refresh_token")
     await session_log_event(session_log= SSessionLogCreate(event_type="logout", user_agent=""), user=db_user)
