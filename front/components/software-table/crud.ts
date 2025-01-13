@@ -17,7 +17,3 @@ export function DeleteRowSoftwareTable(id: number) {
 export function UpdateRowSoftwareTable(id: number) {
     console.log("Updated row with id =", id)
 }
-
-export function AddRowSoftwareTable() {
-    console.log("Added row")
-}

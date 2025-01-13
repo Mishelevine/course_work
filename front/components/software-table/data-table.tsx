@@ -26,7 +26,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "./crud"
-import ModalSoftware from "../modal-software"
+import ModalSoftware from "./modal-software"
 
 interface SoftwareDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
