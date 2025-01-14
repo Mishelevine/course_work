@@ -1,10 +1,12 @@
+import pandas as pd
 from fastapi import APIRouter, HTTPException
 from back.Software.models import Software
 from back.Software.schemas import SSoftware, SSoftwareCreate
 from back.Software import crud
 from back.License import crud as license_crud
 from back.Contract import crud as contract_crud
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import List
 
 router = APIRouter(
@@ -35,9 +37,41 @@ async def create_software(name: str,
     
     return db_software
 
-@router.get("")
+@router.get("/all")
 async def get_all_software() -> List[SSoftware]:
     return await crud.get_all_software()
+
+@router.get("/to_exel_file")
+async def get_software_excel():
+    software_list = await crud.get_all_software()
+    
+    software_data = [
+        {
+            "ID": software.id,
+            "Название": software.name,
+            "Короткое название": software.short_name,
+            "Ссылка на программу": software.program_link,
+            "Версия": software.version,
+            "Дата версии": software.version_date,
+            "Лицензия": software.license.license_type if software.license else None,
+            "Договор": software.contract.contract_number if software.contract else None,
+            "Дата договора": software.contract.contract_date if software.contract else None
+        }
+        for software in software_list
+    ]
+    
+    df = pd.DataFrame(software_data)
+    
+    save_dir = Path("files/excel/Software")
+    save_dir.mkdir(parents=True, exist_ok=True)
+    
+    file_name = f"software_list_{datetime.now(tz=timezone(timedelta(hours=5))).strftime('%Y%m%d_%H%M%S')}.xlsx"
+    file_path = save_dir / file_name
+    
+    with pd.ExcelWriter(file_path, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="Software")
+        
+    return file_name
 
 @router.get("/{software_id}")
 async def get_software_by_id(software_id: int) -> SSoftware:

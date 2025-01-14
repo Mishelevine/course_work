@@ -17,14 +17,14 @@ async def create_role(role: SSystemRoleCreate):
         raise HTTPException(status_code=400, detail="Role already exists")
     return await crud.create_system_role(role=role)
 
-@router.get("/roles/{role_id}", response_model=SSystemRole)
+@router.get("/{role_id}", response_model=SSystemRole)
 async def get_role(role_id: int):
     role = await crud.get_system_role(system_role_id=role_id)
     if not role:
         raise HTTPException(status_code=404, detail="Role not found")
     return role
 
-@router.put("/roles/{role_id}/update", response_model=SSystemRole)
+@router.put("/{role_id}/update", response_model=SSystemRole)
 async def update_role(role_id: int, updated_role: SSystemRoleCreate):
     existing_role = await crud.get_system_role(system_role_id=role_id)
     if not existing_role:
@@ -40,6 +40,6 @@ async def update_role(role_id: int, updated_role: SSystemRoleCreate):
     
     return existing_role
 
-@router.delete("/roles/{role_id}/delete", response_model=dict)
+@router.delete("/{role_id}/delete", response_model=dict)
 async def delete_role(role_id: int):
     return await crud.delete_system_role(system_role_id=role_id)
