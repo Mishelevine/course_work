@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from back.Contract.schemas import SContract, SContractCreate
 from back.Contract import crud
+from typing import List
 
 router = APIRouter(
     prefix="/contract",
@@ -20,6 +21,10 @@ async def get_contract(contract_id: int):
     if not contract_obj:
         raise HTTPException(status_code=404, detail="Contract not found")
     return contract_obj
+
+@router.get("")
+async def get_all_contracts() -> List[SContract]:
+    return await crud.get_all_contracts()
 
 @router.put("/contracts/{contract_id}/update", response_model=SContract)
 async def update_contract(contract_id: int, contract_data: SContractCreate):

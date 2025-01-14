@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from back.License.schemas import SLicense, SLicenseCreate
 from back.License import crud
+from typing import List
 
 router = APIRouter(
     prefix="/license",
@@ -20,6 +21,10 @@ async def get_license(license_id: int):
     if not license:
         raise HTTPException(status_code=404, detail="License not found")
     return license
+
+@router.get("")
+async def get_all_licenses() -> List[SLicense]:
+    return await crud.get_all_licenses()
 
 @router.put("/licenses/{license_id}/update", response_model=SLicense)
 async def update_License(license_id: int, updated_license: SLicenseCreate):
