@@ -1,13 +1,13 @@
 import React, { HTMLInputTypeAttribute } from 'react'
 import * as z from "zod"
 import { Control } from 'react-hook-form';
-import { SoftwareAddSchema } from '@/schemas';
+import { SoftwareSchema } from '@/schemas';
 import { FormControl, FormField, FormLabel, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "../ui/input"
 import { SoftwareTextFieldName } from './add-software-form';
 
 interface SoftwareTextFieldProps {
-    control: Control<z.infer<typeof SoftwareAddSchema>>
+    control: Control<z.infer<typeof SoftwareSchema>>
     name: SoftwareTextFieldName;
     label: string;
     placeholder: string;

@@ -1,27 +1,19 @@
 "use client"
 
 import * as z from "zod"
+import axios from "axios";
+import { API_URL } from "@/constants";
 import { zodResolver } from "@hookform/resolvers/zod"
 
+import { Form } from "@/components/ui/form"
+import { Button } from "../ui/button";
+import { useForm } from "react-hook-form"
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
-import { useForm } from "react-hook-form"
-import { SoftwareAddSchema } from "@/schemas";
-import { Form } from "@/components/ui/form"
+import { FormError } from "../form-error";
+import { SoftwareSchema } from "@/schemas";
+
 import SoftwareTextField from "./software-text-field";
-import { Button } from "../ui/button";
-import { AddRowSoftwareTable } from "./crud";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import SoftwareComboboxField from "./software-combobox-field";
 
 export type SoftwareTextFieldName = "name" | "short_name" | "program_link" | "version" | "version_date";
@@ -33,10 +25,8 @@ const tempLicenseData = [
 ]
 
 const tempContractData = [
-  { label: "8.2.6.4-1003/12 30.03.2023", value: 1 },
   { label: "6027-914 от 11.10.2020", value: 2 },
-  { label: "8.4.6.5-2002/4 от 19.03.2023", value: 3 },
-  { label: "3416-316 от 11.11.2011", value: 4 }
+  { label: "string от 13.01.2025", value: 3 },
 ]
 
 const softwareTextFields = [
@@ -63,7 +53,7 @@ const softwareTextFields = [
   {
     name: "version_date",
     label: "Дата версии",
-    placeholder: "Дата выхода версии добавляемого ПО",
+    placeholder: "Дата в формате DD.MM.YYYY (Пример: 01.01.2020)",
   }
 ]
 
@@ -90,8 +80,8 @@ export const SoftwareAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof SoftwareAddSchema>>({
-    resolver: zodResolver(SoftwareAddSchema),
+  const form = useForm<z.infer<typeof SoftwareSchema>>({
+    resolver: zodResolver(SoftwareSchema),
     defaultValues: {
       name: "",
       short_name: "",
@@ -103,51 +93,62 @@ export const SoftwareAddForm = () => {
     }
   })
 
+  function AddRowSoftwareTable(data: z.infer<typeof SoftwareSchema>) {
+    setError("")
+    const dateParts = data.version_date.split('.')
+    axios.post(API_URL + '/software/create', null, {
+      params: {
+        name: data.name,
+        short_name: data.short_name,
+        program_link: data.program_link,
+        version: data.version,
+        version_date: new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`),
+        license_id: data.license_id,
+        contract_id: data.contract_id
+      }
+    })
+    .then(() => {
+      console.log("Added row", data)
+    })
+    .catch((e) => {
+      setError("Во время добавления записи произошла непредвиденная ошибка.")
+      console.log("Unexpected error occured while adding row.")
+      console.log(e)
+    })
+  }
+
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button className="bg-blue-2 hover:bg-blue-800">Добавить запись</Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent className="bg-light-3 border-2 border-black shadow">
-        <AlertDialogHeader className="flex items-center">
-          <AlertDialogTitle>Добавить ПО</AlertDialogTitle>
-          <AlertDialogDescription>{<>Заполните все поля и нажмите кнопку <b>Создать</b></>}</AlertDialogDescription>
-        </AlertDialogHeader>
-        <Form {...form}>
-          <form id="addSoftwareForm"
-            onSubmit={form.handleSubmit(AddRowSoftwareTable)}
-            className="space-y-6"
-          >
-            <div className="space-y-4">
-              {softwareTextFields.map((formItem, index) => {
-                return <SoftwareTextField
-                  key={index}
-                  control={form.control}
-                  name={formItem.name as SoftwareTextFieldName}
-                  label={formItem.label}
-                  placeholder={formItem.placeholder}
-                />
-              })}
-              {softwareComboboxFields.map((formItem, index) => {
-                return <SoftwareComboboxField
-                  key={index}
-                  form={form}
-                  name={formItem.name as SoftwareComboboxFieldName}
-                  label={formItem.label}
-                  data={formItem.data}
-                  frontText={formItem.frontText}
-                  inputPlaceholder={formItem.inputPlaceholder}
-                  emptyText={formItem.emptyText}
-                />
-              })}
-            </div>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Отмена</AlertDialogCancel>
-              <AlertDialogAction type="submit">Создать</AlertDialogAction>
-            </AlertDialogFooter>
-          </form>
-        </Form>
-      </AlertDialogContent>
-    </AlertDialog>
+    <Form {...form}>
+      <form id="addSoftwareForm"
+        onSubmit={form.handleSubmit(AddRowSoftwareTable)}
+        className="space-y-6"
+      >
+        <div className="space-y-4">
+          {softwareTextFields.map((formItem, index) => {
+            return <SoftwareTextField
+              key={index}
+              control={form.control}
+              name={formItem.name as SoftwareTextFieldName}
+              label={formItem.label}
+              placeholder={formItem.placeholder}
+            />
+          })}
+          {softwareComboboxFields.map((formItem, index) => {
+            return <SoftwareComboboxField
+              key={index}
+              form={form}
+              name={formItem.name as SoftwareComboboxFieldName}
+              label={formItem.label}
+              data={formItem.data}
+              frontText={formItem.frontText}
+              inputPlaceholder={formItem.inputPlaceholder}
+              emptyText={formItem.emptyText}
+            />
+          })}
+        </div>
+        <FormError message={error}/>
+        <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">Создать</Button>
+      </form>
+    </Form>
   )
 }

@@ -2,7 +2,7 @@ import React, { HTMLInputTypeAttribute } from 'react'
 
 import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { SoftwareAddSchema } from '@/schemas';
+import { SoftwareSchema } from '@/schemas';
 import { UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
 import { SoftwareComboboxFieldName } from './add-software-form';
@@ -17,7 +17,7 @@ interface ComboboxDataStruct {
 }
 
 interface SoftwareComboboxFieldProps {
-  form: UseFormReturn<z.infer<typeof SoftwareAddSchema>>
+  form: UseFormReturn<z.infer<typeof SoftwareSchema>>
   name: SoftwareComboboxFieldName
   label: string
   data: ComboboxDataStruct[]

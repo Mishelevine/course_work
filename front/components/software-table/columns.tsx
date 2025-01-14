@@ -16,7 +16,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { DeleteRowSoftwareTable, UpdateRowSoftwareTable } from "./crud";
+import { DeleteRowSoftwareTable } from "./crud";
+import ModalSoftwareForm from "./modal-software-form";
+import { SoftwareUpdateForm } from "./update-software-form";
+import { AlertDialogTrigger } from "../ui/alert-dialog";
 
 export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>>[] = [
     {
@@ -85,20 +88,28 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
         id: "actions",
         cell: ({ row }) => {
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Раскрыть меню</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Действия</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => { UpdateRowSoftwareTable(row.getValue("id")) }}>Изменить запись</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => { DeleteRowSoftwareTable(row.getValue("id")) }}>Удалить запись</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <ModalSoftwareForm
+                    title="Изменить ПО"
+                    description={<>Заполните все поля и нажмите кнопку <b>Изменить</b></>}
+                    form={<SoftwareUpdateForm id={row.getValue("id")}/>}
+                >
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Раскрыть меню</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Действия</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <AlertDialogTrigger asChild>
+                                <DropdownMenuItem onClick={(e) => {e.stopPropagation()}}>Изменить запись</DropdownMenuItem>
+                            </AlertDialogTrigger>
+                            <DropdownMenuItem onClick={() => { DeleteRowSoftwareTable(row.getValue("id")) }}>Удалить запись</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </ModalSoftwareForm>
             )
         },
     },
