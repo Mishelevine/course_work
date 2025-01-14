@@ -1,9 +1,12 @@
-export function CorrectPagesCase(pageNum: number){
-    if (pageNum <= 20){
+import { SoftwareAddSchema } from "@/schemas"
+import { z } from "zod"
+
+export function CorrectPagesCase(pageNum: number) {
+    if (pageNum <= 20) {
         return "страниц"
     }
 
-    if (pageNum % 10 == 1){
+    if (pageNum % 10 == 1) {
         return "страницы"
     }
 
@@ -16,4 +19,8 @@ export function DeleteRowSoftwareTable(id: number) {
 
 export function UpdateRowSoftwareTable(id: number) {
     console.log("Updated row with id =", id)
+}
+
+export function AddRowSoftwareTable(data: z.infer<typeof SoftwareAddSchema>) {
+    console.log("Added row", data)
 }
