@@ -9,6 +9,6 @@ router = APIRouter(
     tags=["Работа с журналом сеансов"]
 )
 
-@router.get("")
+@router.get("/all")
 async def get_all_software() -> List[SSessionLog]:
     return await crud.get_log()

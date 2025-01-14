@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 from back.Software.models import Software
 from back.Software.schemas import SSoftwareCreate, SSoftware
 from back.database import async_session
@@ -31,7 +32,10 @@ async def get_software_by_id(software_id: int):
     
 async def get_all_software() -> list[Software]:
     async with async_session() as session:
-        query = select(Software)
+        query = select(Software).options(
+            joinedload(Software.license),
+            joinedload(Software.contract)
+        )
         result = await session.execute(query)
         return result.scalars().all()
     
