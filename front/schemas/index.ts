@@ -70,7 +70,7 @@ export const CreateEventSchema = z.object({
     organisation_id: z.optional(z.number())
 })
 
-export const SoftwareSchema = z.object({
+export const SoftwareTableSchema = z.object({
     name: z.string(),
     short_name: z.string(),
     program_link: z.string(),
@@ -80,4 +80,14 @@ export const SoftwareSchema = z.object({
     contract_number: z.string(),
     contract_date: z.string(),
     id: z.number()
+})
+
+export const SoftwareAddSchema = z.object({
+    name: z.string(),
+    short_name: z.string(),
+    program_link: z.string(),
+    version: z.string(),
+    version_date: z.string(),
+    license_id: z.number(),
+    contract_id: z.number()
 })

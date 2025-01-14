@@ -1,6 +1,6 @@
 "use client"
 
-import { SoftwareSchema } from "@/schemas";
+import { SoftwareTableSchema } from "@/schemas";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react"
 import { LinkIcon } from "lucide-react";
@@ -9,16 +9,16 @@ import { z } from "zod";
 import { MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { DeleteRowSoftwareTable, UpdateRowSoftwareTable } from "./crud";
 
-export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareSchema>>[] = [
+export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>>[] = [
     {
         accessorKey: "name",
         header: "Наименование ПО"
@@ -36,7 +36,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareSchema>>[] =
                 className="flex flex-row items-center gap-2
                 transition-colors text-blue-900 hover:text-blue-400 w-fit"
             >
-                <LinkIcon className="flex justify-self-center" width={28} height={28}/>
+                <LinkIcon className="flex justify-self-center" width={28} height={28} />
                 <p>Перейти на сайт</p>
             </Link>
         },
@@ -86,18 +86,18 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareSchema>>[] =
         cell: ({ row }) => {
             return (
                 <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                    <span className="sr-only">Раскрыть меню</span>
-                    <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Действия</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => {UpdateRowSoftwareTable(row.getValue("id"))}}>Изменить запись</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => {DeleteRowSoftwareTable(row.getValue("id"))}}>Удалить запись</DropdownMenuItem>
-                </DropdownMenuContent>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Раскрыть меню</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Действия</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => { UpdateRowSoftwareTable(row.getValue("id")) }}>Изменить запись</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => { DeleteRowSoftwareTable(row.getValue("id")) }}>Удалить запись</DropdownMenuItem>
+                    </DropdownMenuContent>
                 </DropdownMenu>
             )
         },

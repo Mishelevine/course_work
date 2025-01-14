@@ -26,7 +26,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "./crud"
-import ModalSoftware from "./modal-software"
+import { SoftwareAddForm } from "./add-software-form"
 
 interface SoftwareDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -50,7 +50,7 @@ export function SoftwareDataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),onSortingChange: setSorting,
+    getPaginationRowModel: getPaginationRowModel(), onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
@@ -73,10 +73,7 @@ export function SoftwareDataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <ModalSoftware
-          dialogTitle="Добавить ПО"
-          dialogDescription={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-        />
+        <SoftwareAddForm />
       </div>
       <div className="rounded-md border overflow-y-auto">
         <Table>
@@ -89,9 +86,9 @@ export function SoftwareDataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   )
                 })}

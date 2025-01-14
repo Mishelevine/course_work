@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { SoftwareTableColumns } from "./columns"
-import { SoftwareSchema } from "@/schemas"
+import { SoftwareTableSchema } from "@/schemas"
 import axios from "axios"
 import { API_URL } from "@/constants"
 import { SoftwareDataTable } from "./data-table"
@@ -16,7 +16,7 @@ type SoftwareSchemaFromBack = {
     id: number
 }
 
-async function getSoftwareData(): Promise<z.infer<typeof SoftwareSchema>[]> {
+async function getSoftwareData(): Promise<z.infer<typeof SoftwareTableSchema>[]> {
     const softwareData = (await axios.get(API_URL + '/software')).data
 
     const newData = await Promise.all(softwareData.map(async (elem: SoftwareSchemaFromBack) => {
@@ -47,7 +47,7 @@ export default async function SoftwareTable() {
             className='flex flex-col gap-5 bg-light-3 p-6
             rounded-[14px] border border-gray-300 shadow'
         >
-            <SoftwareDataTable columns={SoftwareTableColumns} data={data}/>
+            <SoftwareDataTable columns={SoftwareTableColumns} data={data} />
         </section>
     )
 }
