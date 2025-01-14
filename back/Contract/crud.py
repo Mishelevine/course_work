@@ -16,6 +16,12 @@ async def get_contract_by_number(contract_number: str):
         query = select(Contract).filter(Contract.contract_number == contract_number)
         result = await session.execute(query)
         return result.scalar_one_or_none()
+    
+async def get_all_contracts() -> list[Contract]:
+    async with async_session() as session:
+        query = select(Contract)
+        result = await session.execute(query)
+        return result.scalars().all()
 
 async def create_contract(contract_data: SContractCreate):
     async with async_session() as session:
