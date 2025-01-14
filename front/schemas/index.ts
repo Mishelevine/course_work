@@ -82,12 +82,27 @@ export const SoftwareTableSchema = z.object({
     id: z.number()
 })
 
-export const SoftwareAddSchema = z.object({
-    name: z.string(),
-    short_name: z.string(),
-    program_link: z.string(),
-    version: z.string(),
-    version_date: z.string(),
-    license_id: z.number(),
-    contract_id: z.number()
+export const SoftwareSchema = z.object({
+    name: z.string().min(1, {
+        message: "Пожалуйста, введите название ПО"
+    }),
+    short_name: z.string().min(1, {
+        message: "Пожалуйста, введите сокращенное название ПО"
+    }),
+    program_link: z.string().min(1, {
+        message: "Пожалуйста, вставьте ссылку на сайт ПО"
+    }),
+    version: z.string().min(1, {
+        message: "Пожалуйста, введите версию ПО"
+    }),
+    version_date: z.string().regex(
+        new RegExp('(^(31)[.](0[13578]|1[02])[.]((18|19|20)[0-9]{2})$)|(^(29|30)[.](01|0[3-9]|1[1-2])[.]((18|19|20)[0-9]{2})$)|(^(0[1-9]|1[0-9]|2[0-8])[.](0[1-9]|1[0-2])[.]((18|19|20)[0-9]{2})$)|(^(29)[.](02)[.](((18|19|20)(04|08|[2468][048]|[13579][26]))|2000)$)'),
+        'Некорректный формат даты'
+    ),
+    license_id: z.number().min(1, {
+        message: "Пожалуйста, выберите лицензию."
+    }),
+    contract_id: z.number().min(1, {
+        message: "Пожалуйста, выберите договор."
+    }),
 })

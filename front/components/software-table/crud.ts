@@ -1,4 +1,7 @@
-import { SoftwareAddSchema } from "@/schemas"
+import { API_URL } from "@/constants"
+import { SoftwareSchema } from "@/schemas"
+import { Row } from "@tanstack/react-table"
+import axios from "axios"
 import { z } from "zod"
 
 export function CorrectPagesCase(pageNum: number) {
@@ -14,13 +17,12 @@ export function CorrectPagesCase(pageNum: number) {
 }
 
 export function DeleteRowSoftwareTable(id: number) {
-    console.log("Deleted row with id =", id)
-}
-
-export function UpdateRowSoftwareTable(id: number) {
-    console.log("Updated row with id =", id)
-}
-
-export function AddRowSoftwareTable(data: z.infer<typeof SoftwareAddSchema>) {
-    console.log("Added row", data)
+    axios.delete(API_URL + `/software/${id}/delete`)
+    .then(() => {
+        console.log("Deleted row with id =", id)
+    })
+    .catch((e) => {
+        console.log("Error while deleting row")
+        console.log(e)
+    })
 }
