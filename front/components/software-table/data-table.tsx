@@ -8,6 +8,7 @@ import {
   VisibilityState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -25,6 +26,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "./crud"
+import ModalSoftware from "./modal-software"
 
 interface SoftwareDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -51,6 +53,7 @@ export function SoftwareDataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
@@ -61,7 +64,7 @@ export function SoftwareDataTable<TData, TValue>({
 
   return (
     <div className="w-full h-full">
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Поиск по наименованию ПО..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -69,6 +72,10 @@ export function SoftwareDataTable<TData, TValue>({
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
+        />
+        <ModalSoftware
+          dialogTitle="Добавить ПО"
+          dialogDescription={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
         />
       </div>
       <div className="rounded-md border overflow-y-auto">

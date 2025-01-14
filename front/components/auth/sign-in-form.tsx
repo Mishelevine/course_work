@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form } from "@/components/ui/form"
 
 import { SignInSchema } from "@/schemas"
-import { CardWrapper } from "./card-wrapper"
+import { CardWrapper } from "../card-wrapper"
 import { Button } from "../ui/button"
 import { FormError } from "../form-error"
 import { useState } from "react"

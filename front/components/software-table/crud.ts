@@ -1,13 +1,13 @@
 export function CorrectPagesCase(pageNum: number){
-  if (pageNum <= 20){
+    if (pageNum <= 20){
+        return "страниц"
+    }
+
+    if (pageNum % 10 == 1){
+        return "страницы"
+    }
+
     return "страниц"
-  }
-
-  if (pageNum % 10 == 1){
-    return "страницы"
-  }
-
-  return "страниц"
 }
 
 export function DeleteRowSoftwareTable(id: number) {
