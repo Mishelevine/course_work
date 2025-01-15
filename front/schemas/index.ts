@@ -106,3 +106,10 @@ export const SoftwareSchema = z.object({
         message: "Пожалуйста, выберите договор."
     }),
 })
+
+export const UserLogSchema = z.object({
+    event_type: z.string(),
+    time: z.string(),
+    user_id: z.number(),
+    user_role: z.number()
+})
