@@ -46,21 +46,7 @@ async def create_software(name: str,
 async def get_all_software() -> List[SSoftware]:
     return await crud.get_all_software()
 
-@router.get("/test_excel")
-async def download_excel():
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.append(["Column 1", "Column 2", "Column 3"])
-    ws.append([1, 2, 3])
-    ws.append([4, 5, 6])
-
-    excel_file = io.BytesIO()
-    wb.save(excel_file)
-    excel_file.seek(0)
-
-    return StreamingResponse(excel_file, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", headers={"Content-Disposition": "attachment; filename=table.xlsx"})
-
-@router.get("/to_exel_file")
+@router.get("/to_excel_file")
 async def get_software_excel():
     software_list = await crud.get_all_software()
     
@@ -81,16 +67,18 @@ async def get_software_excel():
     
     df = pd.DataFrame(software_data)
     
-    save_dir = Path("files/excel/Software")
-    save_dir.mkdir(parents=True, exist_ok=True)
+    excel_file = io.BytesIO()
+    with pd.ExcelWriter(excel_file, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="Software")
+    excel_file.seek(0)
     
     file_name = f"software_list_{datetime.now(tz=timezone(timedelta(hours=5))).strftime('%Y%m%d_%H%M%S')}.xlsx"
-    file_path = save_dir / file_name
     
-    with pd.ExcelWriter(file_path, engine="openpyxl") as writer:
-        df.to_excel(writer, index=False, sheet_name="Software")
-        
-    return file_name
+    return StreamingResponse(
+        excel_file,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f"attachment; filename={file_name}"}
+    )
 
 @router.get("/{software_id}")
 async def get_software_by_id(software_id: int) -> SSoftware:
