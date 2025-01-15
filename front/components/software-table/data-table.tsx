@@ -84,7 +84,8 @@ export function SoftwareDataTable<TData, TValue>({
           />
           <div className="flex gap-2">
             <DownloadButton
-              apiEndpoint={API_URL + "/software/test_excel"}
+              className="bg-blue-2 hover:bg-blue-700"
+              apiEndpoint={API_URL + "/software/to_excel_file"}
               buttonText="Выгрузить в Excel"
             />
             <AlertDialogTrigger asChild>

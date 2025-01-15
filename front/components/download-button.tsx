@@ -5,10 +5,12 @@ import { Button } from './ui/button';
 
 const DownloadButton = ({
     apiEndpoint,
-    buttonText
+    buttonText,
+    className
 }: {
     apiEndpoint: string,
-    buttonText: string
+    buttonText: string,
+    className?: string
 }) => {
     const handleDownload = async () => {
         try {
@@ -16,7 +18,7 @@ const DownloadButton = ({
             console.log(response.headers)
             const disposition = response.headers['content-disposition'];
             console.log(disposition)
-            const filename = disposition ? disposition.split('filename=')[1] : 'downloaded_file';
+            const filename = disposition ? disposition.split('filename=')[1] : 'downloaded_file.xlsx';
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const a = document.createElement('a');
             a.style.display = 'none';
@@ -32,7 +34,7 @@ const DownloadButton = ({
     };
 
     return (
-        <Button onClick={handleDownload}>
+        <Button onClick={handleDownload} className={className}>
             {buttonText}
         </Button>
     );
