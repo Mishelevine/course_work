@@ -4,6 +4,7 @@ import { UserLogSchema } from "@/schemas"
 import axios from "axios"
 import { API_URL } from "@/constants"
 import { UserLogDataTable } from "./data-table"
+import { DatetimeFromDbForm } from "../helper-functions"
 
 type UserLogSchemaFromBack = {
     event_type: string,
@@ -16,15 +17,14 @@ async function getUserLogData(): Promise<z.infer<typeof UserLogSchema>[]> {
     const userLogData = (await axios.get(API_URL + "/sessionlog/all")).data
 
     const newData = await Promise.all(userLogData.map(async (elem: UserLogSchemaFromBack) => {
-        // это потом, когда надо будет получать фио и роль из айдишника
-        // const licenseType = (await axios.get(API_URL + `/license/${elem.license_id}`)).data.license_type
-        // const contract = (await axios.get(API_URL + `/contract/${elem.contract_id}`)).data
+        const fullName = (await axios.get(API_URL + `/auth/${elem.user_id}/fullname`)).data
+        const roleName = (await axios.get(API_URL + `/role/${elem.user_role}`)).data.role_name
 
         const newElem = {
+            user_name: fullName,
             event_type: elem.event_type,
-            time: elem.time,
-            user_id: elem.user_id,
-            user_role: elem.user_role,
+            time: DatetimeFromDbForm(elem.time),
+            user_role: roleName,
         }
         return newElem
     }))

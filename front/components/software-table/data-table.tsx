@@ -29,6 +29,7 @@ import { CorrectPagesCase } from "../helper-functions"
 import { SoftwareAddForm } from "./add-software-form"
 import ModalSoftwareForm from "./modal-software-form"
 import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog"
+import DownloadButton from "../download-button"
 
 interface SoftwareDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -80,9 +81,12 @@ export function SoftwareDataTable<TData, TValue>({
             }
             className="max-w-sm"
           />
-          <AlertDialogTrigger asChild>
-            <Button className="bg-blue-2 hover:bg-blue-700">Добавить запись</Button>
-          </AlertDialogTrigger>
+          <div className="flex gap-2">
+            <DownloadButton />
+            <AlertDialogTrigger asChild>
+              <Button className="bg-blue-2 hover:bg-blue-700">Добавить запись</Button>
+            </AlertDialogTrigger>
+          </div>
         </div>
         <div className="rounded-md border overflow-y-auto">
           <Table>

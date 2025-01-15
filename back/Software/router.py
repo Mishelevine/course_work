@@ -9,6 +9,11 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List
 
+# TEST
+from fastapi.responses import StreamingResponse
+import io
+import openpyxl
+
 router = APIRouter(
     prefix="/software",
     tags=["Работа с программным обеспечением"]
@@ -40,6 +45,20 @@ async def create_software(name: str,
 @router.get("/all")
 async def get_all_software() -> List[SSoftware]:
     return await crud.get_all_software()
+
+@router.get("/test_excel")
+async def download_excel():
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(["Column 1", "Column 2", "Column 3"])
+    ws.append([1, 2, 3])
+    ws.append([4, 5, 6])
+
+    excel_file = io.BytesIO()
+    wb.save(excel_file)
+    excel_file.seek(0)
+
+    return StreamingResponse(excel_file, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", headers={"Content-Disposition": "attachment; filename=table.xlsx"})
 
 @router.get("/to_exel_file")
 async def get_software_excel():

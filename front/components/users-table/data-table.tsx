@@ -65,10 +65,10 @@ export function UserLogDataTable<TData, TValue>({
     <div className="w-full h-full">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Поиск по ID пользователя..."
-          value={(table.getColumn("user_id")?.getFilterValue() as string) ?? ""}
+          placeholder="Поиск по имени пользователя..."
+          value={(table.getColumn("user_name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("user_id")?.setFilterValue(event.target.value)
+            table.getColumn("user_name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

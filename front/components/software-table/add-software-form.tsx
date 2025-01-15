@@ -15,7 +15,7 @@ import { SoftwareSchema } from "@/schemas";
 
 import SoftwareTextField from "./software-text-field";
 import SoftwareComboboxField from "./software-combobox-field";
-import { DatetimeToDbForm } from "../helper-functions";
+import { DateToDbForm } from "../helper-functions";
 
 export type SoftwareTextFieldName = "name" | "short_name" | "program_link" | "version" | "version_date";
 export type SoftwareComboboxFieldName = "license_id" | "contract_id"
@@ -102,7 +102,7 @@ export const SoftwareAddForm = () => {
         short_name: data.short_name,
         program_link: data.program_link,
         version: data.version,
-        version_date: DatetimeToDbForm(data.version_date),
+        version_date: DateToDbForm(data.version_date),
         license_id: data.license_id,
         contract_id: data.contract_id
       }
