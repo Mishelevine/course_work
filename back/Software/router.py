@@ -1,5 +1,8 @@
 import pandas as pd
+import io
+import openpyxl
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import StreamingResponse
 from back.Software.models import Software
 from back.Software.schemas import SSoftware, SSoftwareCreate
 from back.Software import crud
@@ -8,11 +11,6 @@ from back.Contract import crud as contract_crud
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List
-
-# TEST
-from fastapi.responses import StreamingResponse
-import io
-import openpyxl
 
 router = APIRouter(
     prefix="/software",
