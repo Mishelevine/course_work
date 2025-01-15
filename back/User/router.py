@@ -126,3 +126,17 @@ async def get_user_by_token_directly(token: str):
         return user
     except JWTException:
         raise HTTPException(status_code=401, detail="Could not validate credentials")
+    
+@router.get("/{user_id}/fullname", response_model=str)
+async def get_user_full_name(user_id: int):
+    user = await crud.get_user_by_id(user_id)
+    
+    if user is None:
+            raise HTTPException(status_code=401, detail="Invalid user id")
+    
+    if (user.paternity is None) or (user.paternity == ""):
+        full_name = f"{user.first_name} {user.last_name}"
+    else:
+        full_name = f"{user.first_name} {user.last_name} {user.paternity}"
+    return full_name
+    

@@ -12,6 +12,12 @@ async def get_user_by_username(username: str):
         result = await session.execute(query)
         return result.scalar_one_or_none()
     
+async def get_user_by_id(user_id: int):
+    async with async_session() as session:
+        query = select(User).filter(User.id == user_id)
+        result = await session.execute(query)
+        return result.scalar_one_or_none()
+
 async def create_user(user: SUserCreate, system_role_id: int):
     async with async_session() as session:
         db_user = User(
