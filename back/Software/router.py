@@ -93,5 +93,7 @@ async def update_software(software_id: int, updated_software: SSoftwareCreate):
     existing_software.program_link = updated_software.program_link
     existing_software.version = updated_software.version
     existing_software.version_date = updated_software.version_date
+    existing_software.license_id = updated_software.license_id
+    existing_software.contract_id = updated_software.contract_id
     
     return await crud.update_software(existing_software)

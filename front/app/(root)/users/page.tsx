@@ -1,8 +1,9 @@
+import UserLogTable from '@/components/users-table/user-log-table'
 import React from 'react'
 
 const UsersPage = () => {
   return (
-    <div>This is UsersPage</div>
+    <UserLogTable />
   )
 }
 

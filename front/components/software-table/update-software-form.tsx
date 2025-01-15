@@ -14,28 +14,75 @@ import { SoftwareSchema } from "@/schemas";
 import SoftwareTextField from "./software-text-field";
 import SoftwareComboboxField from "./software-combobox-field";
 import { SoftwareComboboxFieldName, SoftwareTextFieldName } from "./add-software-form";
+import { DatetimeToDbForm } from "../helper-functions";
 
 const tempLicenseData = [
-  { label: "Freeware", value: 1 },
-  { label: "Shareware", value: 2 }
+  {
+    label: "Freeware",
+    value: 1
+  },
+  {
+    label: "Shareware",
+    value: 2
+  }
 ]
 
 const tempContractData = [
-  { label: "6027-914 от 11.10.2020", value: 2 },
-  { label: "string от 13.01.2025", value: 3 },
+  {
+    label: "6027-914 от 11.10.2020",
+    value: 2
+  },
+  {
+    label: "string от 13.01.2025",
+    value: 3
+  },
 ]
 
 const softwareTextFields = [
-  { name: "name", label: "Наименование ПО", placeholder: "Название добавляемого ПО" },
-  { name: "short_name", label: "Сокращенное наименование ПО", placeholder: "Сокращенное название добавляемого ПО" },
-  { name: "program_link", label: "Ссылка на программу", placeholder: "Ссылка на сайт добавляемого ПО" },
-  { name: "version", label: "Версия ПО", placeholder: "Версия добавляемого ПО" },
-  { name: "version_date", label: "Дата версии", placeholder: "Дата в формате DD.MM.YYYY (Пример: 01.01.2020)" }
+  {
+    name: "name",
+    label: "Наименование ПО",
+    placeholder: "Название добавляемого ПО"
+  },
+  {
+    name: "short_name",
+    label: "Сокращенное наименование ПО",
+    placeholder: "Сокращенное название добавляемого ПО"
+  },
+  {
+    name: "program_link",
+    label: "Ссылка на программу",
+    placeholder: "Ссылка на сайт добавляемого ПО"
+  },
+  {
+    name: "version",
+    label: "Версия ПО",
+    placeholder: "Версия добавляемого ПО"
+  },
+  {
+    name: "version_date",
+    label: "Дата версии",
+    placeholder: "Дата в формате DD.MM.YYYY (Пример: 01.01.2020)"
+  }
 ]
 
 const softwareComboboxFields = [
-  { name: "license_id", label: "Тип лицензии", data: tempLicenseData, frontText: "Выберите тип лицензии", inputPlaceholder: "Введите название...", emptyText: "Лицензий не найдено." },
-  { name: "contract_id", label: "Номер договора", data: tempContractData, frontText: "Выберите договор", inputPlaceholder: "Введите название или дату...", emptyText: "Договоров не найдено." }
+  {
+    name: "license_id",
+    label: "Тип лицензии",
+    data: tempLicenseData,
+    frontText: "Выберите тип лицензии",
+    inputPlaceholder: "Введите название...",
+    emptyText: "Лицензий не найдено."
+  },
+  {
+    name: "contract_id",
+    label: "Номер договора",
+    data: tempContractData,
+    frontText: "Выберите договор",
+    inputPlaceholder: "Введите название или дату...",
+    emptyText: "Договоров не найдено."
+  }
 ]
 
 export const SoftwareUpdateForm = ({ id }: { id: number }) => {
@@ -62,7 +109,6 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
     fetchData()
   }, [id])
 
-  // Инициализация формы с условием на загрузку данных
   const form = useForm<z.infer<typeof SoftwareSchema>>({
     resolver: zodResolver(SoftwareSchema),
     defaultValues: {
@@ -77,7 +123,26 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
   })
 
   const UpdateRowSoftwareTable = (data: z.infer<typeof SoftwareSchema>) => {
-    console.log("Updated!", data)
+    axios.put(API_URL + `/software/${id}/update`, {
+      name: data.name,
+      short_name: data.short_name,
+      program_link: data.program_link,
+      version: data.version,
+      version_date: DatetimeToDbForm(data.version_date),
+      license_id: data.license_id,
+      contract_id: data.contract_id
+    }, {
+      params: {
+        software_id: id
+      }
+    })
+      .then(() => {
+        console.log("Updated!", data)
+      })
+      .catch((e) => {
+        console.log("Error while updating row!")
+        console.log(e)
+      })
   }
 
   if (loading) {

@@ -16,7 +16,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { DeleteRowSoftwareTable } from "./crud";
+import { DeleteRowSoftwareTable } from "../helper-functions";
 import ModalSoftwareForm from "./modal-software-form";
 import { SoftwareUpdateForm } from "./update-software-form";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
@@ -91,7 +91,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                 <ModalSoftwareForm
                     title="Изменить ПО"
                     description={<>Заполните все поля и нажмите кнопку <b>Изменить</b></>}
-                    form={<SoftwareUpdateForm id={row.getValue("id")}/>}
+                    form={<SoftwareUpdateForm id={row.getValue("id")} />}
                 >
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -104,7 +104,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                             <DropdownMenuLabel>Действия</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <AlertDialogTrigger asChild>
-                                <DropdownMenuItem onClick={(e) => {e.stopPropagation()}}>Изменить запись</DropdownMenuItem>
+                                <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
                             </AlertDialogTrigger>
                             <DropdownMenuItem onClick={() => { DeleteRowSoftwareTable(row.getValue("id")) }}>Удалить запись</DropdownMenuItem>
                         </DropdownMenuContent>

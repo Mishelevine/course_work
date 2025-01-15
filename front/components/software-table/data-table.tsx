@@ -25,7 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { CorrectPagesCase } from "./crud"
+import { CorrectPagesCase } from "../helper-functions"
 import { SoftwareAddForm } from "./add-software-form"
 import ModalSoftwareForm from "./modal-software-form"
 import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog"
@@ -80,9 +80,9 @@ export function SoftwareDataTable<TData, TValue>({
             }
             className="max-w-sm"
           />
-        <AlertDialogTrigger asChild>
-          <Button className="bg-blue-2 hover:bg-blue-700">Добавить запись</Button>
-        </AlertDialogTrigger>
+          <AlertDialogTrigger asChild>
+            <Button className="bg-blue-2 hover:bg-blue-700">Добавить запись</Button>
+          </AlertDialogTrigger>
         </div>
         <div className="rounded-md border overflow-y-auto">
           <Table>

@@ -15,6 +15,7 @@ import { SoftwareSchema } from "@/schemas";
 
 import SoftwareTextField from "./software-text-field";
 import SoftwareComboboxField from "./software-combobox-field";
+import { DatetimeToDbForm } from "../helper-functions";
 
 export type SoftwareTextFieldName = "name" | "short_name" | "program_link" | "version" | "version_date";
 export type SoftwareComboboxFieldName = "license_id" | "contract_id"
@@ -95,26 +96,25 @@ export const SoftwareAddForm = () => {
 
   function AddRowSoftwareTable(data: z.infer<typeof SoftwareSchema>) {
     setError("")
-    const dateParts = data.version_date.split('.')
     axios.post(API_URL + '/software/create', null, {
       params: {
         name: data.name,
         short_name: data.short_name,
         program_link: data.program_link,
         version: data.version,
-        version_date: new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`),
+        version_date: DatetimeToDbForm(data.version_date),
         license_id: data.license_id,
         contract_id: data.contract_id
       }
     })
-    .then(() => {
-      console.log("Added row", data)
-    })
-    .catch((e) => {
-      setError("Во время добавления записи произошла непредвиденная ошибка.")
-      console.log("Unexpected error occured while adding row.")
-      console.log(e)
-    })
+      .then(() => {
+        console.log("Added row", data)
+      })
+      .catch((e) => {
+        setError("Во время добавления записи произошла непредвиденная ошибка.")
+        console.log("Unexpected error occured while adding row.")
+        console.log(e)
+      })
   }
 
   return (
@@ -146,7 +146,7 @@ export const SoftwareAddForm = () => {
             />
           })}
         </div>
-        <FormError message={error}/>
+        <FormError message={error} />
         <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">Создать</Button>
       </form>
     </Form>
