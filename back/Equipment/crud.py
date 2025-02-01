@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy import select
+from back.EquipmentStatus.models import EquipmentStatus
 from back.database import async_session
 from sqlalchemy.orm import joinedload
 
@@ -20,7 +21,13 @@ async def get_equipment_by_serial_number(serial_number: str):
 
 async def get_all_equipment() -> list[Equipment]:
     async with async_session() as session:
-        query = select(Equipment).options(joinedload(Equipment.type))
+        query = select(Equipment).options(
+            joinedload(Equipment.type),
+            joinedload(Equipment.statuses).joinedload(EquipmentStatus.status_type),
+            joinedload(Equipment.statuses).joinedload(EquipmentStatus.responsible_user),
+            joinedload(Equipment.statuses).joinedload(EquipmentStatus.building),
+            joinedload(Equipment.equipment_specification)
+        )
         result = await session.execute(query)
         return result.unique().scalars().all()
 

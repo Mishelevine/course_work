@@ -8,4 +8,4 @@ class EquipmentStatusType(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     status_type_name = Column(String, nullable=False, unique=True)
 
-    #statuses = relationship("EquipmentStatus", back_populates="status_type", cascade="all, delete")
+    statuses = relationship("EquipmentStatus", back_populates="status_type", cascade="all, delete")

@@ -2,19 +2,19 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-class EquipmentStatusBase(BaseModel):
+class SEquipmentStatusBase(BaseModel):
     equipment_id: int
     status_type_id: int
-    doc_number: int
+    doc_number: str
     status_change_date: datetime
     responsible_user_id: int
     building_id: int
-    audience_id: Optional[int]
+    audience_id: Optional[int] = None
 
-class EquipmentStatusCreate(EquipmentStatusBase):
+class SEquipmentStatusCreate(SEquipmentStatusBase):
     pass
 
-class EquipmentStatus(EquipmentStatusBase):
+class SEquipmentStatus(SEquipmentStatusBase):
     id: int
 
     class Config:

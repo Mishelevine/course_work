@@ -14,4 +14,5 @@ class Equipment(Base):
     remarks = Column(String, nullable=True)
 
     type = relationship("EquipmentType", back_populates="equipment")
-    #statuses = relationship("EquipmentStatus", back_populates="equipment", cascade="all, delete")
+    equipment_specification = relationship("EquipmentSpecification", back_populates="equipment", cascade="all, delete-orphan")
+    statuses = relationship("EquipmentStatus", back_populates="equipment", cascade="all, delete-orphan")
