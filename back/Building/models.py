@@ -8,4 +8,4 @@ class Building(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     building_address = Column(String, nullable=False, unique=True)
 
-    #statuses = relationship("EquipmentStatus", back_populates="building", cascade="all, delete")
+    statuses = relationship("EquipmentStatus", back_populates="building", cascade="all, delete")

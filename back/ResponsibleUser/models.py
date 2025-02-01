@@ -14,4 +14,4 @@ class ResponsibleUser(Base):
 
     job = relationship("ResponsibleUserJob", back_populates="responsible_users")
     office = relationship("ResponsibleUserOffice", back_populates="responsible_users")
-    #equipment_statuses = relationship("EquipmentStatus", back_populates="responsible_user")
+    statuses = relationship("EquipmentStatus", back_populates="responsible_user")

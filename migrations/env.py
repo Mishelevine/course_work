@@ -28,6 +28,7 @@ from back.ResponsibleUserOffice.models import ResponsibleUserOffice
 from back.ResponsibleUser.models import ResponsibleUser
 from back.Equipment.models import Equipment
 from back.EquipmentStatus.models import EquipmentStatus
+from back.EquipmentSpecification.models import EquipmentSpecification
 from back.config import settings
 
 # this is the Alembic Config object, which provides
