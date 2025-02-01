@@ -10,13 +10,8 @@ export const sidebarLinks = [
         // imgUrl: '/icons/activities.svg'
     },
     {
-        label: 'Журнал аудита',
-        route: '/userlog',
-        // imgUrl: '/icons/organisations.svg'
-    },
-    {
-        label: 'Договоры',
-        route: '/contracts',
+        label: 'Пользователи',
+        route: '/users',
         // imgUrl: '/icons/organisations.svg'
     }
 ]
@@ -26,6 +21,8 @@ export const LOWEST_ROLE = 1
 export const WebSiteName = 'HSE SATS'
 export const API_URL = 'http://localhost:8000'
 export const WEBSITE_URL = 'http://localhost:3000'
+
+export const PC_CENTER_PAGE = 'https://perm.hse.ru/pc_centre/'
 
 export const signingPages = [
     '/sign-in'

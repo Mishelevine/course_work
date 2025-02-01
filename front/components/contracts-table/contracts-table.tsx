@@ -19,7 +19,7 @@ async function getContractsData(selected_contract_ids?: number[] | undefined): P
         const newElem = {
             id: elem.id,
             contract_number: elem.contract_number,
-            contract_date: DateFromDbForm(elem.contract_date),
+            contract_date: elem.contract_date,
             selected: selected_contract_ids?.includes(elem.id)
         }
         return newElem

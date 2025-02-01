@@ -12,10 +12,10 @@ import { useEffect, useState } from "react";
 import { FormError } from "../form-error";
 import { LicenseSchema, SoftwareSchema } from "@/schemas";
 
-import SoftwareTextField from "./software-text-field";
-import SoftwareComboboxField from "./software-combobox-field";
+import FormTextField from "../form-text-field";
+import FormComboboxField from "../form-combobox-field";
 import { DateToDbForm } from "../helper-functions";
-import ContractsTable from "../contracts_table/contracts-table";
+import ContractsTable from "../contracts-table/contracts-table";
 import { useToast } from "@/hooks/use-toast";
 
 export type SoftwareTextFieldName = "name" | "short_name" | "program_link" | "version" | "version_date";
@@ -153,7 +153,7 @@ export const SoftwareAddForm = () => {
       >
         <div className="space-y-4">
           {softwareTextFields.map((formItem, index) => {
-            return <SoftwareTextField
+            return <FormTextField
               key={index}
               control={form.control}
               name={formItem.name as SoftwareTextFieldName}
@@ -162,7 +162,7 @@ export const SoftwareAddForm = () => {
             />
           })}
           {softwareComboboxFields.map((formItem, index) => {
-            return <SoftwareComboboxField
+            return <FormComboboxField
               key={index}
               form={form}
               name={formItem.name as SoftwareComboboxFieldName}

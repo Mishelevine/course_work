@@ -16,11 +16,11 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { DeleteRowSoftwareTable } from "../helper-functions";
+import { DateFromDbForm, DeleteRowTable } from "../helper-functions";
 import ModalForm from "../modal-form";
 import { SoftwareUpdateForm } from "./software-update-form";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
-import ContractsTable from "../contracts_table/contracts-table";
+import ContractsTable from "../contracts-table/contracts-table";
 
 export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>>[] = [
     {
@@ -72,6 +72,9 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                 </Button>
             )
         },
+        cell: ({row}) => {
+            return DateFromDbForm(row.getValue("version_date"))
+        }
     },
     {
         accessorKey: "license_type",
@@ -132,7 +135,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                             <AlertDialogTrigger asChild>
                                 <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
                             </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => { DeleteRowSoftwareTable(row.getValue("id")) }}>Удалить запись</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => { DeleteRowTable("software", row.getValue("id")) }}>Удалить запись</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </ModalForm>

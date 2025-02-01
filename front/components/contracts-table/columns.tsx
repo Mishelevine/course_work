@@ -14,7 +14,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { DeleteRowSoftwareTable } from "../helper-functions";
+import { DateFromDbForm, DeleteRowTable } from "../helper-functions";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
 import { Checkbox } from "../ui/checkbox";
 import ModalForm from "../modal-form";
@@ -73,6 +73,9 @@ export const ContractsTableColumns: ColumnDef<z.infer<typeof ContractSchema>>[] 
                 </Button>
             )
         },
+        cell: ({row}) => {
+            return DateFromDbForm(row.getValue("contract_date"))
+        }
     },
     {
         id: "actions",
@@ -96,7 +99,7 @@ export const ContractsTableColumns: ColumnDef<z.infer<typeof ContractSchema>>[] 
                             <AlertDialogTrigger asChild>
                                 <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
                             </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => { DeleteRowSoftwareTable(row.getValue("id")) }}>Удалить запись</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => { DeleteRowTable("contract", row.getValue("id")) }}>Удалить запись</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </ModalForm>

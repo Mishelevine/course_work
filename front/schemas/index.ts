@@ -128,3 +128,19 @@ export const UserLogSchema = z.object({
     user_name: z.string(),
     user_role: z.string()
 })
+
+export const ContractFormSchema = z.object({
+    contract_number: z.string().min(1, {
+        message: "Пожалуйста, введите номер договора"
+    }),
+    contract_date: z.string().regex(
+        new RegExp('(^(31)[.](0[13578]|1[02])[.]((18|19|20)[0-9]{2})$)|(^(29|30)[.](01|0[3-9]|1[1-2])[.]((18|19|20)[0-9]{2})$)|(^(0[1-9]|1[0-9]|2[0-8])[.](0[1-9]|1[0-2])[.]((18|19|20)[0-9]{2})$)|(^(29)[.](02)[.](((18|19|20)(04|08|[2468][048]|[13579][26]))|2000)$)'),
+        'Некорректный формат даты'
+    )
+})
+
+export const LicenseFormSchema = z.object({
+    license_type: z.string().min(1, {
+        message: "Пожалуйста, введите тип лицензии"
+    }),
+})

@@ -27,7 +27,7 @@ async function getSoftwareData(): Promise<z.infer<typeof SoftwareTableSchema>[]>
             short_name: elem.short_name,
             program_link: elem.program_link,
             version: elem.version,
-            version_date: elem.version_date.substring(0, 10),
+            version_date: elem.version_date,
             license_type: licenseType,
             contracts: elem.contracts,
         }
@@ -42,11 +42,6 @@ export default async function SoftwareTable() {
     console.log(data)
 
     return (
-        <section
-            className='flex flex-col gap-5 bg-light-3 p-6
-            rounded-[14px] border border-gray-300 shadow'
-        >
-            <SoftwareDataTable columns={SoftwareTableColumns} data={data} />
-        </section>
+        <SoftwareDataTable columns={SoftwareTableColumns} data={data} />
     )
 }

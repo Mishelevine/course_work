@@ -3,14 +3,13 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import MobileNav from './mobile-nav'
-import { WebSiteName } from '@/constants'
+import { PC_CENTER_PAGE, WebSiteName } from '@/constants'
 import LogOutButton from './auth/logout-button'
-// import { Profile } from './profile'
 
 const Navbar = () => {
   return (
     <nav className='flex justify-between fixed z-50 w-full bg-light-2 px-6 py-4 lg:px-10 shadow'>
-      <Link href='/' className='flex w-fit items-center gap-1'>
+      <Link href={PC_CENTER_PAGE} className='flex w-fit items-center gap-1'>
         <Image
           src='/icons/logo.svg'
           width={36}

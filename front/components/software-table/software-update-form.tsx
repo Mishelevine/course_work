@@ -10,23 +10,12 @@ import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react";
 import { FormError } from "../form-error";
 import { ContractSchema, SoftwareSchema, LicenseSchema } from "@/schemas";
-import SoftwareTextField from "./software-text-field";
-import SoftwareComboboxField from "./software-combobox-field";
+import FormTextField from "../form-text-field";
+import FormComboboxField from "../form-combobox-field";
 import { SoftwareComboboxFieldName, SoftwareTextFieldName } from "./software-add-form";
 import { useToast } from "@/hooks/use-toast"
-import { DateToDbForm } from "../helper-functions";
-import ContractsTable from "../contracts_table/contracts-table";
-
-const tempLicenseData = [
-  {
-    label: "Freeware",
-    value: 1
-  },
-  {
-    label: "Shareware",
-    value: 2
-  }
-]
+import { DateFromDbForm, DateToDbForm } from "../helper-functions";
+import ContractsTable from "../contracts-table/contracts-table";
 
 const softwareTextFields = [
   {
@@ -86,8 +75,7 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
         setLicenseData(response)
         try {
           const response = await axios.get(API_URL + `/software/${id}`)
-          const tempDate = response.data.version_date.substr(0, 10).split('-')
-          const normalDate = tempDate[2] + '.' + tempDate[1] + '.' + tempDate[0]
+          const normalDate = DateFromDbForm(response.data.version_date)
           response.data.version_date = normalDate
           form.reset(response.data)
           setSelectedContractIds(response.data.contracts.map((contract: z.infer<typeof ContractSchema>) => contract.id))
@@ -161,7 +149,7 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
       >
         <div className="space-y-4">
           {softwareTextFields.map((formItem, index) => (
-            <SoftwareTextField
+            <FormTextField
               key={index}
               control={form.control}
               name={formItem.name as SoftwareTextFieldName}
@@ -170,7 +158,7 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
             />
           ))}
           {softwareComboboxFields.map((formItem, index) => (
-            <SoftwareComboboxField
+            <FormComboboxField
               key={index}
               form={form}
               name={formItem.name as SoftwareComboboxFieldName}
