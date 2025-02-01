@@ -70,15 +70,9 @@ export const CreateEventSchema = z.object({
     organisation_id: z.optional(z.number())
 })
 
-export const SoftwareTableSchema = z.object({
-    name: z.string(),
-    short_name: z.string(),
-    program_link: z.string(),
-    version: z.string(),
-    version_date: z.string(),
+export const LicenseSchema = z.object({
     license_type: z.string(),
-    contracts: z.array(z.string()),
-    id: z.number()
+    id: z.number(),
 })
 
 export const ContractSchema = z.object({
@@ -86,6 +80,23 @@ export const ContractSchema = z.object({
     contract_date: z.string(),
     id: z.number(),
     selected: z.boolean()
+})
+
+export const ContractSchemaFromBack = z.object({
+    contract_number: z.string(),
+    contract_date: z.string(),
+    id: z.number(),
+})
+
+export const SoftwareTableSchema = z.object({
+    name: z.string(),
+    short_name: z.string(),
+    program_link: z.string(),
+    version: z.string(),
+    version_date: z.string(),
+    license_type: z.string(),
+    contracts: z.array(ContractSchema),
+    id: z.number()
 })
 
 export const SoftwareSchema = z.object({
@@ -108,9 +119,7 @@ export const SoftwareSchema = z.object({
     license_id: z.number().min(1, {
         message: "Пожалуйста, выберите лицензию."
     }),
-    contract_id: z.number().min(1, {
-        message: "Пожалуйста, выберите договор."
-    }),
+    contracts: z.any()
 })
 
 export const UserLogSchema = z.object({

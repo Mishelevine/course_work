@@ -19,6 +19,7 @@ import { AlertDialogTrigger } from "../ui/alert-dialog";
 import { Checkbox } from "../ui/checkbox";
 import ModalForm from "../modal-form";
 import ContractUpdateForm from "./contract-update-form";
+import { useEffect } from "react";
 
 export const ContractsTableColumns: ColumnDef<z.infer<typeof ContractSchema>>[] = [
     {
@@ -33,15 +34,26 @@ export const ContractsTableColumns: ColumnDef<z.infer<typeof ContractSchema>>[] 
                 aria-label="Выбрать все"
             />
         ),
-        cell: ({ row }) => (
-            <Checkbox
-                checked={row.getValue("selected") as boolean}
-                onCheckedChange={(value) => row.toggleSelected(!!value)}
-                aria-label="Выбрать запись"
-            />
-        ),
-        enableSorting: false,
-        enableHiding: false,
+        cell: ({ row }) => {
+            useEffect(() => {
+                if (row.original.selected !== row.getIsSelected()) {
+                    row.toggleSelected(row.original.selected);
+                }
+            }, [row.original.selected]);
+
+            return (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value) => {
+                        row.original.selected = !!value;
+                        row.toggleSelected(!!value)
+                    }}
+                    aria-label="Выбрать запись"
+                />
+            );
+        },
+        enableSorting: true,
+        enableHiding: true,
     },
     {
         accessorKey: "contract_number",
@@ -53,6 +65,7 @@ export const ContractsTableColumns: ColumnDef<z.infer<typeof ContractSchema>>[] 
             return (
                 <Button
                     variant="ghost"
+                    type="button"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Дата договора

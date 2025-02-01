@@ -37,3 +37,8 @@ export function DatetimeFromDbForm(date: string) {
 
     return normalDate
 }
+
+export function DateFromDbForm(date: string) {
+    const dateSubstr = date.substring(0, 10)
+    return dateSubstr
+}

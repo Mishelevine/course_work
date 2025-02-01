@@ -20,6 +20,7 @@ import { DeleteRowSoftwareTable } from "../helper-functions";
 import ModalForm from "../modal-form";
 import { SoftwareUpdateForm } from "./software-update-form";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
+import ContractsTable from "../contracts_table/contracts-table";
 
 export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>>[] = [
     {
@@ -93,14 +94,17 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
             return (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-fit">
-                            АЛЛО ПОКАЖИСЬ
+                        <Button className="h-8 w-fit p-2 bg-gray-100 hover:text-white hover:bg-gray-400
+                        border-[1px] border-gray-400 text-black">
+                            Показать ({row.original.contracts.length})
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Hello</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-
+                        <ContractsTable
+                            checkboxes={false}
+                            actions={false}
+                            data={row.original.contracts}
+                        />
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
