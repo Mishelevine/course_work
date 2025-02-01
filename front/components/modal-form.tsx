@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from "@/components/ui/alert-dialog"
-const ModalSoftwareForm = ({
+const ModalForm = ({
   form,
   title,
   description,
@@ -36,4 +36,4 @@ const ModalSoftwareForm = ({
   )
 }
 
-export default ModalSoftwareForm
+export default ModalForm

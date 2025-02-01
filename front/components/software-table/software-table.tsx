@@ -5,6 +5,12 @@ import axios from "axios"
 import { API_URL } from "@/constants"
 import { SoftwareDataTable } from "./data-table"
 
+type Contract = {
+    contract_number: string,
+    contract_date: string,
+    id: number
+}
+
 type SoftwareSchemaFromBack = {
     name: string,
     short_name: string,
@@ -12,7 +18,7 @@ type SoftwareSchemaFromBack = {
     version: string,
     version_date: string,
     license_id: number,
-    contract_id: number,
+    contracts: Contract[],
     id: number
 }
 
@@ -21,7 +27,7 @@ async function getSoftwareData(): Promise<z.infer<typeof SoftwareTableSchema>[]>
 
     const newData = await Promise.all(softwareData.map(async (elem: SoftwareSchemaFromBack) => {
         const licenseType = (await axios.get(API_URL + `/license/${elem.license_id}`)).data.license_type
-        const contract = (await axios.get(API_URL + `/contract/${elem.contract_id}`)).data
+        const contract = elem.contracts[0]
         const newElem = {
             name: elem.name,
             short_name: elem.short_name,

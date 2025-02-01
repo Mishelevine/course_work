@@ -10,8 +10,13 @@ export const sidebarLinks = [
         // imgUrl: '/icons/activities.svg'
     },
     {
-        label: 'Пользователи',
-        route: '/users',
+        label: 'Журнал аудита',
+        route: '/userlog',
+        // imgUrl: '/icons/organisations.svg'
+    },
+    {
+        label: 'Договоры',
+        route: '/contracts',
         // imgUrl: '/icons/organisations.svg'
     }
 ]

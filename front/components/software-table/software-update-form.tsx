@@ -13,7 +13,8 @@ import { FormError } from "../form-error";
 import { SoftwareSchema } from "@/schemas";
 import SoftwareTextField from "./software-text-field";
 import SoftwareComboboxField from "./software-combobox-field";
-import { SoftwareComboboxFieldName, SoftwareTextFieldName } from "./add-software-form";
+import { SoftwareComboboxFieldName, SoftwareTextFieldName } from "./software-add-form";
+import { useToast } from "@/hooks/use-toast"
 import { DateToDbForm } from "../helper-functions";
 
 const tempLicenseData = [
@@ -75,19 +76,20 @@ const softwareComboboxFields = [
     inputPlaceholder: "Введите название...",
     emptyText: "Лицензий не найдено."
   },
-  {
-    name: "contract_id",
-    label: "Номер договора",
-    data: tempContractData,
-    frontText: "Выберите договор",
-    inputPlaceholder: "Введите название или дату...",
-    emptyText: "Договоров не найдено."
-  }
+  // {
+  //   name: "contract_id",
+  //   label: "Номер договора",
+  //   data: tempContractData,
+  //   frontText: "Выберите договор",
+  //   inputPlaceholder: "Введите название или дату...",
+  //   emptyText: "Договоров не найдено."
+  // }
 ]
 
 export const SoftwareUpdateForm = ({ id }: { id: number }) => {
   const [error, setError] = useState<string | undefined>("")
   const [loading, setLoading] = useState<boolean>(true)
+  const { toast } = useToast()
   const router = useRouter()
 
   useEffect(() => {
@@ -136,13 +138,17 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
         software_id: id
       }
     })
-      .then(() => {
-        console.log("Updated!", data)
+    .then(() => {
+      toast({
+        title: "Запись обновлена",
+        description: "Данные записаны в БД",
       })
-      .catch((e) => {
-        console.log("Error while updating row!")
-        console.log(e)
-      })
+      console.log("Updated!", data)
+    })
+    .catch((e) => {
+      console.log("Error while updating row!")
+      console.log(e)
+    })
   }
 
   if (loading) {

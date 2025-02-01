@@ -77,9 +77,15 @@ export const SoftwareTableSchema = z.object({
     version: z.string(),
     version_date: z.string(),
     license_type: z.string(),
+    contracts: z.array(z.string()),
+    id: z.number()
+})
+
+export const ContractSchema = z.object({
     contract_number: z.string(),
     contract_date: z.string(),
-    id: z.number()
+    id: z.number(),
+    selected: z.boolean()
 })
 
 export const SoftwareSchema = z.object({

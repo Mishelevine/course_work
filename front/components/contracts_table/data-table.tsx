@@ -26,28 +26,35 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "../helper-functions"
-import { SoftwareAddForm } from "./software-add-form"
 import ModalForm from "../modal-form"
 import DownloadButton from "../download-button"
 import { API_URL } from "@/constants"
 import { AlertDialogTrigger } from "../ui/alert-dialog"
+import ContractAddForm from "./contract-add-form"
 
-interface SoftwareDataTableProps<TData, TValue> {
+interface ContractsDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  checkboxes: boolean,
+  actions: boolean
 }
 
-export function SoftwareDataTable<TData, TValue>({
+export function ContractsDataTable<TData, TValue>({
   columns,
   data,
-}: SoftwareDataTableProps<TData, TValue>) {
+  checkboxes,
+  actions
+}: ContractsDataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
-    id: false
+    select: checkboxes,
+    id: false,
+    actions: actions
   })
+  const [rowSelection, setRowSelection] = React.useState({})
   const [currentPageNumber, setCurrentPageNumber] = React.useState<number>(1)
 
   const table = useReactTable({
@@ -59,26 +66,28 @@ export function SoftwareDataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
+      rowSelection
     }
   })
 
   return (
     <ModalForm
-      title="Создать ПО"
+      title="Создать договор"
       description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<SoftwareAddForm />}
+      form={<ContractAddForm />}
     >
       <div className="w-full h-full">
         <div className="flex items-center justify-between py-4">
           <Input
-            placeholder="Поиск по наименованию ПО..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            placeholder="Поиск по номеру договора..."
+            value={(table.getColumn("contract_number")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
+              table.getColumn("contract_number")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />

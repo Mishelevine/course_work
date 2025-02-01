@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { SoftwareSchema } from '@/schemas';
 import { UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
-import { SoftwareComboboxFieldName } from './add-software-form';
+import { SoftwareComboboxFieldName } from './software-add-form';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown } from 'lucide-react';
