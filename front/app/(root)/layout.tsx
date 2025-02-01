@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/navbar'
 import Sidebar from '@/components/sidebar'
-// import { Toaster } from 'sonner';
+import { Toaster } from "@/components/ui/toaster"
 
 import React, { ReactNode } from 'react'
 
@@ -19,7 +19,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
               <div>
                   {children}
               </div>
-              {/* <Toaster /> */}
+              <Toaster />
           </section>
       </div>
     </main>

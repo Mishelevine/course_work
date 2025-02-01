@@ -5,30 +5,21 @@ import axios from "axios";
 import { API_URL } from "@/constants";
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { Form } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Button } from "../ui/button";
 import { useForm } from "react-hook-form"
-import { useState } from "react";
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
 import { FormError } from "../form-error";
-import { SoftwareSchema } from "@/schemas";
+import { LicenseSchema, SoftwareSchema } from "@/schemas";
 
 import SoftwareTextField from "./software-text-field";
 import SoftwareComboboxField from "./software-combobox-field";
 import { DateToDbForm } from "../helper-functions";
+import ContractsTable from "../contracts_table/contracts-table";
+import { useToast } from "@/hooks/use-toast";
 
 export type SoftwareTextFieldName = "name" | "short_name" | "program_link" | "version" | "version_date";
-export type SoftwareComboboxFieldName = "license_id" | "contract_id"
-
-const tempLicenseData = [
-  { label: "Freeware", value: 1 },
-  { label: "Shareware", value: 2 }
-]
-
-const tempContractData = [
-  { label: "6027-914 от 11.10.2020", value: 2 },
-  { label: "string от 13.01.2025", value: 3 },
-]
+export type SoftwareComboboxFieldName = "license_id"
 
 const softwareTextFields = [
   {
@@ -62,24 +53,40 @@ const softwareComboboxFields = [
   {
     name: "license_id",
     label: "Тип лицензии",
-    data: tempLicenseData,
     frontText: "Выберите тип лицензии",
     inputPlaceholder: "Введите название...",
     emptyText: "Лицензий не найдено."
-  },
-  {
-    name: "contract_id",
-    label: "Номер договора",
-    data: tempContractData,
-    frontText: "Выберите договор",
-    inputPlaceholder: "Введите название или дату...",
-    emptyText: "Договоров не найдено."
   }
 ]
 
 export const SoftwareAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
-  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(true)
+  const [selectedContractIds, setSelectedContractIds] = useState<number[]>([]);
+  const [licensesData, setLicenseData] = useState<z.infer<typeof LicenseSchema>[]>([])
+
+  const { toast } = useToast()
+
+  useEffect(() => {
+    setLoading(true)
+    const fetchData = async () => {
+      try {
+        const response = (await axios.get(API_URL + `/license/all`)).data as z.infer<typeof LicenseSchema>[]
+        setLicenseData(response)
+        setLoading(false)
+      }
+      catch(e) {
+        console.log("Ошибка при получении данных о лицензиях")
+        console.log(e)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  const handleSelectedRowsChange = (selectedIds: number[]) => {
+    setSelectedContractIds(selectedIds);
+  };
 
   const form = useForm<z.infer<typeof SoftwareSchema>>({
     resolver: zodResolver(SoftwareSchema),
@@ -90,31 +97,52 @@ export const SoftwareAddForm = () => {
       version: "",
       version_date: "",
       license_id: 0,
-      contract_id: 0
+      contracts: []
     }
-  })
+  });
 
   function AddRowSoftwareTable(data: z.infer<typeof SoftwareSchema>) {
     setError("")
-    axios.post(API_URL + '/software/create', null, {
-      params: {
+    if (selectedContractIds.length === 0) {
+      setError("Выберите хотя бы один договор")
+    }
+    else {
+      axios.post(API_URL + '/software/create', {
         name: data.name,
         short_name: data.short_name,
         program_link: data.program_link,
         version: data.version,
         version_date: DateToDbForm(data.version_date),
         license_id: data.license_id,
-        contract_id: data.contract_id
-      }
-    })
+        contract_ids: selectedContractIds,
+      })
       .then(() => {
         console.log("Added row", data)
+        toast({
+          title: "Запись добавлена",
+          description: "Данные записаны в БД",
+          className: "bg-white"
+        })
       })
       .catch((e) => {
-        setError("Во время добавления записи произошла непредвиденная ошибка.")
+        setError("Во время добавления записи произошла непредвиденная ошибка!")
         console.log("Unexpected error occured while adding row.")
+        console.log({
+            name: data.name,
+            short_name: data.short_name,
+            program_link: data.program_link,
+            version: data.version,
+            version_date: DateToDbForm(data.version_date),
+            license_id: data.license_id,
+            contract_ids: selectedContractIds,
+        })
         console.log(e)
       })
+    }
+  }
+
+  if (loading) {
+    return <div>Загрузка...</div>
   }
 
   return (
@@ -139,12 +167,37 @@ export const SoftwareAddForm = () => {
               form={form}
               name={formItem.name as SoftwareComboboxFieldName}
               label={formItem.label}
-              data={formItem.data}
+              data={licensesData}
               frontText={formItem.frontText}
               inputPlaceholder={formItem.inputPlaceholder}
               emptyText={formItem.emptyText}
             />
           })}
+
+          <FormField
+            control={form.control}
+            name="contracts"
+            render={() => (
+                <FormItem>
+                    <FormLabel>
+                      Договоры
+                    </FormLabel>
+                    <FormControl>
+                      <section
+                          className='flex flex-col gap-5 bg-light-3 p-1
+                          rounded-[10px] border border-gray-300'
+                      >
+                        <ContractsTable
+                          checkboxes={true}
+                          actions={false}
+                          onSelectedRowsChange={handleSelectedRowsChange}
+                        />
+                      </section>
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+          />
         </div>
         <FormError message={error} />
         <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">Создать</Button>

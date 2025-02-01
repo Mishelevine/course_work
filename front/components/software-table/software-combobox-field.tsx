@@ -2,10 +2,10 @@ import React from 'react'
 
 import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { SoftwareSchema } from '@/schemas';
+import { LicenseSchema, SoftwareSchema } from '@/schemas';
 import { UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
-import { SoftwareComboboxFieldName } from './add-software-form';
+import { SoftwareComboboxFieldName } from './software-add-form';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown } from 'lucide-react';
@@ -20,7 +20,7 @@ interface SoftwareComboboxFieldProps {
   form: UseFormReturn<z.infer<typeof SoftwareSchema>>
   name: SoftwareComboboxFieldName
   label: string
-  data: ComboboxDataStruct[]
+  data: z.infer<typeof LicenseSchema>[]
   frontText: string
   inputPlaceholder: string
   emptyText: string
@@ -55,8 +55,8 @@ const SoftwareComboboxField = ({
                 >
                   {field.value
                     ? data.find(
-                      (elem) => elem.value === field.value
-                    )?.label
+                      (elem) => elem.id === field.value
+                    )?.license_type
                     : frontText
                   }
                   <ChevronsUpDown className="opacity-50" />
@@ -74,17 +74,17 @@ const SoftwareComboboxField = ({
                   <CommandGroup>
                     {data.map((elem) => (
                       <CommandItem
-                        value={elem.label}
-                        key={elem.value}
+                        value={elem.license_type}
+                        key={elem.id}
                         onSelect={() => {
-                          form.setValue(name, elem.value)
+                          form.setValue(name, elem.id)
                         }}
                       >
-                        {elem.label}
+                        {elem.license_type}
                         <Check
                           className={cn(
                             "ml-auto",
-                            elem.value === field.value
+                            elem.id === field.value
                               ? "opacity-100"
                               : "opacity-0"
                           )}
