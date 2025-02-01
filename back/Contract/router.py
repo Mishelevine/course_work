@@ -15,16 +15,16 @@ async def create_contract(contract_data: SContractCreate):
         raise HTTPException(status_code=400, detail="Contract number already exists")
     return await crud.create_contract(contract_data=contract_data)
 
+@router.get("/all")
+async def get_all_contracts() -> List[SContract]:
+    return await crud.get_all_contracts()
+
 @router.get("/{contract_id}", response_model=SContract)
 async def get_contract(contract_id: int):
     contract_obj = await crud.get_contract(contract_id)
     if not contract_obj:
         raise HTTPException(status_code=404, detail="Contract not found")
     return contract_obj
-
-@router.get("/all")
-async def get_all_contracts() -> List[SContract]:
-    return await crud.get_all_contracts()
 
 @router.put("/{contract_id}/update", response_model=SContract)
 async def update_contract(contract_id: int, contract_data: SContractCreate):
