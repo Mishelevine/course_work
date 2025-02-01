@@ -3,10 +3,10 @@ from typing import Optional
 
 class SEquipmentBase(BaseModel):
     model: str
-    serial_number: int
-    inventory_number: int
+    serial_number: str
+    inventory_number: str
     network_name: str
-    remarks: Optional[str]
+    remarks: Optional[str] = None
     type_id: int
 
 class SEquipmentCreate(SEquipmentBase):
