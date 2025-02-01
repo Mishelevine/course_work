@@ -15,16 +15,16 @@ async def create_license(license: SLicenseCreate):
         raise HTTPException(status_code=400, detail="License already exists")
     return await crud.create_license(license=license)
 
+@router.get("/all")
+async def get_all_licenses() -> List[SLicense]:
+    return await crud.get_all_licenses()
+
 @router.get("/{license_id}", response_model=SLicense)
 async def get_license(license_id: int):
     license = await crud.get_license(license_id)
     if not license:
         raise HTTPException(status_code=404, detail="License not found")
     return license
-
-@router.get("/all")
-async def get_all_licenses() -> List[SLicense]:
-    return await crud.get_all_licenses()
 
 @router.put("/{license_id}/update", response_model=SLicense)
 async def update_License(license_id: int, updated_license: SLicenseCreate):
