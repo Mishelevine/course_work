@@ -23,6 +23,8 @@ from back.SessionLog.models import SessionLog
 from back.Building.models import Building
 from back.EquipmentType.models import EquipmentType
 from back.EquipmentStatusType.models import EquipmentStatusType
+from back.ResponsibleUserJob.models import ResponsibleUserJob
+from back.ResponsibleUserOffice.models import ResponsibleUserOffice
 from back.ResponsibleUser.models import ResponsibleUser
 from back.Equipment.models import Equipment
 from back.EquipmentStatus.models import EquipmentStatus
