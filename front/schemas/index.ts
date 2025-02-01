@@ -70,14 +70,61 @@ export const CreateEventSchema = z.object({
     organisation_id: z.optional(z.number())
 })
 
-export const SoftwareSchema = z.object({
+export const LicenseSchema = z.object({
+    license_type: z.string(),
+    id: z.number(),
+})
+
+export const ContractSchema = z.object({
+    contract_number: z.string(),
+    contract_date: z.string(),
+    id: z.number(),
+    selected: z.boolean()
+})
+
+export const ContractSchemaFromBack = z.object({
+    contract_number: z.string(),
+    contract_date: z.string(),
+    id: z.number(),
+})
+
+export const SoftwareTableSchema = z.object({
     name: z.string(),
     short_name: z.string(),
     program_link: z.string(),
     version: z.string(),
     version_date: z.string(),
     license_type: z.string(),
-    contract_number: z.string(),
-    contract_date: z.string(),
+    contracts: z.array(ContractSchema),
     id: z.number()
+})
+
+export const SoftwareSchema = z.object({
+    name: z.string().min(1, {
+        message: "Пожалуйста, введите название ПО"
+    }),
+    short_name: z.string().min(1, {
+        message: "Пожалуйста, введите сокращенное название ПО"
+    }),
+    program_link: z.string().min(1, {
+        message: "Пожалуйста, вставьте ссылку на сайт ПО"
+    }),
+    version: z.string().min(1, {
+        message: "Пожалуйста, введите версию ПО"
+    }),
+    version_date: z.string().regex(
+        new RegExp('(^(31)[.](0[13578]|1[02])[.]((18|19|20)[0-9]{2})$)|(^(29|30)[.](01|0[3-9]|1[1-2])[.]((18|19|20)[0-9]{2})$)|(^(0[1-9]|1[0-9]|2[0-8])[.](0[1-9]|1[0-2])[.]((18|19|20)[0-9]{2})$)|(^(29)[.](02)[.](((18|19|20)(04|08|[2468][048]|[13579][26]))|2000)$)'),
+        'Некорректный формат даты'
+    ),
+    license_id: z.number().min(1, {
+        message: "Пожалуйста, выберите лицензию."
+    }),
+    contracts: z.any()
+})
+
+export const UserLogSchema = z.object({
+    event_type: z.string(),
+    time: z.string(),
+    user_name: z.string(),
+    user_role: z.string()
 })

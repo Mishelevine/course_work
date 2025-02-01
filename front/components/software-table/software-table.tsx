@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { SoftwareTableColumns } from "./columns"
-import { SoftwareSchema } from "@/schemas"
+import { ContractSchemaFromBack, SoftwareTableSchema } from "@/schemas"
 import axios from "axios"
 import { API_URL } from "@/constants"
 import { SoftwareDataTable } from "./data-table"
@@ -12,26 +12,24 @@ type SoftwareSchemaFromBack = {
     version: string,
     version_date: string,
     license_id: number,
-    contract_id: number,
+    contracts: z.infer<typeof ContractSchemaFromBack>[],
     id: number
 }
 
-async function getSoftwareData(): Promise<z.infer<typeof SoftwareSchema>[]> {
-    const softwareData = (await axios.get(API_URL + '/software')).data
+async function getSoftwareData(): Promise<z.infer<typeof SoftwareTableSchema>[]> {
+    const softwareData = (await axios.get(API_URL + '/software/all')).data
 
     const newData = await Promise.all(softwareData.map(async (elem: SoftwareSchemaFromBack) => {
-        const licenseType = (await axios.get(API_URL + `/license/licenses/${elem.license_id}`)).data.license_type
-        const contract = (await axios.get(API_URL + `/contract/contracts/${elem.contract_id}`)).data
+        const licenseType = (await axios.get(API_URL + `/license/${elem.license_id}`)).data.license_type
         const newElem = {
+            id: elem.id,
             name: elem.name,
             short_name: elem.short_name,
             program_link: elem.program_link,
             version: elem.version,
             version_date: elem.version_date.substring(0, 10),
             license_type: licenseType,
-            contract_number: contract.contract_number,
-            contract_date: contract.contract_date.substring(0, 10),
-            id: elem.id
+            contracts: elem.contracts,
         }
         return newElem
     }))
@@ -41,13 +39,14 @@ async function getSoftwareData(): Promise<z.infer<typeof SoftwareSchema>[]> {
 
 export default async function SoftwareTable() {
     const data = await getSoftwareData()
-    // console.log(data)
+    console.log(data)
+
     return (
         <section
             className='flex flex-col gap-5 bg-light-3 p-6
             rounded-[14px] border border-gray-300 shadow'
         >
-            <SoftwareDataTable columns={SoftwareTableColumns} data={data}/>
+            <SoftwareDataTable columns={SoftwareTableColumns} data={data} />
         </section>
     )
 }

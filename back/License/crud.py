@@ -16,6 +16,12 @@ async def get_license_by_type(license_type: str):
         query = select(License).filter(License.license_type == license_type)
         result = await session.execute(query)
         return result.scalar_one_or_none()
+    
+async def get_all_licenses() -> list[License]:
+    async with async_session() as session:
+        query = select(License)
+        result = await session.execute(query)
+        return result.scalars().all()
 
 async def create_license(license: SLicenseCreate):
     async with async_session() as session:
