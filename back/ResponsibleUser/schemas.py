@@ -4,9 +4,9 @@ from typing import Optional
 class SResponsibleUserBase(BaseModel):
     first_name: str
     last_name: str
-    paternity: Optional[str]
-    job: str
-    office: str
+    paternity: Optional[str] = None
+    job_id: int
+    office_id: int
 
 class SResponsibleUserCreate(SResponsibleUserBase):
     pass
