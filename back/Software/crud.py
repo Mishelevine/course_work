@@ -4,6 +4,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.orm import joinedload
 from back.Software.models import Software
 from back.Contract.models import Contract
+from back.License.models import License
 from back.SoftwareContract.models import SoftwareContract
 from back.Software.schemas import SSoftwareCreate, SSoftware
 from back.database import async_session
@@ -13,6 +14,11 @@ from fastapi import Depends
 async def create_software(software: SSoftwareCreate):
     async with async_session() as session:
         async with session.begin():
+            
+            license = await session.get(License, software.license_id)
+            if not license:
+                raise HTTPException(status_code=404, detail="License not found")
+        
             db_software = Software(
                 name=software.name,
                 short_name=software.short_name,

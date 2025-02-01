@@ -13,5 +13,5 @@ class Software(Base):
     version_date = Column(Date, nullable=True)
     license_id = Column(Integer, ForeignKey("licenses.id", ondelete='CASCADE'))
 
-    license = relationship("License", back_populates="software", cascade="save-update, merge, delete", passive_deletes=True)
-    contracts = relationship("SoftwareContract", back_populates="software", cascade="save-update, merge, delete")
+    license = relationship("License", back_populates="software")
+    contracts = relationship("SoftwareContract", back_populates="software", cascade="all, delete-orphan")
