@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from back.SystemRole.router import router as router_roles
-from back.User.router import router as router_users
+from back.User.router import router as router_auth
+from back.User.user_router import router as router_users
 from back.Job.router import router as router_jobs
 from back.Office.router import router as router_offices
 from back.License.router import router as router_license
@@ -22,6 +23,7 @@ app = FastAPI(
 )
 
 app.include_router(router_roles)
+app.include_router(router_auth)
 app.include_router(router_users)
 app.include_router(router_jobs)
 app.include_router(router_offices)

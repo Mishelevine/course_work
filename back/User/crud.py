@@ -1,10 +1,22 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 from back.User.models import User
 from back.User.schemas import SUserCreate
 from back.database import async_session
 from passlib.hash import bcrypt
 from fastapi import Depends
+
+
+async def get_all_users() -> list[User]:
+    async with async_session() as session:
+        query = select(User).options(
+            joinedload(User.job),
+            joinedload(User.office),
+            joinedload(User.system_role)
+        )
+        result = await session.execute(query)
+        return result.unique().scalars().all()
 
 async def get_user_by_username(username: str):
     async with async_session() as session:
