@@ -5,39 +5,15 @@ import { API_URL } from '@/constants'
 import { useRouter } from "next/navigation";
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
-async function RefreshAccessToken() {
-    try {
-        const getUserInfo = await axios.post(API_URL + '/auth/token/refresh')
-
-        if (getUserInfo.status === 401){
-            return false
-        }
-
-        return true
-    }
-    catch(e) {
-        console.log(e)
-        console.log("!Unexpected error during refreshing access token!")
-        console.log(e.status, e.message)
-    }
-
-    return false
-}
-
 async function Logout(router: AppRouterInstance){
+    axios.defaults.withCredentials = true
     axios.post(API_URL + '/auth/logout')
     .then(() => {
         router.push('/sign-in')
     })
     .catch(async (e) => {
-        if (e.status === 401){
-            await RefreshAccessToken()
-            router.push('/sign-in')
-        }
-        else{
-            console.log("!Unexpected error while logging out!")
-            console.log(e)
-        }
+        console.log("!Unexpected error while logging out!")
+        console.log(e)
     })
 }
 

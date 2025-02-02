@@ -31,7 +31,6 @@ export function DeleteRowTable(from: string, id: number) {
 
 export function DatetimeFromDbForm(date: string) {
     const dateSubstr = date.substring(0, 19)
-    console.log(dateSubstr)
     const dateTimeSplit = dateSubstr.split('T')
     const dateSplit = dateTimeSplit[0].split('-')
     const normalDate = dateSplit[2] + '.' + dateSplit[1] + '.' + dateSplit[0] + ' ' + dateTimeSplit[1]

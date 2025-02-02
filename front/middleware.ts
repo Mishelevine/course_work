@@ -2,13 +2,11 @@ import { NextResponse, NextRequest } from "next/server";
 import { WEBSITE_URL, signingPages, imgExtensions, closedPages, API_URL } from "@/constants"
 import axios from "axios";
 
-export async function CheckAccessToken(
-    accessToken: string | undefined,
-    refreshToken: string | undefined
-) {
+async function GetAccessToken(req: NextRequest) {
+    const accessToken = req.cookies.get("Authorization")?.value
     if (accessToken === undefined){
         console.log("No access token!")
-        return await RefreshAccessToken(refreshToken)
+        return await RefreshAccessToken(req)
     }
 
     try {
@@ -21,73 +19,92 @@ export async function CheckAccessToken(
 
         if (getUserInfo.status === 401){
             console.log("Access token expired, refreshing it.")
-            return await RefreshAccessToken(refreshToken)
+            return await RefreshAccessToken(req)
         }
 
         console.log("Access token OK")
-        return true
+        return [false, accessToken]
     }
     catch (e) {
         console.log("Unexpected error during checking access token!")
         console.log(e.status, e.message)
     }
 
-    return false
+    return [true, undefined]
 }
 
-export async function RefreshAccessToken(refreshToken: string | undefined) {
+async function RefreshAccessToken(req: NextRequest) {
+    const refreshToken = req.cookies.get("refresh_token")?.value
+
     if (refreshToken === undefined){
         console.log("No refresh token!")
-        return false
+        return [true, undefined]
     }
 
     try {
-        const getUserInfo = await axios.post(API_URL + '/auth/token/refresh', {
-            params: {
-                refresh_token: refreshToken
-            }
-        })
-
-        console.log(getUserInfo)
+        const getUserInfo = await axios.post(API_URL + '/auth/token/refresh', null, { params: {
+            refresh_token: refreshToken
+        }})
 
         if (getUserInfo.status === 401){
             console.log("Refresh token expired!")
-            return false
+            return [true, undefined]
         }
 
         console.log("Access token refreshed")
-        return true
+        return [true, getUserInfo.data["access_token"]]
     }
     catch(e) {
         console.log("!Unexpected error during refreshing access token!")
         console.log(e.status, e.message)
     }
 
-    return false
+    return [true, undefined]
+}
+
+async function SetCookieIfNeeded(res: NextResponse, setCookie: boolean, accessToken: string) {
+    const maxAgeMinutes = 15
+
+    if (setCookie && accessToken) {
+        res.cookies.set("Authorization", accessToken, {
+            httpOnly: true,
+            maxAge: maxAgeMinutes * 60,
+        })
+    }
+
+    return res
 }
 
 export default async function middleware(req: NextRequest){
-    // const accessToken = req.cookies.get("Authorization")?.value
-    // const refreshToken = req.cookies.get("refresh_token")?.value
+    const resp = await GetAccessToken(req)
+    const setCookie = resp[0]
+    const accessToken = resp[1]
+    const isAuthorized = accessToken !== undefined
 
-    // const isAuthorized = await CheckAccessToken(accessToken, refreshToken)
-    // const url = req.url
+    const url = req.url
 
-    // if(imgExtensions.some(elem => url.includes(elem))){
-    //   return NextResponse.next()
-    // }
+    if(imgExtensions.some(elem => url.includes(elem))){
+        return NextResponse.next()
+    }
 
-    // if(!isAuthorized && !signingPages.some(link => url.includes(link))){
-    //   return NextResponse.redirect(WEBSITE_URL + '/sign-in')
-    // }
+    if(!isAuthorized && !signingPages.some(link => url.includes(link))){
+        const res = NextResponse.redirect(WEBSITE_URL + '/sign-in')
+        return SetCookieIfNeeded(res, setCookie, accessToken)
+    }
 
-    // if (isAuthorized && signingPages.some(link => url.includes(link))){
-    //   return NextResponse.redirect(WEBSITE_URL)
-    // }
+    if (isAuthorized && signingPages.some(link => url.includes(link))){
+        console.log("here")
+        const res = NextResponse.redirect(WEBSITE_URL)
+        return SetCookieIfNeeded(res, setCookie, accessToken)
+    }
 
-    // if (isAuthorized && closedPages.some(link => url.includes(link))){
-    //   return NextResponse.redirect(WEBSITE_URL)
-    // }
+    if (isAuthorized && closedPages.some(link => url.includes(link))){
+        const res = NextResponse.redirect(WEBSITE_URL)
+        return SetCookieIfNeeded(res, setCookie, accessToken)
+    }
+
+    const res = NextResponse.next()
+    return SetCookieIfNeeded(res, setCookie, accessToken)
 }
 
 export const config = {
