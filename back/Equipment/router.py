@@ -6,7 +6,7 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 import pandas as pd
-from back.Equipment.schemas import SEquipment, SEquipmentCreate
+from back.Equipment.schemas import SEquipment, SEquipmentCreate, SEquipmentWithResponsible
 from back.Equipment import crud
 
 router = APIRouter(
@@ -95,7 +95,7 @@ async def create_equipment(equipment: SEquipmentCreate):
     return await crud.create_equipment(equipment=equipment)
 
 @router.get("/all")
-async def get_all_equipment() -> List[SEquipment]:
+async def get_all_equipment() -> List[SEquipmentWithResponsible]:
     return await crud.get_all_equipment()
 
 @router.get("/{equipment_id}", response_model=SEquipment)
