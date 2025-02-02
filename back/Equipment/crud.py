@@ -57,7 +57,8 @@ async def get_all_equipment() -> list[SEquipmentWithResponsible]:
                     inventory_number=equipment.inventory_number,
                     network_name=equipment.network_name,
                     remarks=equipment.remarks,
-                    responsible_user_full_name=responsible_user_full_name
+                    responsible_user_full_name=responsible_user_full_name,
+                    type_name=equipment.type.type_name
                 )
             )
             
