@@ -20,6 +20,7 @@ class SEquipment(SEquipmentBase):
         
 class SEquipmentWithResponsible(SEquipment):
     responsible_user_full_name: Optional[str] = None
+    type_name: Optional[str] = None
 
     class Config:
         from_attributes = True
