@@ -1,32 +1,24 @@
 import React from 'react'
 
 import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { LicenseSchema, SoftwareSchema } from '@/schemas';
-import { UseFormReturn } from 'react-hook-form';
-import { z } from 'zod';
-import { SoftwareComboboxFieldName } from './software-add-form';
-import { Button } from '../ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { FieldValues, Path, UseFormReturn } from 'react-hook-form';
+import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/command";
 
-interface ComboboxDataStruct {
-  label: string,
-  value: number
-}
-
-interface SoftwareComboboxFieldProps {
-  form: UseFormReturn<z.infer<typeof SoftwareSchema>>
-  name: SoftwareComboboxFieldName
+interface FormComboboxFieldProps<TFormSchema extends FieldValues, TTextFieldName extends Path<TFormSchema>, TDataSchema extends FieldValues> {
+  form: UseFormReturn<TFormSchema>
+  name: TTextFieldName
   label: string
-  data: z.infer<typeof LicenseSchema>[]
+  data: TDataSchema[]
   frontText: string
   inputPlaceholder: string
   emptyText: string
 }
 
-const SoftwareComboboxField = ({
+function FormComboboxField<TFormSchema extends FieldValues, TTextFieldName extends Path<TFormSchema>, TDataSchema extends FieldValues>({
   form,
   name,
   label,
@@ -34,7 +26,7 @@ const SoftwareComboboxField = ({
   frontText,
   inputPlaceholder,
   emptyText
-}: SoftwareComboboxFieldProps) => {
+}: FormComboboxFieldProps<TFormSchema, TTextFieldName, TDataSchema>){
   return (
     <FormField
       control={form.control}
@@ -102,4 +94,4 @@ const SoftwareComboboxField = ({
   )
 }
 
-export default SoftwareComboboxField
+export default FormComboboxField
