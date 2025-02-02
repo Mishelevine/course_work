@@ -3,11 +3,13 @@ import pandas as pd
 import io
 import openpyxl
 from typing import List
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 import pandas as pd
 from back.Equipment.schemas import SEquipment, SEquipmentCreate, SEquipmentWithResponsible
 from back.Equipment import crud
+from back.User.depends import get_current_user
+from back.User.models import User
 
 router = APIRouter(
     prefix="/equipment",
@@ -95,8 +97,8 @@ async def create_equipment(equipment: SEquipmentCreate):
     return await crud.create_equipment(equipment=equipment)
 
 @router.get("/all")
-async def get_all_equipment() -> List[SEquipmentWithResponsible]:
-    return await crud.get_all_equipment()
+async def get_all_equipment(user: User = Depends(get_current_user)) -> List[SEquipmentWithResponsible]:
+    return await crud.get_all_equipment(user_role_id=user.system_role_id)
 
 @router.get("/{equipment_id}", response_model=SEquipment)
 async def get_equipment(equipment_id: int):

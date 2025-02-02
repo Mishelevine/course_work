@@ -26,11 +26,10 @@ email_regex = r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*
 
 @router.post("/signup", response_model=SUser)
 async def create_user(user: SUserCreate):
-    system_role_id = 1
 
     db_user = await crud.get_user_by_username(username=user.username)
     if db_user:
-        raise HTTPException(status_code=400, detail="Email already in use")
+        raise HTTPException(status_code=400, detail="Username already in use")
 
     access_token_expires = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
@@ -39,7 +38,7 @@ async def create_user(user: SUserCreate):
     )
 
     print(access_token)
-    new_user = await crud.create_user(user=user, system_role_id=system_role_id)
+    new_user = await crud.create_user(user=user, system_role_id=user.system_role_id)
     return new_user
 
 

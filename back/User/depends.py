@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from fastapi import Depends, HTTPException, Request, status
 from jose import jwt, JWTError
 from jwt.exceptions import JWTException
+from back.User.models import User
 from back.database import async_session
 
 from back.User import crud
@@ -20,7 +21,7 @@ def get_refresh_token(request: Request):
         raise HTTPException(status_code=401, detail="Refresh token absent")
     return refresh_token
 
-async def get_current_user(token: str = Depends(get_token)):
+async def get_current_user(token: str = Depends(get_token)) -> User:
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
@@ -29,7 +30,6 @@ async def get_current_user(token: str = Depends(get_token)):
         if not username:
             raise HTTPException(status_code=401, detail="Invalid token")
         
-        # Await the async function to get the actual user object
         async with async_session() as session:
             user = await crud.get_user_by_username(username=username)
         
