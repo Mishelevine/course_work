@@ -18,7 +18,7 @@ async def get_all_users() -> list[User]:
         result = await session.execute(query)
         return result.unique().scalars().all()
 
-async def get_user_by_username(username: str):
+async def get_user_by_username(username: str) -> User:
     async with async_session() as session:
         query = select(User).filter(User.username == username)
         result = await session.execute(query)
