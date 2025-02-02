@@ -7,6 +7,7 @@ class SUserBase(BaseModel):
     username: str
     job_id: int
     office_id: int
+    system_role_id: int = 1
 
 class SUserCreate(SUserBase):
     hashed_password: str
@@ -17,7 +18,6 @@ class SUserAuth(BaseModel):
 
 class SUser(SUserBase):
     id: int
-    system_role_id: int = 1
 
     class Config:
         from_attributes = True
