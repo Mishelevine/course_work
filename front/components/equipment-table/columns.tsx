@@ -12,7 +12,6 @@ import { AlertDialogTrigger } from "../ui/alert-dialog";
 import { DeleteRowTable } from "../helper-functions";
 import Link from "next/link";
 import { API_URL } from "@/constants";
-import { useToast } from "@/hooks/use-toast";
 
 export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[] = [
     {

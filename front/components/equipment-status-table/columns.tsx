@@ -1,37 +1,53 @@
 "use client"
 
-import { EquipmentSpecsSchema } from "@/schemas";
+import { EquipmentStatusTableSchema } from "@/schemas";
 import { ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
 import ModalForm from "../modal-form";
-import EquipmentSpecsUpdateForm from "./equipment-specs-update-form";
+import EquipmentStatusUpdateForm from "./equipment-status-update-form";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
-import { DeleteRowTable } from "../helper-functions";
+import { DatetimeFromDbForm, DeleteRowTable } from "../helper-functions";
 import { API_URL } from "@/constants";
 
-export const EquipmentSpecsTableColumns: ColumnDef<z.infer<typeof EquipmentSpecsSchema>>[] = [
+export const EquipmentStatusTableColumns: ColumnDef<z.infer<typeof EquipmentStatusTableSchema>>[] = [
     {
-        accessorKey: "screen_resolution",
-        header: "Разрешение экрана",
+        accessorKey: "status_type_name",
+        header: "Статус",
     },
     {
-        accessorKey: "processor_type",
-        header: "Тип процессора",
+        accessorKey: "doc_number",
+        header: "Номер договора",
     },
     {
-        accessorKey: "ram_size",
-        header: "Объём оперативной памяти",
+        accessorKey: "status_change_date",
+        header: "Дата изменения статуса",
+        cell: ({row}) => {
+            return DatetimeFromDbForm(row.getValue("status_change_date"))
+        }
     },
     {
-        accessorKey: "gpu_info",
-        header: "Характеристики ГП",
+        accessorKey: "responsible_user_fio",
+        header: "ФИО ответственного",
     },
     {
-        accessorKey: "storage",
-        header: "Тип и объём диска",
+        accessorKey: "responsible_user_job_name",
+        header: "Должность ответственного",
+    },
+
+    {
+        accessorKey: "responsible_user_office_name",
+        header: "Подразделение ответственного",
+    },
+    {
+        accessorKey: "building_address",
+        header: "Адрес учебного корпуса",
+    },
+    {
+        accessorKey: "audience_id",
+        header: "Номер аудитории",
     },
     {
         id: "actions",
@@ -39,8 +55,8 @@ export const EquipmentSpecsTableColumns: ColumnDef<z.infer<typeof EquipmentSpecs
             return (
                 <ModalForm
                     title="Изменить ПО"
-                    description={<>Измените все необходимые поля и нажмите кнопку <b>Изменить</b></>}
-                    form={<EquipmentSpecsUpdateForm id={row.getValue("id")} />}
+                    description={<>Заполните все поля и нажмите кнопку <b>Изменить</b></>}
+                    form={<EquipmentStatusUpdateForm id={row.getValue("id")} />}
                 >
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -53,12 +69,12 @@ export const EquipmentSpecsTableColumns: ColumnDef<z.infer<typeof EquipmentSpecs
                             <DropdownMenuLabel>Действия</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <AlertDialogTrigger asChild>
-                                <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
+                                <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить статус</DropdownMenuItem>
                             </AlertDialogTrigger>
                             <DropdownMenuItem onClick={() => {
-                                DeleteRowTable(API_URL + `/equipment_specs/${row.getValue("id")}`)
+                                DeleteRowTable(API_URL + `/equipment_status/${row.getValue("id")}`)
                             }}>
-                                Удалить запись
+                                Удалить статус
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

@@ -16,7 +16,7 @@ export default async function EquipmentSpecsTable(
     equipmentId: number
 }) {
     const data = await getEquipmentSpecsData(equipmentId)
-    console.log(data)
+    // console.log(data)
     return (
         <EquipmentSpecsDataTable columns={EquipmentSpecsTableColumns} data={data} equipmentId={equipmentId} />
     )

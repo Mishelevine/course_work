@@ -6,7 +6,6 @@ import { ContractSchema, ContractSchemaFromBack } from "@/schemas"
 import axios from "axios"
 import { API_URL } from "@/constants"
 import { ContractsDataTable } from "./data-table"
-import { DateFromDbForm } from "../helper-functions"
 import { useEffect, useState } from "react"
 
 async function getContractsData(selected_contract_ids?: number[] | undefined): Promise<z.infer<typeof ContractSchema>[]> {
