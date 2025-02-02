@@ -40,10 +40,10 @@ async def create_user(user: SUserCreate):
     if db_user:
         raise HTTPException(status_code=400, detail="Email already in use")
         
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = settings.ACCESS_TOKEN_EXPIRE_MINUTES
     
     access_token = auth.create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user.username}, expires_delta=timedelta(minutes=access_token_expires)
     )
     
     print(access_token)
@@ -58,14 +58,14 @@ async def login_for_access_token(response: Response, form_data: OAuth2PasswordRe
     if not db_user or not auth.verify_password(form_data.password, db_user.hashed_password):
         raise HTTPException(status_code=401, detail="Incorrect email or password")
     
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    refresh_token_expires = timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+    access_token_expires = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    refresh_token_expires = settings.REFRESH_TOKEN_EXPIRE_DAYS
     
     access_token = auth.create_access_token(
-        data={"sub": db_user.username}, expires_delta=access_token_expires
+        data={"sub": db_user.username}, expires_delta=timedelta(minutes=access_token_expires)
     )
     refresh_token = auth.create_refresh_token(
-        data={"sub": db_user.username}, expires_delta=refresh_token_expires
+        data={"sub": db_user.username}, expires_delta=timedelta(days=refresh_token_expires)
     )
     
     response.set_cookie(
@@ -73,17 +73,23 @@ async def login_for_access_token(response: Response, form_data: OAuth2PasswordRe
         value=refresh_token,
         httponly=True,
         secure=True,
-        samesite="strict"
+        samesite="strict",
+        max_age=(refresh_token_expires*60*60*24)
     )
     
-    response.set_cookie(key="Authorization", value=access_token, httponly=True)
+    response.set_cookie(key="Authorization", value=access_token, httponly=True, max_age=(access_token_expires*60))
     
     await session_log_event(session_log= SSessionLogCreate(event_type="login", user_agent=""), user=db_user)
     
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/token/refresh", response_model=Token)
-async def refresh_access_token(response: Response, refresh_token: str = Cookie(None), db_user: User = Depends(get_user_refresh_token)):
+async def refresh_access_token(response: Response, refresh_token: str = Cookie(None)):
+    if not refresh_token:
+        db_user: User = await get_user_refresh_token()
+    else:
+        db_user: User = await get_user_refresh_token(refresh_token)
+    
     if not refresh_token:
         raise HTTPException(status_code=401, detail="No refresh token provided")
     
@@ -95,10 +101,10 @@ async def refresh_access_token(response: Response, refresh_token: str = Cookie(N
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid refresh token")
     
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = auth.create_access_token(data={"sub": username}, expires_delta=access_token_expires)
+    access_token_expires = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    access_token = auth.create_access_token(data={"sub": username}, expires_delta=timedelta(minutes=access_token_expires))
     
-    response.set_cookie(key="Authorization", value=access_token, httponly=True)
+    response.set_cookie(key="Authorization", value=access_token, httponly=True, max_age=(access_token_expires*60))
     
     await session_log_event(session_log= SSessionLogCreate(event_type="refresh", user_agent=""), user=db_user)
     
