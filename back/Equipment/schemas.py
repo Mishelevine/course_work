@@ -17,3 +17,9 @@ class SEquipment(SEquipmentBase):
 
     class Config:
         from_attributes = True
+        
+class SEquipmentWithResponsible(SEquipment):
+    responsible_user_full_name: Optional[str] = None
+
+    class Config:
+        from_attributes = True
