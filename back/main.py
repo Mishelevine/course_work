@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 from back.SystemRole.router import router as router_roles
 from back.User.router import router as router_users
 from back.Job.router import router as router_jobs
@@ -52,3 +53,6 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["Content-Disposition"]
 )
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
