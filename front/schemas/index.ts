@@ -117,7 +117,7 @@ export const SoftwareSchema = z.object({
         'Некорректный формат даты'
     ),
     license_id: z.number().min(1, {
-        message: "Пожалуйста, выберите лицензию."
+        message: "Пожалуйста, выберите лицензию"
     }),
     contracts: z.any()
 })
@@ -143,4 +143,40 @@ export const LicenseFormSchema = z.object({
     license_type: z.string().min(1, {
         message: "Пожалуйста, введите тип лицензии"
     }),
+})
+
+export const EquipmentSchema = z.object({
+    type_name: z.string(),
+    type_id: z.number(),
+    model: z.string(),
+    serial_number: z.string(),
+    inventory_number: z.string(),
+    network_name: z.string(),
+    remarks: z.string(),
+    id: z.number(),
+    responsible_user_full_name: z.string() // фио ответстветственного лица
+})
+
+export const EquipmentFormSchema = z.object({
+    type_id: z.number().min(1, {
+        message: "Пожалуйста, выберите тип"
+    }),
+    model: z.string().min(1, {
+        message: "Пожалуйста, введите модель"
+    }),
+    serial_number: z.string().min(1, {
+        message: "Пожалуйста, введите серийный номер"
+    }),
+    inventory_number: z.string().min(1, {
+        message: "Пожалуйста, введите инвентарный номер"
+    }),
+    network_name: z.string().min(1, {
+        message: "Пожалуйста, введите сокращенное сетевое имя"
+    }),
+    remarks: z.string(),
+})
+
+export const TypeSchema = z.object({
+    type_name: z.string(),
+    id: z.number()
 })

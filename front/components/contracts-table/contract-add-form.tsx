@@ -8,26 +8,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useToast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
 import { ContractFormSchema } from '@/schemas';
-import { Form } from '../ui/form';
-import FormTextField from '../form-text-field';
-import { Button } from '../ui/button';
 import { DateToDbForm } from '../helper-functions';
-import { FormError } from '../form-error';
-
-export type ContractTextFieldName = "contract_number" | "contract_date"
-
-const contractTextFields = [
-  {
-    name: "contract_number",
-    label: "Номер договора",
-    placeholder: "Номер добавляемого договора",
-  },
-  {
-    name: "contract_date",
-    label: "Дата договора",
-    placeholder: "Дата в формате DD.MM.YYYY (Пример: 01.01.2020)",
-  },
-]
+import { textFields } from './fields';
+import CRUDFormForTables from '../crud-form-for-tables';
 
 const ContractAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -65,26 +48,14 @@ const ContractAddForm = () => {
   }
 
   return (
-    <Form {...form}>
-      <form id="addContractForm"
-        onSubmit={form.handleSubmit(AddRowContractTable)}
-        className="space-y-6"
-      >
-        <div className="space-y-4">
-          {contractTextFields.map((formItem, index) => {
-            return <FormTextField
-              key={index}
-              control={form.control}
-              name={formItem.name as ContractTextFieldName}
-              label={formItem.label}
-              placeholder={formItem.placeholder}
-            />
-          })}
-        </div>
-        <FormError message={error} />
-        <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">Создать</Button>
-      </form>
-    </Form>
+    <CRUDFormForTables
+      form={form}
+      id="addContractForm"
+      onSubmit={AddRowContractTable}
+      error={error}
+
+      textFields={textFields}
+    />
   )
 }
 

@@ -18,10 +18,10 @@ export function DateToDbForm(date: string) {
     return new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`)
 }
 
-export function DeleteRowTable(from: string, id: number) {
-    axios.delete(API_URL + `/${from}/${id}/delete`)
+export function DeleteRowTable(apiEndpoint: string) {
+    axios.delete(apiEndpoint)
     .then(() => {
-        console.log("Deleted row with id =", id)
+        console.log("Deleted row with by endpoint:", apiEndpoint)
     })
     .catch((e) => {
         console.log("Error while deleting row")

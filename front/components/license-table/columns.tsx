@@ -17,6 +17,7 @@ import { DeleteRowTable } from "../helper-functions";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
 import ModalForm from "../modal-form";
 import LicenseUpdateForm from "./license-update-form";
+import { API_URL } from "@/constants";
 
 export const LicensesTableColumns: ColumnDef<z.infer<typeof LicenseSchema>>[] = [
     {
@@ -45,7 +46,7 @@ export const LicensesTableColumns: ColumnDef<z.infer<typeof LicenseSchema>>[] = 
                             <AlertDialogTrigger asChild>
                                 <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
                             </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => { DeleteRowTable("license", row.getValue("id")) }}>Удалить запись</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => { DeleteRowTable(API_URL + `/license/${row.getValue("id")}/delete`) }}>Удалить запись</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </ModalForm>

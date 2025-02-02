@@ -21,6 +21,7 @@ import ModalForm from "../modal-form";
 import { SoftwareUpdateForm } from "./software-update-form";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
 import ContractsTable from "../contracts-table/contracts-table";
+import { API_URL } from "@/constants";
 
 export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>>[] = [
     {
@@ -135,7 +136,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                             <AlertDialogTrigger asChild>
                                 <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
                             </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => { DeleteRowTable("software", row.getValue("id")) }}>Удалить запись</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => { DeleteRowTable(API_URL + `/software/${row.getValue("id")}/delete`) }}>Удалить запись</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </ModalForm>

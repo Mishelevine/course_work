@@ -4,29 +4,13 @@ import { useToast } from '@/hooks/use-toast'
 import { ContractFormSchema } from '@/schemas'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Form } from "@/components/ui/form"
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios from 'axios'
 import { API_URL } from '@/constants'
 import { DateFromDbForm, DateToDbForm } from '../helper-functions'
-import FormTextField from '../form-text-field'
-import { FormError } from '../form-error'
-import { Button } from '../ui/button'
-import { ContractTextFieldName } from './contract-add-form'
-
-const contractTextFields = [
-  {
-    name: "contract_number",
-    label: "Номер договора",
-    placeholder: "Номер добавляемого договора",
-  },
-  {
-    name: "contract_date",
-    label: "Дата договора",
-    placeholder: "Дата в формате DD.MM.YYYY (Пример: 01.01.2020)",
-  },
-]
+import { textFields } from './fields';
+import CRUDFormForTables from '../crud-form-for-tables'
 
 const ContractUpdateForm = ({
     id
@@ -89,31 +73,15 @@ const ContractUpdateForm = ({
     })
   }
 
-  if (loading) {
-    return <div>Загрузка...</div>
-  }
-
   return (
-    <Form {...form}>
-      <form id="updateContractForm"
-        onSubmit={form.handleSubmit(UpdateRowContractTable)}
-        className="space-y-6"
-      >
-        <div className="space-y-4">
-          {contractTextFields.map((formItem, index) => (
-            <FormTextField
-              key={index}
-              control={form.control}
-              name={formItem.name as ContractTextFieldName}
-              label={formItem.label}
-              placeholder={formItem.placeholder}
-            />
-          ))}
-        </div>
-        <FormError message={error} />
-        <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">Изменить</Button>
-      </form>
-    </Form>
+    <CRUDFormForTables
+      form={form}
+      id="updateContractForm"
+      onSubmit={UpdateRowContractTable}
+      error={error}
+      loading={loading}
+      textFields={textFields}
+    />
   )
 }
 

@@ -13,6 +13,8 @@ interface FormComboboxFieldProps<TFormSchema extends FieldValues, TTextFieldName
   name: TTextFieldName
   label: string
   data: TDataSchema[]
+  value_field: string,
+  id_field: string,
   frontText: string
   inputPlaceholder: string
   emptyText: string
@@ -23,6 +25,8 @@ function FormComboboxField<TFormSchema extends FieldValues, TTextFieldName exten
   name,
   label,
   data,
+  value_field,
+  id_field,
   frontText,
   inputPlaceholder,
   emptyText
@@ -47,8 +51,8 @@ function FormComboboxField<TFormSchema extends FieldValues, TTextFieldName exten
                 >
                   {field.value
                     ? data.find(
-                      (elem) => elem.id === field.value
-                    )?.license_type
+                      (elem) => elem[id_field] === field.value
+                    )?.[value_field]
                     : frontText
                   }
                   <ChevronsUpDown className="opacity-50" />
@@ -66,17 +70,17 @@ function FormComboboxField<TFormSchema extends FieldValues, TTextFieldName exten
                   <CommandGroup>
                     {data.map((elem) => (
                       <CommandItem
-                        value={elem.license_type}
-                        key={elem.id}
+                        value={elem[value_field]}
+                        key={elem[id_field]}
                         onSelect={() => {
-                          form.setValue(name, elem.id)
+                          form.setValue(name, elem[id_field])
                         }}
                       >
-                        {elem.license_type}
+                        {elem[value_field]}
                         <Check
                           className={cn(
                             "ml-auto",
-                            elem.id === field.value
+                            elem[id_field] === field.value
                               ? "opacity-100"
                               : "opacity-0"
                           )}

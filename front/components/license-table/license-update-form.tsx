@@ -4,23 +4,12 @@ import { useToast } from '@/hooks/use-toast'
 import { LicenseFormSchema } from '@/schemas'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Form } from "@/components/ui/form"
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios from 'axios'
 import { API_URL } from '@/constants'
-import FormTextField from '../form-text-field'
-import { FormError } from '../form-error'
-import { Button } from '../ui/button'
-import { LicenseTextFieldName } from './license-add-form'
-
-const licenseTextFields = [
-  {
-    name: "license_type",
-    label: "Тип лицензии",
-    placeholder: "Тип добавляемой лицензии",
-  },
-]
+import { textFields } from './fields';
+import CRUDFormForTables from '../crud-form-for-tables';
 
 const LicenseUpdateForm = ({
     id
@@ -78,31 +67,15 @@ const LicenseUpdateForm = ({
     })
   }
 
-  if (loading) {
-    return <div>Загрузка...</div>
-  }
-
   return (
-    <Form {...form}>
-      <form id="addLicenseForm"
-        onSubmit={form.handleSubmit(UpdateRowLicenseTable)}
-        className="space-y-6"
-      >
-        <div className="space-y-4">
-          {licenseTextFields.map((formItem, index) => {
-            return <FormTextField
-              key={index}
-              control={form.control}
-              name={formItem.name as LicenseTextFieldName}
-              label={formItem.label}
-              placeholder={formItem.placeholder}
-            />
-          })}
-        </div>
-        <FormError message={error} />
-        <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">Создать</Button>
-      </form>
-    </Form>
+    <CRUDFormForTables
+      form={form}
+      id="updateLicenseForm"
+      onSubmit={UpdateRowLicenseTable}
+      error={error}
+      loading={loading}
+      textFields={textFields}
+    />
   )
 }
 

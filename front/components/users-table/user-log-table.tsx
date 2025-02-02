@@ -36,11 +36,6 @@ export default async function UserLogTable() {
     const data = await getUserLogData()
 
     return (
-        <section
-            className='flex flex-col gap-5 bg-light-3 p-6
-            rounded-[14px] border border-gray-300 shadow'
-        >
-            <UserLogDataTable columns={UserLogTableColumns} data={data} />
-        </section>
+        <UserLogDataTable columns={UserLogTableColumns} data={data} />
     )
 }

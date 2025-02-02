@@ -6,7 +6,7 @@ export const sidebarLinks = [
     },
     {
         label: 'Учёт комплекса ТС',
-        route: '/technicalcomplex',
+        route: '/equipment',
         // imgUrl: '/icons/activities.svg'
     },
     {
