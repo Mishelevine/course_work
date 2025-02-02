@@ -12,6 +12,7 @@ import { AlertDialogTrigger } from "../ui/alert-dialog";
 import { DeleteRowTable } from "../helper-functions";
 import Link from "next/link";
 import { API_URL } from "@/constants";
+import { useToast } from "@/hooks/use-toast";
 
 export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[] = [
     {
@@ -79,7 +80,11 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
                             <AlertDialogTrigger asChild>
                                 <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
                             </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => { DeleteRowTable(API_URL + `/equipment/${row.getValue("id")}`) }}>Удалить запись</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {
+                                DeleteRowTable(API_URL + `/equipment/${row.getValue("id")}`)
+                            }}>
+                                Удалить запись
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </ModalForm>

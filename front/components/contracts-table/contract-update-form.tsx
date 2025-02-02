@@ -75,6 +75,7 @@ const ContractUpdateForm = ({
 
   return (
     <CRUDFormForTables
+      buttonText="Изменить"
       form={form}
       id="updateContractForm"
       onSubmit={UpdateRowContractTable}

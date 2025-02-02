@@ -16,15 +16,29 @@ type EquipmentSchemaFromBack = {
     id: number
 }
 
-async function getEquipmentData(): Promise<z.infer<typeof EquipmentSchema>[]> {
-    const equipmentData = (await axios.get(API_URL + '/equipment/all')).data
-    return equipmentData
+async function getEquipmentData(equipmentId?: number): Promise<z.infer<typeof EquipmentSchema>[]> {
+    if (!equipmentId)
+        return (await axios.get(API_URL + '/equipment/all')).data
+    else{
+        const equipment = (await axios.get(API_URL + `/equipment/${equipmentId}`)).data
+        const typeId = (await axios.get(API_URL + `/equipment_types/${equipmentId}`)).data.type_name
+        return [{
+            ...equipment,
+            type_name: typeId
+        }]
+    }
 }
 
-export default async function EquipmentTable() {
-    const data = await getEquipmentData()
-
+export default async function EquipmentTable(
+{
+    forStatus,
+    equipmentId
+} : {
+    forStatus: boolean,
+    equipmentId?: number
+}) {
+    const data = await getEquipmentData(equipmentId)
     return (
-        <EquipmentDataTable columns={EquipmentTableColumns} data={data} />
+        <EquipmentDataTable columns={EquipmentTableColumns} data={data} forStatus={forStatus} />
     )
 }

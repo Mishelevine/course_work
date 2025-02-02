@@ -99,6 +99,7 @@ export const SoftwareAddForm = () => {
 
   return (
     <CRUDFormForTables
+      buttonText="Создать"
       form={form}
       id="addSoftwareForm"
       onSubmit={AddRowSoftwareTable}

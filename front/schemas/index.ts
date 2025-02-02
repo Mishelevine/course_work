@@ -180,3 +180,31 @@ export const TypeSchema = z.object({
     type_name: z.string(),
     id: z.number()
 })
+
+export const EquipmentSpecsSchema = z.object({
+    screen_resolution: z.string(),
+    processor_type: z.string(),
+    ram_size: z.string(),
+    gpu_info: z.string(),
+    storage: z.string(),
+    id: z.number()
+})
+
+export const EquipmentSpecsFormSchema = z.object({
+    screen_resolution: z.string().min(1, {
+        message: "Пожалуйста, введите разрешение экрана"
+    }),
+    processor_type: z.string().min(1, {
+        message: "Пожалуйста, введите тип процессора"
+    }),
+    ram_size: z.string().min(1, {
+        message: "Пожалуйста, введите размер оперативной памяти"
+    }),
+    gpu_info: z.string().min(1, {
+        message: "Пожалуйста, введите характеристики ГП"
+    }),
+    storage: z.string().min(1, {
+        message: "Пожалуйста, введите тип и объём диска"
+    }),
+    equipment_id: z.number()
+})

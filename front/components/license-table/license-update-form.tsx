@@ -69,6 +69,7 @@ const LicenseUpdateForm = ({
 
   return (
     <CRUDFormForTables
+      buttonText="Изменить"
       form={form}
       id="updateLicenseForm"
       onSubmit={UpdateRowLicenseTable}

@@ -4,7 +4,6 @@ import { UserLogSchema } from "@/schemas"
 import axios from "axios"
 import { API_URL } from "@/constants"
 import { UserLogDataTable } from "./data-table"
-import { DatetimeFromDbForm } from "../helper-functions"
 
 type UserLogSchemaFromBack = {
     event_type: string,

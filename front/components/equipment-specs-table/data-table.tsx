@@ -15,7 +15,6 @@ import {
 } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 
 import {
   Table,
@@ -25,36 +24,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { CorrectPagesCase } from "../helper-functions"
-import EquipmentAddForm from "./equipment-add-form"
+import EquipmentSpecsAddForm from "./equipment-specs-add-form"
 import ModalForm from "../modal-form"
-import DownloadButton from "../download-button"
-import { API_URL } from "@/constants"
 import { AlertDialogTrigger } from "../ui/alert-dialog"
 
-interface EquipmentDataTableProps<TData, TValue> {
+interface EquipmentSpecsDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  forStatus: boolean
+  data: TData[],
+  equipmentId: number
 }
 
-export function EquipmentDataTable<TData, TValue>({
+export function EquipmentSpecsDataTable<TData, TValue>({
   columns,
   data,
-  forStatus,
-}: EquipmentDataTableProps<TData, TValue>) {
+  equipmentId
+}: EquipmentSpecsDataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
     id: false,
-    remarks: !forStatus,
-    responsible_user_full_name: !forStatus,
-    status: !forStatus,
-    actions: !forStatus
+    equipment_id: false
   })
-  const [currentPageNumber, setCurrentPageNumber] = React.useState<number>(1)
 
   const table = useReactTable({
     data,
@@ -74,32 +66,18 @@ export function EquipmentDataTable<TData, TValue>({
 
   return (
     <ModalForm
-      title="Добавить оборудование"
+      title="Добавить характеристики"
       description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<EquipmentAddForm />}
+      form={<EquipmentSpecsAddForm equipmentId={equipmentId}/>}
     >
       <div className="w-full h-full">
-        {!forStatus && <div className="flex items-center justify-between py-4">
-          <Input
-            placeholder="Поиск по модели оборудования..."
-            value={(table.getColumn("model")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("model")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <div className="flex gap-2">
-            {/* <DownloadButton
-              className="bg-blue-2 hover:bg-blue-700"
-              apiEndpoint={API_URL + "/equipment/to_excel_file"}
-              buttonText="Выгрузить в Excel"
-              tableData={table.getFilteredRowModel().rows.map(row => row.original)}
-            /> */}
-            <AlertDialogTrigger asChild>
-              <Button className="bg-blue-2 hover:bg-blue-700">Добавить оборудование</Button>
-            </AlertDialogTrigger>
-          </div>
-        </div>}
+        <div className="flex justify-end py-4">
+          <AlertDialogTrigger asChild>
+            <Button disabled={table.getRowCount() >= 1} className="bg-blue-2 hover:bg-blue-700">
+              {table.getRowCount() < 1 ? "Добавить характеристики" : "Характеристики уже указаны"}
+            </Button>
+          </AlertDialogTrigger>
+        </div>
         <div className="rounded-md border overflow-y-auto">
           <Table>
             <TableHeader>
@@ -137,40 +115,13 @@ export function EquipmentDataTable<TData, TValue>({
               ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center">
-                    Нет записей
+                    Нет характеристик
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </div>
-        {!forStatus && <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {currentPageNumber} из {table.getPageOptions().length} {" "} {CorrectPagesCase(table.getPageOptions().length)}
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setCurrentPageNumber(currentPageNumber - 1)
-              table.previousPage()
-            }}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Назад
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              setCurrentPageNumber(currentPageNumber + 1)
-              table.nextPage()
-            }}
-            disabled={!table.getCanNextPage()}
-          >
-            Вперед
-          </Button>
-        </div>}
       </div>
     </ModalForm>
   )

@@ -44,6 +44,7 @@ const LicenseAddForm = () => {
 
   return (
     <CRUDFormForTables
+      buttonText="Создать"
       form={form}
       id="addLicenseForm"
       onSubmit={AddRowLicenseTable}

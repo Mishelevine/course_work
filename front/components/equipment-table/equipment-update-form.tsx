@@ -6,27 +6,84 @@ import axios from "axios";
 import { API_URL } from "@/constants";
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { Form } from "@/components/ui/form"
-
-import { Button } from "../ui/button";
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react";
-import { FormError } from "../form-error";
 import { EquipmentFormSchema, TypeSchema } from "@/schemas";
 
-import FormTextField from "../form-text-field";
-import FormComboboxField from "../form-combobox-field";
-
 import { useToast } from "@/hooks/use-toast";
-
+import { textFields, comboboxFields } from './fields';
+import CRUDFormForTables from '../crud-form-for-tables';
 
 const EquipmentUpdateForm = ({
     id
 } : {
     id: number
 }) => {
+  const [error, setError] = useState<string | undefined>("");
+  const [loading, setLoading] = useState<boolean>(true)
+
+  const { toast } = useToast()
+
+  useEffect(() => {
+    setLoading(true)
+    const fetchData = async () => {
+      try {
+        const response = (await axios.get(API_URL + `/equipment_types/all`)).data
+        const editedEquipment = (await axios.get(API_URL + `/equipment/${id}`)).data
+        form.reset(editedEquipment)
+        comboboxFields[0].data = response
+        setLoading(false)
+      }
+      catch(e) {
+        console.log("Ошибка при получении данных о типах оборудования")
+        console.log(e)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  const form = useForm<z.infer<typeof EquipmentFormSchema>>({
+    resolver: zodResolver(EquipmentFormSchema),
+    defaultValues: {
+      model: "",
+      serial_number: "",
+      inventory_number: "",
+      network_name: "",
+      remarks: "",
+      type_id: 0,
+    }
+  });
+
+  function UpdateRowEquipmentTable(data: z.infer<typeof EquipmentFormSchema>) {
+    setError("")
+    axios.put(API_URL + `/equipment/${id}`, data)
+    .then(() => {
+      console.log("Updated row ID =", data)
+      toast({
+        title: "Запись обновлена",
+        description: "Данные записаны в БД",
+        className: "bg-white"
+      })
+    })
+    .catch((e) => {
+      setError("Произошла непредвиденная ошибка при обновлении записи")
+      console.log("Error while updating row!")
+      console.log(e)
+    })
+  }
+
   return (
-    <div>EquipmentUpdateForm</div>
+    <CRUDFormForTables
+      buttonText="Изменить"
+      form={form}
+      id="updateEquipmentForm"
+      onSubmit={UpdateRowEquipmentTable}
+      error={error}
+      loading={loading}
+      textFields={textFields}
+      comboboxFields={comboboxFields}
+    />
   )
 }
 

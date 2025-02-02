@@ -22,6 +22,7 @@ import { SoftwareUpdateForm } from "./software-update-form";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
 import ContractsTable from "../contracts-table/contracts-table";
 import { API_URL } from "@/constants";
+import { useToast } from "@/hooks/use-toast";
 
 export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>>[] = [
     {
@@ -136,7 +137,11 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                             <AlertDialogTrigger asChild>
                                 <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
                             </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => { DeleteRowTable(API_URL + `/software/${row.getValue("id")}/delete`) }}>Удалить запись</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {
+                                DeleteRowTable(API_URL + `/software/${row.getValue("id")}/delete`)
+                            }}>
+                                Удалить запись
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </ModalForm>

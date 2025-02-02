@@ -49,11 +49,11 @@ const ContractAddForm = () => {
 
   return (
     <CRUDFormForTables
+      buttonText="Создать"
       form={form}
       id="addContractForm"
       onSubmit={AddRowContractTable}
       error={error}
-
       textFields={textFields}
     />
   )

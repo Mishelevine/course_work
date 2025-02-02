@@ -21,6 +21,7 @@ import ModalForm from "../modal-form";
 import ContractUpdateForm from "./contract-update-form";
 import { useEffect } from "react";
 import { API_URL } from "@/constants";
+import { useToast } from "@/hooks/use-toast";
 
 export const ContractsTableColumns: ColumnDef<z.infer<typeof ContractSchema>>[] = [
     {
@@ -100,7 +101,11 @@ export const ContractsTableColumns: ColumnDef<z.infer<typeof ContractSchema>>[] 
                             <AlertDialogTrigger asChild>
                                 <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
                             </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => { DeleteRowTable(API_URL + `/contract/${row.getValue("id")}/delete`) }}>Удалить запись</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {
+                                DeleteRowTable(API_URL + `/contract/${row.getValue("id")}/delete`)
+                            }}>
+                                Удалить запись
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </ModalForm>

@@ -8,13 +8,17 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { useForm } from "react-hook-form"
 import { useEffect, useState } from "react";
-import { EquipmentFormSchema, TypeSchema } from "@/schemas";
+import { EquipmentSpecsFormSchema, TypeSchema } from "@/schemas";
 
 import { useToast } from "@/hooks/use-toast";
-import { textFields, comboboxFields } from './fields';
+import { textFields } from './fields';
 import CRUDFormForTables from '../crud-form-for-tables';
 
-const EquipmentAddForm = () => {
+const EquipmentSpecsUpdateForm = ({
+    id
+} : {
+    id: number
+}) => {
   const [error, setError] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -24,8 +28,8 @@ const EquipmentAddForm = () => {
     setLoading(true)
     const fetchData = async () => {
       try {
-        const response = (await axios.get(API_URL + `/equipment_types/all`)).data
-        comboboxFields[0].data = response
+        const response = (await axios.get(API_URL + `/equipment_specs/${id}`)).data
+        form.reset(response)
         setLoading(false)
       }
       catch(e) {
@@ -37,49 +41,47 @@ const EquipmentAddForm = () => {
     fetchData()
   }, [])
 
-  const form = useForm<z.infer<typeof EquipmentFormSchema>>({
-    resolver: zodResolver(EquipmentFormSchema),
-    defaultValues: {
-      model: "",
-      serial_number: "",
-      inventory_number: "",
-      network_name: "",
-      remarks: "",
-      type_id: 0,
-    }
-  });
-
-  function AddRowEquipmentTable(data: z.infer<typeof EquipmentFormSchema>) {
+  function UpdateRowEquipmentSpecsTable(data: z.infer<typeof EquipmentSpecsFormSchema>) {
     setError("")
-    axios.post(API_URL + '/equipment/create', data)
+    axios.put(API_URL + `/equipment_specs/${id}`, data)
     .then(() => {
-      console.log("Added row", data)
+      console.log("Updated row ID =", data)
       toast({
-        title: "Запись добавлена",
+        title: "Характеристики обновлены",
         description: "Данные записаны в БД",
         className: "bg-white"
       })
     })
     .catch((e) => {
-      setError("Во время добавления записи произошла непредвиденная ошибка!")
-      console.log("Unexpected error occured while adding row.")
-      console.log(data)
+      setError("Произошла непредвиденная ошибка при обновлении характеристик")
+      console.log("Error while updating row!")
       console.log(e)
     })
   }
 
+  const form = useForm<z.infer<typeof EquipmentSpecsFormSchema>>({
+    resolver: zodResolver(EquipmentSpecsFormSchema),
+    defaultValues: {
+      screen_resolution: "",
+      processor_type: "",
+      ram_size: "",
+      gpu_info: "",
+      storage: "",
+      equipment_id: 0
+    }
+  });
+
   return (
     <CRUDFormForTables
-      buttonText="Создать"
+      buttonText="Изменить"
       form={form}
-      id="addEquipmentForm"
-      onSubmit={AddRowEquipmentTable}
+      id="updateEquipmentSpecsForm"
+      onSubmit={UpdateRowEquipmentSpecsTable}
       error={error}
       loading={loading}
       textFields={textFields}
-      comboboxFields={comboboxFields}
     />
   )
 }
 
-export default EquipmentAddForm
+export default EquipmentSpecsUpdateForm

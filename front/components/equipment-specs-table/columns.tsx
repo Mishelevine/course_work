@@ -1,29 +1,38 @@
 "use client"
 
-import { LicenseSchema } from "@/schemas";
+import { EquipmentSpecsSchema } from "@/schemas";
 import { ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
-import { MoreHorizontal } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { DeleteRowTable } from "../helper-functions";
-import { AlertDialogTrigger } from "../ui/alert-dialog";
 import ModalForm from "../modal-form";
-import LicenseUpdateForm from "./license-update-form";
+import EquipmentSpecsUpdateForm from "./equipment-specs-update-form";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { MoreHorizontal } from "lucide-react";
+import { AlertDialogTrigger } from "../ui/alert-dialog";
+import { DeleteRowTable } from "../helper-functions";
 import { API_URL } from "@/constants";
 import { useToast } from "@/hooks/use-toast";
 
-export const LicensesTableColumns: ColumnDef<z.infer<typeof LicenseSchema>>[] = [
+export const EquipmentSpecsTableColumns: ColumnDef<z.infer<typeof EquipmentSpecsSchema>>[] = [
     {
-        accessorKey: "license_type",
-        header: "Тип лицензии"
+        accessorKey: "screen_resolution",
+        header: "Разрешение экрана",
+    },
+    {
+        accessorKey: "processor_type",
+        header: "Тип процессора",
+    },
+    {
+        accessorKey: "ram_size",
+        header: "Объём оперативной памяти",
+    },
+    {
+        accessorKey: "gpu_info",
+        header: "Характеристики ГП",
+    },
+    {
+        accessorKey: "storage",
+        header: "Тип и объём диска",
     },
     {
         id: "actions",
@@ -31,8 +40,8 @@ export const LicensesTableColumns: ColumnDef<z.infer<typeof LicenseSchema>>[] = 
             return (
                 <ModalForm
                     title="Изменить ПО"
-                    description={<>Заполните все поля и нажмите кнопку <b>Изменить</b></>}
-                    form={<LicenseUpdateForm id={row.getValue("id")} />}
+                    description={<>Измените все необходимые поля и нажмите кнопку <b>Изменить</b></>}
+                    form={<EquipmentSpecsUpdateForm id={row.getValue("id")} />}
                 >
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -48,7 +57,7 @@ export const LicensesTableColumns: ColumnDef<z.infer<typeof LicenseSchema>>[] = 
                                 <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
                             </AlertDialogTrigger>
                             <DropdownMenuItem onClick={() => {
-                                DeleteRowTable(API_URL + `/license/${row.getValue("id")}/delete`)
+                                DeleteRowTable(API_URL + `/equipment_specs/${row.getValue("id")}`)
                             }}>
                                 Удалить запись
                             </DropdownMenuItem>
@@ -59,6 +68,9 @@ export const LicensesTableColumns: ColumnDef<z.infer<typeof LicenseSchema>>[] = 
         },
     },
     {
-        accessorKey: "id",
-    }
+        accessorKey: "id"
+    },
+    {
+        accessorKey: "equipment_id"
+    },
 ]

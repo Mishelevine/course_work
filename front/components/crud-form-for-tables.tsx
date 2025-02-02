@@ -24,23 +24,25 @@ type ComboboxField<TComboboxData> = {
 }
 
 function CRUDFormForTables<TData extends FieldValues, TComboboxData extends FieldValues> ({
-    form,
-    id,
-    onSubmit,
-    error,
-    loading,
-    textFields,
-    comboboxFields,
-    children
+  buttonText,
+  form,
+  id,
+  onSubmit,
+  error,
+  loading,
+  textFields,
+  comboboxFields,
+  children
 } : {
-    form: UseFormReturn<TData>
-    id: string
-    onSubmit: SubmitHandler<TData>
-    error: string | undefined
-    loading?: boolean | undefined
-    textFields?: TextField[]
-    comboboxFields?: ComboboxField<TComboboxData>[],
-    children?: React.ReactNode
+  buttonText: string
+  form: UseFormReturn<TData>
+  id: string
+  onSubmit: SubmitHandler<TData>
+  error: string | undefined
+  loading?: boolean | undefined
+  textFields?: TextField[]
+  comboboxFields?: ComboboxField<TComboboxData>[],
+  children?: React.ReactNode
 }) {
   if (loading) {
     return <div>Загрузка...</div>
@@ -79,7 +81,7 @@ function CRUDFormForTables<TData extends FieldValues, TComboboxData extends Fiel
         </div>
         {children}
         <FormError message={error} />
-        <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">Создать</Button>
+        <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">{buttonText}</Button>
       </form>
     </Form>
   )

@@ -97,8 +97,9 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
 
   return (
     <CRUDFormForTables
+      buttonText="Изменить"
       form={form}
-      id="addSoftwareForm"
+      id="updateSoftwareForm"
       onSubmit={UpdateRowSoftwareTable}
       error={error}
       loading={loading}
