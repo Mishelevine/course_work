@@ -1,17 +1,10 @@
-from datetime import timedelta
-from email.message import EmailMessage
-import random
-import smtplib
-import re
-import string
+from datetime import datetime, timedelta, timezone
 from typing import List
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, Response, Cookie
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import JWTException
 from jose import JWTError, jwt
 import os
-import uuid
-from fastapi.responses import FileResponse
 
 from back.User.depends import get_current_user, get_user_refresh_token
 from back.Token.schemas import Token
@@ -30,7 +23,6 @@ router = APIRouter(
 )
 
 email_regex = r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$"
-
 
 @router.post("/signup", response_model=SUser)
 async def create_user(user: SUserCreate):

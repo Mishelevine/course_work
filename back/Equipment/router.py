@@ -15,7 +15,7 @@ router = APIRouter(
 )
 
 @router.get("/to_excel_file")
-async def get_software_excel():
+async def get_equipment_excel():
     equipment_list = await crud.get_all_equipment()
     
     equipment_data = []
