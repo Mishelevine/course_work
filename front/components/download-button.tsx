@@ -1,19 +1,21 @@
 import React from 'react';
 import axios from 'axios';
-import { API_URL } from '@/constants';
 import { Button } from './ui/button';
 
-const DownloadButton = ({
+function DownloadButton<TData>({
     apiEndpoint,
     buttonText,
-    className
+    className,
+    tableData
 }: {
     apiEndpoint: string,
     buttonText: string,
-    className?: string
-}) => {
+    className?: string,
+    tableData?: TData[]
+}) {
     const handleDownload = async () => {
         try {
+            console.log(tableData)
             const response = await axios.get(apiEndpoint, { responseType: 'blob' });
             console.log(response.headers)
             const disposition = response.headers['content-disposition'];

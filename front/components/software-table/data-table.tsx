@@ -87,6 +87,7 @@ export function SoftwareDataTable<TData, TValue>({
               className="bg-blue-2 hover:bg-blue-700"
               apiEndpoint={API_URL + "/software/to_excel_file"}
               buttonText="Выгрузить в Excel"
+              tableData={table.getFilteredRowModel().rows.map(row => row.original)}
             />
             <AlertDialogTrigger asChild>
               <Button className="bg-blue-2 hover:bg-blue-700">Добавить запись</Button>

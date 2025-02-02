@@ -67,6 +67,7 @@ function TabsShower() {
               Здесь вы можете просмотреть информацию о лицензиях для ПО
             </CardDescription>
           </CardHeader>
+          <Separator className="bg-gray-300"/>
           <CardContent className="space-y-2">
             <LicensesTable/>
           </CardContent>

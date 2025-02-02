@@ -39,7 +39,6 @@ async function getSoftwareData(): Promise<z.infer<typeof SoftwareTableSchema>[]>
 
 export default async function SoftwareTable() {
     const data = await getSoftwareData()
-    console.log(data)
 
     return (
         <SoftwareDataTable columns={SoftwareTableColumns} data={data} />

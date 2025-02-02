@@ -23,7 +23,7 @@ async function getUserLogData(): Promise<z.infer<typeof UserLogSchema>[]> {
         const newElem = {
             user_name: fullName,
             event_type: elem.event_type,
-            time: DatetimeFromDbForm(elem.time),
+            time: elem.time,
             user_role: roleName,
         }
         return newElem

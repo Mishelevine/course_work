@@ -12,7 +12,6 @@ async function getLicensesData(): Promise<z.infer<typeof LicenseSchema>[]> {
 
 export default async function LicensesTable() {
     const data = await getLicensesData()
-    console.log(data)
 
     return (
         <LicenseDataTable columns={LicensesTableColumns} data={data} />

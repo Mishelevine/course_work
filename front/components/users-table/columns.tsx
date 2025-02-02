@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
+import { DatetimeFromDbForm } from "../helper-functions";
 
 export const UserLogTableColumns: ColumnDef<z.infer<typeof UserLogSchema>>[] = [
     {
@@ -28,6 +29,9 @@ export const UserLogTableColumns: ColumnDef<z.infer<typeof UserLogSchema>>[] = [
                 </Button>
             )
         },
+        cell: ({row}) => {
+            return DatetimeFromDbForm(row.getValue("time"))
+        }
     },
     {
         accessorKey: "user_role",

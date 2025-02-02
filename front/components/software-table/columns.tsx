@@ -102,7 +102,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                             Показать ({row.original.contracts.length})
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent className="px-4 py-2" align="end">
                         <ContractsTable
                             checkboxes={false}
                             actions={false}

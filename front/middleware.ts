@@ -7,6 +7,7 @@ export async function CheckAccessToken(
     refreshToken: string | undefined
 ) {
     if (accessToken === undefined){
+        console.log("No access token!")
         return await RefreshAccessToken(refreshToken)
     }
 
@@ -19,19 +20,16 @@ export async function CheckAccessToken(
         console.log("Access token auth status: " + getUserInfo.status)
 
         if (getUserInfo.status === 401){
+            console.log("Access token expired, refreshing it.")
             return await RefreshAccessToken(refreshToken)
         }
 
+        console.log("Access token OK")
         return true
     }
     catch (e) {
-        if (e.status === 401){
-            return await RefreshAccessToken(refreshToken)
-        }
-        else {
-            console.log("!Unexpected error during checking access token!")
-            console.log(e.status, e.message)
-        }
+        console.log("Unexpected error during checking access token!")
+        console.log(e.status, e.message)
     }
 
     return false
@@ -39,6 +37,7 @@ export async function CheckAccessToken(
 
 export async function RefreshAccessToken(refreshToken: string | undefined) {
     if (refreshToken === undefined){
+        console.log("No refresh token!")
         return false
     }
 
@@ -52,9 +51,11 @@ export async function RefreshAccessToken(refreshToken: string | undefined) {
         console.log(getUserInfo)
 
         if (getUserInfo.status === 401){
+            console.log("Refresh token expired!")
             return false
         }
 
+        console.log("Access token refreshed")
         return true
     }
     catch(e) {
