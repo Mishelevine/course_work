@@ -18,7 +18,17 @@ from back.User.models import User
 from back.License.models import License
 from back.Contract.models import Contract
 from back.Software.models import Software
+from back.SoftwareContract.models import SoftwareContract
 from back.SessionLog.models import SessionLog
+from back.Building.models import Building
+from back.EquipmentType.models import EquipmentType
+from back.EquipmentStatusType.models import EquipmentStatusType
+from back.ResponsibleUserJob.models import ResponsibleUserJob
+from back.ResponsibleUserOffice.models import ResponsibleUserOffice
+from back.ResponsibleUser.models import ResponsibleUser
+from back.Equipment.models import Equipment
+from back.EquipmentStatus.models import EquipmentStatus
+from back.EquipmentSpecification.models import EquipmentSpecification
 from back.config import settings
 
 # this is the Alembic Config object, which provides

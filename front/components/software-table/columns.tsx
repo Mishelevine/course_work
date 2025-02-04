@@ -16,15 +16,28 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { DeleteRowSoftwareTable } from "../helper-functions";
-import ModalSoftwareForm from "./modal-software-form";
-import { SoftwareUpdateForm } from "./update-software-form";
+import { DateFromDbForm, DeleteRowTable } from "../helper-functions";
+import ModalForm from "../modal-form";
+import { SoftwareUpdateForm } from "./software-update-form";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
+import ContractsTable from "../contracts-table/contracts-table";
+import { API_URL } from "@/constants";
+import { useToast } from "@/hooks/use-toast";
 
 export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>>[] = [
     {
         accessorKey: "name",
-        header: "Наименование ПО"
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Наименование ПО
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
     },
     {
         accessorKey: "short_name",
@@ -61,34 +74,52 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                 </Button>
             )
         },
+        cell: ({row}) => {
+            return DateFromDbForm(row.getValue("version_date"))
+        }
     },
     {
         accessorKey: "license_type",
-        header: "Тип лицензии"
-    },
-    {
-        accessorKey: "contract_number",
-        header: "Номер договора"
-    },
-    {
-        accessorKey: "contract_date",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Дата договора
+                    Тип лицензии
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
         },
     },
     {
+        id: "contracts",
+        header: "Договоры",
+        cell: ({ row }) => {
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button className="h-8 w-fit p-2 bg-gray-100 hover:text-white hover:bg-gray-400
+                        border-[1px] border-gray-400 text-black">
+                            Показать ({row.original.contracts.length})
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="px-4 py-2" align="end">
+                        <ContractsTable
+                            checkboxes={false}
+                            actions={false}
+                            data={row.original.contracts}
+                        />
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )
+        }
+    },
+    {
         id: "actions",
         cell: ({ row }) => {
             return (
-                <ModalSoftwareForm
+                <ModalForm
                     title="Изменить ПО"
                     description={<>Заполните все поля и нажмите кнопку <b>Изменить</b></>}
                     form={<SoftwareUpdateForm id={row.getValue("id")} />}
@@ -106,10 +137,14 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                             <AlertDialogTrigger asChild>
                                 <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
                             </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => { DeleteRowSoftwareTable(row.getValue("id")) }}>Удалить запись</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {
+                                DeleteRowTable(API_URL + `/software/${row.getValue("id")}/delete`)
+                            }}>
+                                Удалить запись
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                </ModalSoftwareForm>
+                </ModalForm>
             )
         },
     },

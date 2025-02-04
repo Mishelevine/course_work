@@ -9,4 +9,4 @@ class Contract(Base):
     contract_number = Column(String(20), nullable=False)
     contract_date = Column(Date, nullable=False)
     
-    software = relationship("Software", back_populates="contract", cascade='save-update, merge, delete')
+    software = relationship("SoftwareContract", back_populates="contract", cascade="all, delete-orphan")

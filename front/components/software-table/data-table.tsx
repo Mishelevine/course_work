@@ -26,11 +26,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "../helper-functions"
-import { SoftwareAddForm } from "./add-software-form"
-import ModalSoftwareForm from "./modal-software-form"
-import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog"
+import { SoftwareAddForm } from "./software-add-form"
+import ModalForm from "../modal-form"
 import DownloadButton from "../download-button"
 import { API_URL } from "@/constants"
+import { AlertDialogTrigger } from "../ui/alert-dialog"
 
 interface SoftwareDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -67,7 +67,7 @@ export function SoftwareDataTable<TData, TValue>({
   })
 
   return (
-    <ModalSoftwareForm
+    <ModalForm
       title="Создать ПО"
       description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
       form={<SoftwareAddForm />}
@@ -87,6 +87,7 @@ export function SoftwareDataTable<TData, TValue>({
               className="bg-blue-2 hover:bg-blue-700"
               apiEndpoint={API_URL + "/software/to_excel_file"}
               buttonText="Выгрузить в Excel"
+              tableData={table.getFilteredRowModel().rows.map(row => row.original)}
             />
             <AlertDialogTrigger asChild>
               <Button className="bg-blue-2 hover:bg-blue-700">Добавить запись</Button>
@@ -166,6 +167,6 @@ export function SoftwareDataTable<TData, TValue>({
           </Button>
         </div>
       </div>
-    </ModalSoftwareForm>
+    </ModalForm>
   )
 }
