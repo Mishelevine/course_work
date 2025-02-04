@@ -1,46 +1,41 @@
-import { z } from "zod"
+"use client"
+
+import { SoftwareDataTable } from "./data-table"
 import { SoftwareTableColumns } from "./columns"
-import { ContractSchemaFromBack, SoftwareTableSchema } from "@/schemas"
+import { useEffect, useState } from "react"
+import { SoftwareTableSchema } from "@/schemas"
 import axios from "axios"
 import { API_URL } from "@/constants"
-import { SoftwareDataTable } from "./data-table"
+import { z } from "zod"
 
-type SoftwareSchemaFromBack = {
-    name: string,
-    short_name: string,
-    program_link: string,
-    version: string,
-    version_date: string,
-    license_id: number,
-    contracts: z.infer<typeof ContractSchemaFromBack>[],
-    id: number
-}
+export default function SoftwareTable() {
+  const [data, setData] = useState<z.infer<typeof SoftwareTableSchema>[]>([])
+  const [loading, setLoading] = useState(true)
 
-async function getSoftwareData(): Promise<z.infer<typeof SoftwareTableSchema>[]> {
-    const softwareData = (await axios.get(API_URL + '/software/all')).data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/software/all`)
+        const processedData = await Promise.all(
+          response.data.map(async (item: any) => ({
+            ...item,
+            license_type: (await axios.get(`${API_URL}/license/${item.license_id}`)).data.license_type
+          }))
+        )
+        setData(processedData)
+      } catch (error) {
+        console.error("Error loading software data:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-    const newData = await Promise.all(softwareData.map(async (elem: SoftwareSchemaFromBack) => {
-        const licenseType = (await axios.get(API_URL + `/license/${elem.license_id}`)).data.license_type
-        const newElem = {
-            id: elem.id,
-            name: elem.name,
-            short_name: elem.short_name,
-            program_link: elem.program_link,
-            version: elem.version,
-            version_date: elem.version_date,
-            license_type: licenseType,
-            contracts: elem.contracts,
-        }
-        return newElem
-    }))
+    fetchData()
+  }, [])
 
-    return newData
-}
+  if (loading) {
+    return <div>Loading software data...</div>
+  }
 
-export default async function SoftwareTable() {
-    const data = await getSoftwareData()
-
-    return (
-        <SoftwareDataTable columns={SoftwareTableColumns} data={data} />
-    )
+  return <SoftwareDataTable columns={SoftwareTableColumns} data={data} />
 }

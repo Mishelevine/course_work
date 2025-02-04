@@ -8,6 +8,68 @@ import { API_URL } from "@/constants"
 import { ContractsDataTable } from "./data-table"
 import { useEffect, useState } from "react"
 
+// export default function ContractsTable({
+//     checkboxes,
+//     actions,
+//     data,
+//     selected_contract_ids,
+//     onSelectedRowsChange
+// }: {
+//     checkboxes: boolean,
+//     actions: boolean,
+//     data?: z.infer<typeof ContractSchema>[] | undefined
+//     selected_contract_ids?: number[] | undefined
+//     onSelectedRowsChange?: (selectedIds: number[]) => void
+// }) {
+//     const [isLoading, setIsLoading] = useState<boolean>(!data)
+//     const [tableData, setTableData] = useState<z.infer<typeof ContractSchema>[]>(data || [])
+//     const [error, setError] = useState<string | null>(null)
+
+//     const fetchData = async (ids?: number[]) => {
+//         try {
+//             setIsLoading(true)
+//             setError(null)
+
+//             const response = await axios.get<z.infer<typeof ContractSchemaFromBack>[]>(`${API_URL}/contract/all`)
+//             const processedData = response.data.map(elem => ({
+//                 id: elem.id,
+//                 contract_number: elem.contract_number,
+//                 contract_date: elem.contract_date,
+//                 selected: ids?.includes(elem.id) || false
+//             }))
+
+//             setTableData(processedData)
+//         } catch (err) {
+//             console.error("Error fetching contracts:", err)
+//             setError("Failed to load contracts data")
+//         } finally {
+//             setIsLoading(false)
+//         }
+//     }
+
+//     useEffect(() => {
+//         if (!data) {
+//             fetchData(selected_contract_ids)
+//         }
+//     }, [selected_contract_ids])
+
+//     if (isLoading) {
+//         return <div className="p-4">Loading contracts...</div>
+//     }
+
+//     return (
+//         <ContractsDataTable
+//             columns={ContractsTableColumns}
+//             data={tableData}
+//             checkboxes={checkboxes}
+//             actions={actions}
+//             onSelectedRowsChange={onSelectedRowsChange}
+//         />
+//     )
+// }
+
+////////////////////////////////
+
 async function getContractsData(selected_contract_ids?: number[] | undefined): Promise<z.infer<typeof ContractSchema>[]> {
     const contractsDataFull = (await axios.get(API_URL + `/contract/all`)).data;
     if (selected_contract_ids === undefined) {

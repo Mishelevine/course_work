@@ -1,3 +1,5 @@
+"use client"
+
 import EquipmentTable from '@/components/equipment-table/equipment-table'
 import React from 'react'
 
