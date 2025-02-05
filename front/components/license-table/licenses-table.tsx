@@ -1,19 +1,35 @@
-import { z } from "zod"
+"use client"
+
+import { LicenseDataTable } from "./data-table"
+import { useEffect, useState } from "react"
+import { LicenseSchema } from "@/schemas"
 import { LicensesTableColumns } from "./columns"
 import axios from "axios"
 import { API_URL } from "@/constants"
-import { LicenseDataTable } from "./data-table"
-import { LicenseSchema } from "@/schemas"
+import { z } from "zod"
 
-async function getLicensesData(): Promise<z.infer<typeof LicenseSchema>[]> {
-    const licensesData = (await axios.get(API_URL + '/license/all')).data
-    return licensesData
-}
+export default function LicensesTable() {
+  const [data, setData] = useState<z.infer<typeof LicenseSchema>[]>([])
+  const [loading, setLoading] = useState(true)
 
-export default async function LicensesTable() {
-    const data = await getLicensesData()
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/license/all`)
+        setData(response.data)
+      } catch (error) {
+        console.error("Error loading licenses:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-    return (
-        <LicenseDataTable columns={LicensesTableColumns} data={data} />
-    )
+    fetchData()
+  }, [])
+
+  if (loading) {
+    return <div>Loading licenses...</div>
+  }
+
+  return <LicenseDataTable columns={LicensesTableColumns} data={data} />
 }
