@@ -1,0 +1,7 @@
+front/
+.git/
+.venv/
+__pycache__/
+*.pyc
+alembic.ini
+node_modules/

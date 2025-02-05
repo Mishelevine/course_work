@@ -1,6 +1,16 @@
 services:
-  front:
-    build:
-      context: ./front
+  backend:
+    build: .
     ports:
-      - 3000:3000
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+
+  frontend:
+    build: ./front
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+      - backend
