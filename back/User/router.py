@@ -112,10 +112,9 @@ async def refresh_access_token(response: Response, refresh_token: str):
 
 
 @router.post("/logout")
-async def logout(response: Response, db_user: User = Depends(get_user_refresh_token)):
+async def logout(response: Response):
     response.delete_cookie("Authorization")
     response.delete_cookie("refresh_token")
-    await session_log_event(session_log=SSessionLogCreate(event_type="logout", user_agent=""), user=db_user)
     return {"message": "Successfully logged out"}
 
 
