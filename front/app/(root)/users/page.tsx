@@ -1,3 +1,5 @@
+"use client"
+
 import UserLogTable from '@/components/user-log-table/user-log-table'
 import React from 'react'
 

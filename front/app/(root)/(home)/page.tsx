@@ -1,9 +1,12 @@
+"use client"
+
 import ContractsTable from "@/components/contracts-table/contracts-table"
 import LicensesTable from "@/components/license-table/licenses-table"
 import SoftwareTable from "@/components/software-table/software-table"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useEffect, useState } from "react"
 
 function TabsShower() {
   return (
@@ -77,11 +80,18 @@ function TabsShower() {
   )
 }
 
-async function Home() {
+function Home() {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) return <div>Loading...</div>
+
   return (
     <section className='flex size-full flex-col gap-5
-      bg-light-3 p-6 rounded-[14px] border shadow-sm max-sm:w-screen'
-    >
+      bg-light-3 p-6 rounded-[14px] border shadow-sm max-sm:w-screen'>
       <TabsShower/>
     </section>
   )

@@ -208,3 +208,81 @@ export const EquipmentSpecsFormSchema = z.object({
     }),
     equipment_id: z.number()
 })
+
+export const EquipmentStatusFormSchema = z.object({
+    equipment_id: z.number(),
+    status_type_id: z.number().min(1, {
+        message: "Пожалуйста, выберите статус"
+    }),
+    doc_number: z.string().min(1, {
+        message: "Пожалуйста, введите номер документа"
+    }),
+    status_change_date: z.string(),
+    responsible_user_id: z.number().min(1, {
+        message: "Пожалуйста, выберите ответственного"
+    }),
+    building_id: z.number().min(1, {
+        message: "Пожалуйста, выберите адрес"
+    }),
+    audience_id: z.string().min(1, {
+        message: "Пожалуйста, введите номер аудитории"
+    }),
+})
+
+export const EquipmentStatusSchema = z.object({
+    equipment_id: z.number(),
+    status_type_id: z.number(),
+    doc_number: z.string(),
+    status_change_date: z.string(),
+    responsible_user_id: z.number(),
+    building_id: z.number(),
+    audience_id: z.string(),
+    id: z.number()
+})
+
+export const StatusSchema = z.object({
+    status_type_name: z.string(),
+    id: z.number()
+})
+
+export const ResponsibleUserSchema = z.object({
+    first_name: z.string(),
+    last_name: z.string(),
+    paternity: z.string(),
+    job_id: z.number(),
+    office_id: z.number(),
+    id: z.number()
+})
+
+export const ResponsibleUserJobSchema = z.object({
+    job_name: z.string(),
+    id: z.number()
+})
+
+export const ResponsibleUserOfficeSchema = z.object({
+    office_name: z.string(),
+    id: z.number()
+})
+
+export const BuildingSchema = z.object({
+    building_address: z.string(),
+    id: z.number()
+})
+
+export const ResponsibleUserForComboboxSchema = z.object({
+    full_info: z.string(),
+    id: z.number()
+})
+
+export const EquipmentStatusTableSchema = z.object({
+    status_type_name: z.string(),
+    doc_number: z.string(),
+    status_change_date: z.string(),
+    responsible_user_fio: z.string(),
+    responsible_user_job_name: z.string(),
+    responsible_user_office_name: z.string(),
+    building_address: z.string(),
+    audience_id: z.string(),
+    id: z.number(),
+    equipment_id: z.number(),
+})

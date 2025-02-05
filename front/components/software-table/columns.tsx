@@ -22,7 +22,6 @@ import { SoftwareUpdateForm } from "./software-update-form";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
 import ContractsTable from "../contracts-table/contracts-table";
 import { API_URL } from "@/constants";
-import { useToast } from "@/hooks/use-toast";
 
 export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>>[] = [
     {

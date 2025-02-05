@@ -16,6 +16,11 @@ import { useState } from "react"
 import { API_URL } from "@/constants"
 import LoginPageField from "./login-page-field"
 
+type UserInfo = {
+    username: string,
+    password: string
+}
+
 export type LoginFieldName = "username" | "password";
 
 const loginFields = [
@@ -44,12 +49,15 @@ export const SignInForm = () => {
         },
     })
 
-    const onSubmit = () => {
+    const onSubmit = (data: UserInfo) => {
         setError("");
-        const formValues = document.getElementById("loginForm") as HTMLFormElement;
+
+        const formValues = new FormData();
+        formValues.append("username", data.username)
+        formValues.append("password", data.password)
         axios.defaults.withCredentials = true;
 
-        axios.post(API_URL + "/auth/login", new FormData(formValues))
+        axios.post(API_URL + "/auth/login", formValues)
         .then((data) => {
             setError("");
             router.push('/')
