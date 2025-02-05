@@ -233,7 +233,7 @@ export const EquipmentStatusSchema = z.object({
     equipment_id: z.number(),
     status_type_id: z.number(),
     doc_number: z.string(),
-    // status_change_date: z.string(),
+    status_change_date: z.string(),
     responsible_user_id: z.number(),
     building_id: z.number(),
     audience_id: z.string(),
