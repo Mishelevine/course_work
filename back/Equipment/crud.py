@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import Depends, HTTPException
 from sqlalchemy import select
 from back.EquipmentStatus.models import EquipmentStatus
@@ -69,6 +70,76 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                     )
                 )
                 
+        return equipment_data
+    
+async def get_equipment_for_excel(user_role_id: int, equipment_list: List[SEquipmentWithResponsible]):
+    async with async_session() as session:
+        equipment_data = []
+        equipment_ids = [eq.id for eq in equipment_list]
+        
+        query = select(Equipment).options(
+            joinedload(Equipment.statuses).joinedload(EquipmentStatus.status_type),
+            joinedload(Equipment.statuses).joinedload(EquipmentStatus.responsible_user),
+            joinedload(Equipment.statuses).joinedload(EquipmentStatus.building),
+            joinedload(Equipment.equipment_specification)
+        ).where(Equipment.id.in_(equipment_ids))
+        
+        result = await session.execute(query)
+        db_equipment_list = result.unique().scalars().all()
+
+        equipment_status_map = {eq.id: eq for eq in db_equipment_list}
+    
+        for equipment in equipment_list:
+            equipment_info = {
+                "ID": equipment.id,
+                "Тип оборудования": equipment.type_name,
+                "Модель": equipment.model,
+                "Серийный номер": equipment.serial_number,
+                "Инвентарный номер": equipment.inventory_number,
+                "Сетевое имя": equipment.network_name,
+                "Примечания": equipment.remarks,
+                "Ответственный": equipment.responsible_user_full_name,
+            }
+            if user_role_id > 3:
+                db_equipment = equipment_status_map.get(equipment.id)
+                if db_equipment and db_equipment.statuses:
+                    latest_status = sorted(db_equipment.statuses, key=lambda x: x.status_change_date, reverse=True)[0]
+                    equipment_info.update({
+                        "Статус": latest_status.status_type.status_type_name if latest_status.status_type else None,
+                        "Дата изменения статуса": latest_status.status_change_date,
+                        "Ответственный": latest_status.responsible_user.first_name if latest_status.responsible_user else None,
+                        "Здание": latest_status.building.building_address if latest_status.building else None,
+                        "Аудитория": latest_status.audience_id,
+                    })
+                else:
+                    equipment_info.update({
+                        "Статус": None,
+                        "Дата изменения статуса": None,
+                        "Ответственный": None,
+                        "Здание": None,
+                        "Аудитория": None,
+                    })
+                
+                if db_equipment and db_equipment.equipment_specification:
+                    for spec in db_equipment.equipment_specification:
+                        equipment_info.update({
+                            "Разрешение экрана": spec.screen_resolution,
+                            "Тип процессора": spec.processor_type,
+                            "Объем оперативной памяти": spec.ram_size,
+                            "Тип и объем диска": spec.storage,
+                            "Графический процессор": spec.gpu_info,
+                        })
+                else:
+                    equipment_info.update({
+                        "Разрешение экрана": None,
+                        "Тип процессора": None,
+                        "Объем оперативной памяти": None,
+                        "Тип и объем диска": None,
+                        "Графический процессор": None,
+                    })
+                
+            equipment_data.append(equipment_info)
+            
         return equipment_data
 
 async def create_equipment(equipment: SEquipmentCreate):
