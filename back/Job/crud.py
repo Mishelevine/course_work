@@ -16,6 +16,12 @@ async def get_job_by_name(job_name: str):
         query = select(Job).filter(Job.job_name == job_name)
         result = await session.execute(query)
         return result.scalar_one_or_none()
+    
+async def get_all_jobs() -> list[Job]:
+    async with async_session() as session:
+        query = select(Job)
+        result = await session.execute(query)
+        return result.scalars().all()
 
 async def create_job(job: SJobCreate):
     async with async_session() as session:

@@ -2,9 +2,10 @@ from typing import Optional
 from fastapi import HTTPException
 from sqlalchemy import select
 from back.database import async_session
+from sqlalchemy.orm import joinedload
 
 from back.ResponsibleUser.models import ResponsibleUser
-from back.ResponsibleUser.schemas import SResponsibleUser, SResponsibleUserCreate
+from back.ResponsibleUser.schemas import SAllResponsibleUser, SResponsibleUser, SResponsibleUserCreate
 
 async def get_responsible_user(user_id: int):
     async with async_session() as session:
@@ -12,11 +13,28 @@ async def get_responsible_user(user_id: int):
         result = await session.execute(query)
         return result.scalar_one_or_none()
     
-async def get_all_responsible_users() -> list[SResponsibleUser]:
+async def get_all_responsible_users() -> list[SAllResponsibleUser]:
     async with async_session() as session:
-        query = select(ResponsibleUser)
+        query = select(ResponsibleUser).options(
+            joinedload(ResponsibleUser.office),
+            joinedload(ResponsibleUser.job)
+        )
         result = await session.execute(query)
-        return result.scalars().all()
+        responsible_users_list = result.unique().scalars().all()
+        
+        responsible_users_data = []
+        
+        for responsible_user in responsible_users_list:
+            responsible_users_data.append(
+                SAllResponsibleUser(
+                    id=responsible_user.id,
+                    full_name=f"{responsible_user.first_name} {responsible_user.last_name} {responsible_user.paternity}",
+                    job_name=responsible_user.job.job_name,
+                    office_name=responsible_user.office.office_name,
+                )
+            )
+        return responsible_users_data
+            
 
 async def create_responsible_user(user: SResponsibleUserCreate):
     async with async_session() as session:

@@ -16,6 +16,12 @@ async def get_office_by_name(office_name: str):
         query = select(Office).filter(Office.office_name == office_name)
         result = await session.execute(query)
         return result.scalar_one_or_none()
+    
+async def get_all_offfices() -> list[Office]:
+    async with async_session() as session:
+        query = select(Office)
+        result = await session.execute(query)
+        return result.scalars().all()
 
 async def create_office(office: SOfficeCreate):
     async with async_session() as session:

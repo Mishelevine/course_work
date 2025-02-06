@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 from back.User.models import User
-from back.User.schemas import SUserCreate, SUserAllSchema
+from back.User.schemas import SUser, SUserBase, SUserCreate, SUserAllSchema
 from back.database import async_session
 from passlib.hash import bcrypt
 from fastapi import Depends, HTTPException
@@ -26,7 +26,7 @@ async def get_all_users() -> list[SUserAllSchema]:
                 SUserAllSchema(
                     id=user.id,
                     username=user.username,
-                    full_name= f"{user.first_name} {user.last_name} {user.paternity}",
+                    full_name= await get_user_full_name(user.id),
                     job_name=user.job.job_name if user.job else None,
                     office_name=user.office.office_name if user.office else None,
                     role_name=user.system_role.role_name if user.system_role else None,
@@ -47,6 +47,18 @@ async def get_user_by_id(user_id: int):
         query = select(User).filter(User.id == user_id)
         result = await session.execute(query)
         return result.scalar_one_or_none()
+    
+async def get_user_full_name(user_id: int):
+    user = await get_user_by_id(user_id)
+    
+    if user is None:
+        raise HTTPException(status_code=401, detail="Invalid user id")
+
+    if (user.paternity is None) or (user.paternity == ""):
+        full_name = f"{user.first_name} {user.last_name}"
+    else:
+        full_name = f"{user.first_name} {user.last_name} {user.paternity}"
+    return full_name
 
 async def create_user(user: SUserCreate, system_role_id: int):
     async with async_session() as session:
@@ -65,6 +77,31 @@ async def create_user(user: SUserCreate, system_role_id: int):
         await session.refresh(db_user)
         return db_user
     
+async def update_user(updated_user: SUser):
+    user = await get_user_by_id(updated_user.id)
+    
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    db_user = await get_user_by_username(username=updated_user.username)
+    if db_user.id != user.id:
+        raise HTTPException(status_code=400, detail="Username already in use")
+    
+    user.username = updated_user.username
+    user.first_name = updated_user.first_name
+    user.last_name = updated_user.last_name
+    user.paternity = updated_user.paternity
+    user.job_id = updated_user.job_id
+    user.office_id = updated_user.office_id
+    user.system_role_id = updated_user.system_role_id
+    
+    async with async_session() as session:
+        session.add(user)
+        await session.commit()
+        await session.refresh(user)
+    
+    return user
+    
 async def delete_user(user_id: int):
     async with async_session() as session:
         user = await get_user_by_id(user_id)
@@ -73,3 +110,17 @@ async def delete_user(user_id: int):
         await session.delete(user)
         await session.commit()
         return {"detail": "User deleted successfully"}
+    
+async def change_password(user_id: int, new_password: str):
+    async with async_session() as session:
+        user = await get_user_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        new_hashed_password = bcrypt.hash(new_password)
+        
+        user.hashed_password = new_hashed_password
+        session.add(user)
+        await session.commit()
+        
+        return {"detail": "Password updated successfully"}
