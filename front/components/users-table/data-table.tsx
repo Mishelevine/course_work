@@ -125,7 +125,7 @@ export function UserDataTable<TData, TValue>({
           <div className="flex gap-2">
             <DownloadButton
               className="bg-blue-2 hover:bg-blue-700"
-              apiEndpoint={API_URL + ""} // TODO: поставить эндпойнт как он появится
+              apiEndpoint={API_URL + "/user/to_excel_file"}
               buttonText="Выгрузить в Excel"
               tableData={table.getFilteredRowModel().rows.map(row => row.original)}
             />

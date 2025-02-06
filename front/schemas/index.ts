@@ -392,3 +392,63 @@ export const ResponsibleUserOfficeFormSchema = z.object({
         message: "Пожалуйста, введите подразделение ответственного лица"
     }),
 })
+
+export const CreateUserFormSchema = z.object({
+    username: z.string().min(1, {
+        message: "Пожалуйста, введите логин"
+    }),
+    hashed_password: z.string().min(1, {
+        message: "Пожалуйста, введите пароль"
+    }),
+    first_name: z.string().min(1, {
+        message: "Пожалуйста, введите имя"
+    }),
+    last_name: z.string().min(1, {
+        message: "Пожалуйста, введите фамилию"
+    }),
+    paternity: z.string(),
+    job_id: z.number().min(1, {
+        message: "Пожалуйста, выберите должность"
+    }),
+    office_id: z.number().min(1, {
+        message: "Пожалуйста, выберите подразделение"
+    }),
+    system_role_id: z.number().min(1, {
+        message: "Пожалуйста, выберите роль в системе"
+    })
+})
+
+export const UpdateUserFormSchema = z.object({
+    username: z.string().min(1, {
+        message: "Пожалуйста, введите логин"
+    }),
+    first_name: z.string().min(1, {
+        message: "Пожалуйста, введите имя"
+    }),
+    last_name: z.string().min(1, {
+        message: "Пожалуйста, введите фамилию"
+    }),
+    paternity: z.string(),
+    job_id: z.number().min(1, {
+        message: "Пожалуйста, выберите должность"
+    }),
+    office_id: z.number().min(1, {
+        message: "Пожалуйста, выберите подразделение"
+    }),
+    system_role_id: z.number().min(1, {
+        message: "Пожалуйста, выберите роль в системе"
+    }),
+    id: z.number()
+})
+
+export const UpdateUserPasswordSchema = z.object({
+    user_id: z.number(),
+    new_password: z.string().min(1, {
+        message: "Пожалуйста, введите пароль"
+    })
+})
+
+export const UserRoleSchema = z.object({
+    role_name: z.string(),
+    id: z.number()
+})

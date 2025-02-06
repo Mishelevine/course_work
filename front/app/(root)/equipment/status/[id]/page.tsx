@@ -46,6 +46,3 @@ const EquipmentStatusPage = (props:  {params: Promise<{ id: string }>}) => {
 };
 
 export default EquipmentStatusPage;
-
-// const EquipmentStatusPage = async (props:  {params: Promise<{ id: string }>}) => {
-//   const params = await props.params;
