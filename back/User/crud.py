@@ -2,21 +2,39 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 from back.User.models import User
-from back.User.schemas import SUserCreate
+from back.User.schemas import SUserCreate, SUserAllSchema
 from back.database import async_session
 from passlib.hash import bcrypt
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 
 
-async def get_all_users() -> list[User]:
+async def get_all_users() -> list[SUserAllSchema]:
     async with async_session() as session:
         query = select(User).options(
             joinedload(User.job),
             joinedload(User.office),
             joinedload(User.system_role)
         )
+        
+        user_data = []
+        
         result = await session.execute(query)
-        return result.unique().scalars().all()
+        user_list = result.unique().scalars().all()
+        
+        for user in user_list:
+            user_data.append(
+                SUserAllSchema(
+                    id=user.id,
+                    username=user.username,
+                    full_name= f"{user.first_name} {user.last_name} {user.paternity}",
+                    job_name=user.job.job_name if user.job else None,
+                    office_name=user.office.office_name if user.office else None,
+                    role_name=user.system_role.role_name if user.system_role else None,
+                )
+            )
+        
+        return user_data
+            
 
 async def get_user_by_username(username: str) -> User:
     async with async_session() as session:
@@ -46,3 +64,12 @@ async def create_user(user: SUserCreate, system_role_id: int):
         await session.commit()
         await session.refresh(db_user)
         return db_user
+    
+async def delete_user(user_id: int):
+    async with async_session() as session:
+        user = await get_user_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        await session.delete(user)
+        await session.commit()
+        return {"detail": "User deleted successfully"}
