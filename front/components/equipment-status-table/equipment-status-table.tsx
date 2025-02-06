@@ -2,7 +2,7 @@
 
 import { z } from "zod"
 import { EquipmentStatusTableColumns } from "./columns"
-import { EquipmentStatusSchema, EquipmentStatusTableSchema, ResponsibleUserSchema } from "@/schemas"
+import { EquipmentStatusSchema, EquipmentStatusTableSchema, SingleResponsibleUserSchema } from "@/schemas"
 import axios from "axios"
 import { API_URL } from "@/constants"
 import { EquipmentStatusDataTable } from "./data-table"
@@ -32,7 +32,7 @@ export default function EquipmentStatusTable({
 
                     const responsible_user = (await axios.get(
                         `${API_URL}/responsible_users/${status.responsible_user_id}`
-                    )).data as z.infer<typeof ResponsibleUserSchema>
+                    )).data as z.infer<typeof SingleResponsibleUserSchema>
 
                     const user_fio = [
                         responsible_user.last_name,

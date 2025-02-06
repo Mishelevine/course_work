@@ -26,6 +26,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "../helper-functions"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 
 interface UserLogDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -63,15 +64,38 @@ export function UserLogDataTable<TData, TValue>({
 
   return (
     <div className="w-full h-full">
-      <div className="flex items-center justify-between py-4">
-        <Input
-          placeholder="Поиск по имени пользователя..."
-          value={(table.getColumn("user_name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("user_name")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className="flex items-start justify-between py-4">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="item-1" className="border-0 px-1">
+            <AccordionTrigger className="flex h-[40px] min-w-[100px] max-w-[100px] py-0">Фильтры</AccordionTrigger>
+            <AccordionContent className="flex flex-col gap-2 p-1">
+              <Input
+                placeholder="Поиск по логину пользователя..."
+                value={(table.getColumn("user_name")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("user_name")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />
+              <Input
+                placeholder="Поиск по типу события..."
+                value={(table.getColumn("event_type")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("event_type")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />
+              <Input
+                placeholder="Поиск по роли..."
+                value={(table.getColumn("role_name")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("role_name")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
       <div className="rounded-md border overflow-y-auto">
         <Table>

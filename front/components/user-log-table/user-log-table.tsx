@@ -26,39 +26,8 @@ export default function UserLogTable() {
             try {
                 setLoading(true)
                 setError(null)
-
-                // Получаем основные данные логов
-                const logsResponse = await axios.get<UserLogSchemaFromBack[]>(`${API_URL}/sessionlog/all`)
-                const basicLogsData = logsResponse.data
-
-                // Параллельно запрашиваем дополнительные данные для каждой записи
-                const enrichedData = await Promise.all(
-                    basicLogsData.map(async (log) => {
-                        try {
-                            const [nameResponse, roleResponse] = await Promise.all([
-                                axios.get<string>(`${API_URL}/auth/${log.user_id}/fullname`),
-                                axios.get<{ role_name: string }>(`${API_URL}/role/${log.user_role}`)
-                            ])
-
-                            return {
-                                user_name: nameResponse.data,
-                                event_type: log.event_type,
-                                time: log.time,
-                                user_role: roleResponse.data.role_name,
-                            }
-                        } catch (e) {
-                            console.error(`Error enriching log entry ${log.user_id}:`, e)
-                            return {
-                                user_name: "N/A",
-                                event_type: log.event_type,
-                                time: log.time,
-                                user_role: "N/A",
-                            }
-                        }
-                    })
-                )
-
-                setData(enrichedData)
+                const logs = (await axios.get(API_URL + "/sessionlog/all")).data
+                setData(logs)
             } catch (e) {
                 console.error("Error fetching logs:", e)
                 setError("Не удалось загрузить данные журнала")

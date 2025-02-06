@@ -32,5 +32,5 @@ export default function ResponsibleUserOfficeTable() {
     return <div>Loading offices...</div>
   }
 
-  return <ResponsibleUserOfficeDataTable columns={ResponsibleUserOfficeTableColumns} data={data} /> // TODO: поменять на данные с бэка как появится ручка
+  return <ResponsibleUserOfficeDataTable columns={ResponsibleUserOfficeTableColumns} data={data} />
 }

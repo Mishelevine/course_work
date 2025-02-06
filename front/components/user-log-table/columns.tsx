@@ -9,8 +9,8 @@ import { DatetimeFromDbForm } from "../helper-functions";
 
 export const UserLogTableColumns: ColumnDef<z.infer<typeof UserLogSchema>>[] = [
     {
-        accessorKey: "user_name",
-        header: "Имя пользователя",
+        accessorKey: "username",
+        header: "Логин пользователя",
     },
     {
         accessorKey: "event_type",
@@ -34,7 +34,7 @@ export const UserLogTableColumns: ColumnDef<z.infer<typeof UserLogSchema>>[] = [
         }
     },
     {
-        accessorKey: "user_role",
+        accessorKey: "role_name",
         header: "Роль пользователя",
     }
 ]

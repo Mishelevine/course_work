@@ -1,6 +1,6 @@
 "use client"
 
-import EquipmentStatusTypeAddForm from "./equipment-status-type-add-form"
+import ResponsibleUserAddForm from "./responsible-user-add-form"
 
 import * as React from "react"
 import {
@@ -29,16 +29,17 @@ import {
 import { CorrectPagesCase } from "../helper-functions"
 import ModalForm from "../modal-form"
 import { AlertDialogTrigger } from "../ui/alert-dialog"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 
-interface EquipmentStatusTypeDataTableProps<TData, TValue> {
+interface ResponsibleUserDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function EquipmentStatusTypeDataTable<TData, TValue>({
+export function ResponsibleUserDataTable<TData, TValue>({
   columns,
   data,
-}: EquipmentStatusTypeDataTableProps<TData, TValue>) {
+}: ResponsibleUserDataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
@@ -64,20 +65,43 @@ export function EquipmentStatusTypeDataTable<TData, TValue>({
 
   return (
     <ModalForm
-      title="Создать статус"
+      title="Создать ответственное лицо"
       description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<EquipmentStatusTypeAddForm />}
+      form={<ResponsibleUserAddForm />}
     >
       <div className="w-full h-full">
-        <div className="flex items-center justify-between py-4">
-          <Input
-            placeholder="Поиск по наименованию статуса..."
-            value={(table.getColumn("status_type_name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("status_type_name")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
+        <div className="flex items-start justify-between py-4">
+            <Accordion type="single" collapsible>
+              <AccordionItem value="item-1" className="border-0 px-1">
+              <AccordionTrigger className="flex h-[40px] min-w-[100px] max-w-[100px] py-0">Фильтры</AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-2 p-1">
+                <Input
+                  placeholder="Поиск по ФИО..."
+                  value={(table.getColumn("full_name")?.getFilterValue() as string) ?? ""}
+                  onChange={(event) =>
+                  table.getColumn("full_name")?.setFilterValue(event.target.value)
+                  }
+                  className="w-[300px]"
+                />
+                <Input
+                  placeholder="Поиск по должности..."
+                  value={(table.getColumn("job_name")?.getFilterValue() as string) ?? ""}
+                  onChange={(event) =>
+                  table.getColumn("job_name")?.setFilterValue(event.target.value)
+                  }
+                  className="w-[300px]"
+                />
+                <Input
+                  placeholder="Поиск по подразделению..."
+                  value={(table.getColumn("office_name")?.getFilterValue() as string) ?? ""}
+                  onChange={(event) =>
+                  table.getColumn("office_name")?.setFilterValue(event.target.value)
+                  }
+                  className="w-[300px]"
+                />
+              </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           <div className="flex gap-2">
             <AlertDialogTrigger asChild>
               <Button className="bg-blue-2 hover:bg-blue-700">Добавить запись</Button>
@@ -121,7 +145,7 @@ export function EquipmentStatusTypeDataTable<TData, TValue>({
               ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center">
-                    Нет статусов
+                    Нет ответственных лиц
                   </TableCell>
                 </TableRow>
               )}

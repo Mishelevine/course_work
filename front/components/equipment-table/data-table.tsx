@@ -31,6 +31,7 @@ import ModalForm from "../modal-form"
 import DownloadButton from "../download-button"
 import { API_URL } from "@/constants"
 import { AlertDialogTrigger } from "../ui/alert-dialog"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 
 interface EquipmentDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -79,22 +80,70 @@ export function EquipmentDataTable<TData, TValue>({
       form={<EquipmentAddForm />}
     >
       <div className="w-full h-full">
-        {!forStatus && <div className="flex items-center justify-between py-4">
-          <Input
-            placeholder="Поиск по модели оборудования..."
-            value={(table.getColumn("model")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("model")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
+        {!forStatus && <div className="flex items-start justify-between py-4">
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1" className="border-0 px-1">
+            <AccordionTrigger className="flex h-[40px] min-w-[100px] max-w-[100px] py-0">Фильтры</AccordionTrigger>
+            <AccordionContent className="flex flex-col gap-2 p-1">
+              <Input
+                placeholder="Фильтр по типу оборудования..."
+                value={(table.getColumn("type_name")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("type_name")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />
+              <Input
+                placeholder="Фильтр по модели оборудования..."
+                value={(table.getColumn("model")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("model")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />
+              <Input
+                placeholder="Фильтр по серийному номеру..."
+                value={(table.getColumn("serial_number")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("serial_number")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />
+              <Input
+                placeholder="Фильтр по инвентарному номеру..."
+                value={(table.getColumn("inventory_number")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("inventory_number")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />
+              <Input
+                placeholder="Фильтр по сетевому имени..."
+                value={(table.getColumn("network_name")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("network_name")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />
+              {/*TODO: скрыть для других ролей пользователей*/}
+              <Input
+                placeholder="Фильтр по ФИО ответственного лица..."
+                value={(table.getColumn("responsible_user_full_name")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("responsible_user_full_name")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />
+            </AccordionContent>
+            </AccordionItem>
+          </Accordion>
           <div className="flex gap-2">
-            {/* <DownloadButton
+            <DownloadButton
               className="bg-blue-2 hover:bg-blue-700"
-              apiEndpoint={API_URL + "/equipment/to_excel_file"}
+              apiEndpoint={API_URL + "/"} // TODO: поменять на ручку мишину когда она появится
               buttonText="Выгрузить в Excel"
               tableData={table.getFilteredRowModel().rows.map(row => row.original)}
-            /> */}
+            />
             <AlertDialogTrigger asChild>
               <Button className="bg-blue-2 hover:bg-blue-700">Добавить оборудование</Button>
             </AlertDialogTrigger>

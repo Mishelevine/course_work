@@ -125,8 +125,8 @@ export const SoftwareSchema = z.object({
 export const UserLogSchema = z.object({
     event_type: z.string(),
     time: z.string(),
-    user_name: z.string(),
-    user_role: z.string()
+    username: z.string(),
+    role_name: z.string()
 })
 
 export const ContractFormSchema = z.object({
@@ -247,12 +247,35 @@ export const StatusSchema = z.object({
 })
 
 export const ResponsibleUserSchema = z.object({
+    full_name: z.string(),
+    job_name: z.string(),
+    office_name: z.string(),
+    id: z.number()
+})
+
+export const SingleResponsibleUserSchema = z.object({
     first_name: z.string(),
     last_name: z.string(),
     paternity: z.string(),
     job_id: z.number(),
     office_id: z.number(),
     id: z.number()
+})
+
+export const SingleResponsibleUserFormSchema = z.object({
+    first_name: z.string().min(1, {
+        message: "Пожалуйста, введите имя"
+    }),
+    last_name: z.string().min(1, {
+        message: "Пожалуйста, введите фамилию"
+    }),
+    paternity: z.string(),
+    job_id: z.number().min(1, {
+        message: "Пожалуйста, выберите должность"
+    }),
+    office_id: z.number().min(1, {
+        message: "Пожалуйста, выберите подразделение"
+    })
 })
 
 export const ResponsibleUserForComboboxSchema = z.object({
