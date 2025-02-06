@@ -286,3 +286,23 @@ export const EquipmentStatusTableSchema = z.object({
     id: z.number(),
     equipment_id: z.number(),
 })
+
+// export const UserSchemaFromBack = z.object({
+//     first_name: z.string(),
+//     last_name: z.string(),
+//     paternity: z.string(),
+//     username: z.string(),
+//     job_name: z.string(),
+//     office_name: z.string(),
+//     role_name: z.string(),
+//     id: z.number()
+// })
+
+export const UserSchemaForTable = z.object({
+    full_name: z.string(),
+    username: z.string(),
+    job_name: z.string(),
+    office_name: z.string(),
+    role_name: z.string(),
+    id: z.number()
+})
