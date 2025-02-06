@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 
 class SUserBase(BaseModel):
@@ -18,6 +19,17 @@ class SUserAuth(BaseModel):
 
 class SUser(SUserBase):
     id: int
+
+    class Config:
+        from_attributes = True
+        
+class SUserAllSchema(BaseModel):
+    id: int
+    username: str
+    full_name: Optional[str] = None
+    job_name: Optional[str] = None
+    office_name: Optional[str] = None
+    role_name: Optional[str] = None
 
     class Config:
         from_attributes = True

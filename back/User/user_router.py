@@ -6,7 +6,7 @@ import pandas as pd
 import io
 import openpyxl
 
-from back.User.schemas import SUser, SUserCreate
+from back.User.schemas import SUser, SUserCreate, SUserAllSchema
 from back.User import crud
 
 router = APIRouter(
@@ -53,6 +53,10 @@ async def get_software_excel():
     )
     
 @router.get("users/all")
-async def get_all_users() -> List[SUser]:
+async def get_all_users() -> List[SUserAllSchema]:
     
     return await crud.get_all_users()
+
+@router.delete("/{user_id}", response_model=dict)
+async def delete_user(user_id: int):
+    return await crud.delete_user(user_id=user_id)
