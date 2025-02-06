@@ -1,5 +1,8 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
+
+from back.EquipmentSpecification.schemas import SEquipmentSpecification
+from back.EquipmentStatus.schemas import SEquipmentStatus
 
 class SEquipmentBase(BaseModel):
     model: str
@@ -21,6 +24,8 @@ class SEquipment(SEquipmentBase):
 class SEquipmentWithResponsible(SEquipment):
     responsible_user_full_name: Optional[str] = None
     type_name: Optional[str] = None
+    statuses: Optional[List[SEquipmentStatus]] = None
+    specifications: Optional[List[SEquipmentSpecification]] = None
 
     class Config:
         from_attributes = True

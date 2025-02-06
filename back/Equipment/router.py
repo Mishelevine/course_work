@@ -16,78 +16,46 @@ router = APIRouter(
     tags=["Оборудование"]
 )
 
-@router.get("/to_excel_file")
-async def get_equipment_excel():
-    equipment_list = await crud.get_all_equipment()
-    
-    equipment_data = []
-    for equipment in equipment_list:
-        # Основная информация об оборудовании
-        equipment_info = {
-            "ID": equipment.id,
-            "Тип оборудования": equipment.type.type_name if equipment.type else None,
-            "Модель": equipment.model,
-            "Серийный номер": equipment.serial_number,
-            "Инвентарный номер": equipment.inventory_number,
-            "Сетевое имя": equipment.network_name,
-            "Примечания": equipment.remarks,
-        }
+@router.post("/to_excel_file")
+async def generate_equipment_excel(equipment_list: List[SEquipmentWithResponsible]):
+    from fastapi import APIRouter, HTTPException
+from fastapi.responses import StreamingResponse
+from typing import List
+import pandas as pd
+import io
+from datetime import datetime, timezone, timedelta
 
-        # Информация о статусах
-        if equipment.statuses:
-            for status in equipment.statuses:
-                equipment_info.update({
-                    "Статус": status.status_type.status_type_name if status.status_type else None,
-                    "Дата изменения статуса": status.status_change_date,
-                    "Ответственный": status.responsible_user.first_name if status.responsible_user else None,
-                    "Здание": status.building.building_address if status.building else None,
-                    "Аудитория": status.audience_id,
-                })
-        else:
-            equipment_info.update({
-                "Статус": None,
-                "Дата изменения статуса": None,
-                "Ответственный": None,
-                "Здание": None,
-                "Аудитория": None,
-            })
+router = APIRouter(
+    prefix="/equipment",
+    tags=["Оборудование"]
+)
 
-        # Информация о технических характеристиках
-        if equipment.equipment_specification:
-            for spec in equipment.equipment_specification:
-                equipment_info.update({
-                    "Разрешение экрана": spec.screen_resolution,
-                    "Тип процессора": spec.processor_type,
-                    "Объем оперативной памяти": spec.ram_size,
-                    "Тип и объем диска": spec.storage,
-                    "Графический процессор": spec.gpu_info,
-                })
-        else:
-            equipment_info.update({
-                "Разрешение экрана": None,
-                "Тип процессора": None,
-                "Объем оперативной памяти": None,
-                "Тип диска": None,
-                "Объем диска": None,
-                "Графический процессор": None,
-            })
-            
-        equipment_data.append(equipment_info)
+@router.post("/to_excel_file")
+async def generate_equipment_excel(equipment_list: List[SEquipmentWithResponsible], user: User = Depends(get_current_user)):
+    if user.system_role_id < 3:
+        raise HTTPException(status_code=403, detail="Forbidden")
     
-    df = pd.DataFrame(equipment_data)
-    
-    excel_file = io.BytesIO()
-    with pd.ExcelWriter(excel_file, engine="openpyxl") as writer:
-        df.to_excel(writer, index=False, sheet_name="Equipment")
-    excel_file.seek(0)
-    
-    file_name = f"equipment_list_{datetime.now(tz=timezone(timedelta(hours=5))).strftime('%Y%m%d_%H%M%S')}.xlsx"
-    
-    return StreamingResponse(
-        excel_file,
-        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        headers={"Content-Disposition": f"attachment; filename={file_name}"}
-    )
+    try:
+        equipment_data = await crud.get_equipment_for_excel(user.system_role_id, equipment_list)
+
+        df = pd.DataFrame(equipment_data)
+
+        excel_file = io.BytesIO()
+        with pd.ExcelWriter(excel_file, engine="openpyxl") as writer:
+            df.to_excel(writer, index=False, sheet_name="Equipment")
+        excel_file.seek(0)
+
+        file_name = f"equipment_list_{datetime.now(tz=timezone(timedelta(hours=5))).strftime('%Y%m%d_%H%M%S')}.xlsx"
+
+        return StreamingResponse(
+            excel_file,
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={"Content-Disposition": f"attachment; filename={file_name}"}
+        )
+
+    except Exception as e:
+        print(f"Ошибка при генерации Excel-файла: {e}")
+        raise HTTPException(status_code=500, detail="Ошибка при генерации Excel-файла")
 
 @router.post("/create", response_model=SEquipment)
 async def create_equipment(equipment: SEquipmentCreate):

@@ -84,8 +84,9 @@ async def update_user(updated_user: SUser):
         raise HTTPException(status_code=404, detail="User not found")
     
     db_user = await get_user_by_username(username=updated_user.username)
-    if db_user.id != user.id:
-        raise HTTPException(status_code=400, detail="Username already in use")
+    if db_user:
+        if db_user.id != user.id:
+            raise HTTPException(status_code=400, detail="Username already in use")
     
     user.username = updated_user.username
     user.first_name = updated_user.first_name
