@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, HTTPException
 from back.Office.schemas import SOffice, SOfficeCreate
 from back.Office import crud
@@ -13,6 +14,10 @@ async def create_office(office: SOfficeCreate):
     if db_office:
         raise HTTPException(status_code=400, detail="Office already exists")
     return await crud.create_office(office=office)
+
+@router.get("/all")
+async def get_all_offices() -> List[SOffice]:
+    return await crud.get_all_offfices()
 
 @router.get("/{office_id}", response_model=SOffice)
 async def get_office(office_id: int):

@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, HTTPException
 from back.Job.schemas import SJob, SJobCreate
 from back.Job import crud
@@ -13,6 +14,10 @@ async def create_job(job: SJobCreate):
     if db_job:
         raise HTTPException(status_code=400, detail="Job already exists")
     return await crud.create_job(job=job)
+
+@router.get("/all")
+async def get_all_jobs() -> List[SJob]:
+    return await crud.get_all_jobs()
 
 @router.get("/{job_id}", response_model=SJob)
 async def get_job(job_id: int):

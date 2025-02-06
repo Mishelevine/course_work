@@ -16,7 +16,7 @@ async def create_building(building: SBuildingCreate):
     return await crud.create_building(building=building)
 
 @router.get("/all")
-async def get_all_contracts() -> List[SBuilding]:
+async def get_all_buildings() -> List[SBuilding]:
     return await crud.get_all_buildings()
 
 @router.get("/{building_id}", response_model=SBuilding)

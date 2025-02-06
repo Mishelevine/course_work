@@ -16,7 +16,7 @@ async def create_equipment_status_type(status_type: SEquipmentStatusTypeCreate):
     return await crud.create_equipment_status_type(status_type=status_type)
 
 @router.get("/all")
-async def get_all_contracts() -> List[SEquipmentStatusType]:
+async def get_all_equipment_status_types() -> List[SEquipmentStatusType]:
     return await crud.get_all_equipment_status_types()
 
 @router.get("/{status_type_id}", response_model=SEquipmentStatusType)

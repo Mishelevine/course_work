@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import APIRouter, HTTPException
-from back.ResponsibleUser.schemas import SResponsibleUser, SResponsibleUserCreate
+from back.ResponsibleUser.schemas import SAllResponsibleUser, SResponsibleUser, SResponsibleUserCreate
 from back.ResponsibleUserJob.schemas import SResponsibleUserJob, SResponsibleUserJobCreate
 from back.ResponsibleUserOffice.schemas import SResponsibleUserOffice, SResponsibleUserOfficeCreate
 from back.ResponsibleUser import crud
@@ -24,7 +24,7 @@ async def create_responsible_user(user: SResponsibleUserCreate):
     return await crud.create_responsible_user(user=user)
 
 @router.get("/all")
-async def get_all_responsible_users() -> List[SResponsibleUser]:
+async def get_all_responsible_users() -> List[SAllResponsibleUser]:
     return await crud.get_all_responsible_users()
 
 @router.get("/{user_id}", response_model=SResponsibleUser)
@@ -54,7 +54,7 @@ async def create_job(job: SResponsibleUserJobCreate):
     return await crud_responsible_user_job.create_job(job=job)
 
 @router.get("/job/all")
-async def get_all_contracts() -> List[SResponsibleUserJob]:
+async def get_all_jobs() -> List[SResponsibleUserJob]:
     return await crud_responsible_user_job.get_all_jobs()
 
 @router.get("/job/{job_id}", response_model=SResponsibleUserJob)
@@ -89,7 +89,7 @@ async def create_office(office: SResponsibleUserOfficeCreate):
     return await crud_responsible_user_office.create_office(office=office)
 
 @router.get("/office/all")
-async def get_all_contracts() -> List[SResponsibleUserOffice]:
+async def get_all_offices() -> List[SResponsibleUserOffice]:
     return await crud_responsible_user_office.get_all_offices()
 
 @router.get("/office/{office_id}", response_model=SResponsibleUserOffice)

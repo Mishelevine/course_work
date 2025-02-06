@@ -77,6 +77,13 @@ async def login_for_access_token(response: Response, form_data: OAuth2PasswordRe
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+@router.post("/change-password")
+async def change_password(user_id: int, new_password: str , current_user: User = Depends(get_current_user)):
+    if current_user.id != 4:
+        HTTPException(status_code=403, detail="Forbidden")
+    
+    return await crud.change_password(user_id, new_password)
+
 @router.post("/token/refresh", response_model=Token)
 async def refresh_access_token(response: Response, refresh_token: str):
     print(refresh_token)
@@ -134,17 +141,3 @@ async def get_user_by_token_directly(token: str):
     except ExpiredSignatureError:
         raise HTTPException(
             status_code=401, detail="Could not validate credentials")
-
-
-@router.get("/{user_id}/fullname", response_model=str)
-async def get_user_full_name(user_id: int):
-    user = await crud.get_user_by_id(user_id)
-
-    if user is None:
-        raise HTTPException(status_code=401, detail="Invalid user id")
-
-    if (user.paternity is None) or (user.paternity == ""):
-        full_name = f"{user.first_name} {user.last_name}"
-    else:
-        full_name = f"{user.first_name} {user.last_name} {user.paternity}"
-    return full_name
