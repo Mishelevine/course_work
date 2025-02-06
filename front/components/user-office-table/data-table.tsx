@@ -1,5 +1,7 @@
 "use client"
 
+import UserOfficeAddForm from "./user-office-add-form"
+
 import * as React from "react"
 import {
   ColumnDef,
@@ -25,26 +27,25 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "../helper-functions"
-import LicenseAddForm from "./license-add-form"
 import ModalForm from "../modal-form"
 import { AlertDialogTrigger } from "../ui/alert-dialog"
 
-interface LicenseDataTableProps<TData, TValue> {
+interface UserOfficeDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function LicenseDataTable<TData, TValue>({
+export function UserOfficeDataTable<TData, TValue>({
   columns,
   data,
-}: LicenseDataTableProps<TData, TValue>) {
+}: UserOfficeDataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
     id: false
   })
-  const [currentPageNumber, setCurrentPageNumber] = React.useState<number>(1)
+  const [currentPageNumber, setCurrentPageNumber] = React.useState<number>(1) //TODO: когда записей нет сделать 0
 
   const table = useReactTable({
     data,
@@ -63,17 +64,17 @@ export function LicenseDataTable<TData, TValue>({
 
   return (
     <ModalForm
-      title="Создать лицензию"
+      title="Создать должность"
       description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<LicenseAddForm />}
+      form={<UserOfficeAddForm />}
     >
       <div className="w-full h-full">
         <div className="flex items-center justify-between py-4">
           <Input
-            placeholder="Поиск по типу лицензии..."
-            value={(table.getColumn("license_type")?.getFilterValue() as string) ?? ""}
+            placeholder="Поиск по наименованию подразделения..."
+            value={(table.getColumn("office_name")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-              table.getColumn("license_type")?.setFilterValue(event.target.value)
+              table.getColumn("office_name")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -120,7 +121,7 @@ export function LicenseDataTable<TData, TValue>({
               ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center">
-                    Нет записей.
+                    Нет подразделений
                   </TableCell>
                 </TableRow>
               )}

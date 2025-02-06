@@ -7,6 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import UserTable from '@/components/users-table/user-table'
+import UserJobTable from '@/components/user-job-table/user-job-table'
+import UserOfficeTable from '@/components/user-office-table/user-office-table'
 
 function TabsShower() {
   return (
@@ -65,7 +67,7 @@ function TabsShower() {
           </CardHeader>
           <Separator className="bg-gray-300"/>
           <CardContent className="space-y-2">
-            <div> UserJobsTable </div>
+            <UserJobTable/>
           </CardContent>
         </Card>
       </TabsContent>
@@ -79,7 +81,7 @@ function TabsShower() {
           </CardHeader>
           <Separator className="bg-gray-300"/>
           <CardContent className="space-y-2">
-            <div> UserOfficesTable </div>
+            <UserOfficeTable/>
           </CardContent>
         </Card>
       </TabsContent>

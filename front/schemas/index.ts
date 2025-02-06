@@ -306,3 +306,25 @@ export const UserSchemaForTable = z.object({
     role_name: z.string(),
     id: z.number()
 })
+
+export const UserJobSchema = z.object({
+    job_name: z.string(),
+    id: z.number()
+})
+
+export const UserJobFormSchema = z.object({
+    job_name: z.string().min(1, {
+        message: "Пожалуйста, введите должность"
+    })
+})
+
+export const UserOfficeSchema = z.object({
+    office_name: z.string(),
+    id: z.number()
+})
+
+export const UserOfficeFormSchema = z.object({
+    office_name: z.string().min(1, {
+        message: "Пожалуйста, введите подразделение"
+    })
+})

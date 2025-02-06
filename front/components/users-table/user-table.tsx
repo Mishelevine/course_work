@@ -66,5 +66,5 @@ export default function UserTable() {
     return <div>Loading users data...</div>
   }
 
-  return <UserDataTable columns={UserTableColumns} data={tempData} /> // TODO: изменить на данные из ручки как миша сделает
+  return <UserDataTable columns={UserTableColumns} data={data} />
 }

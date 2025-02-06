@@ -1,46 +1,38 @@
 "use client"
 
-import { UserSchemaForTable } from "@/schemas";
+import { UserOfficeSchema } from "@/schemas";
+import UserOfficeUpdateForm from "./user-office-update-form";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
-import { Button } from "../ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { DeleteRowTable } from "../helper-functions";
+import { AlertDialogTrigger } from "../ui/alert-dialog";
 import ModalForm from "../modal-form";
-import UserUpdateForm from "./user-update-form";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
 import { API_URL } from "@/constants";
 
-export const UserTableColumns: ColumnDef<z.infer<typeof UserSchemaForTable>>[] = [
-    {
-        accessorKey: "full_name",
-        header: "ФИО пользователя",
-    },
-    {
-        accessorKey: "username",
-        header: "Логин"
-    },
-    {
-        accessorKey: "job_name",
-        header: "Должность"
-    },
+export const UserOfficeTableColumns: ColumnDef<z.infer<typeof UserOfficeSchema>>[] = [
     {
         accessorKey: "office_name",
-        header: "Подразделение"
-    },
-    {
-        accessorKey: "role_name",
-        header: "Роль"
+        header: "Наименование подразделения"
     },
     {
         id: "actions",
         cell: ({ row }) => {
             return (
                 <ModalForm
-                    title="Изменить данные о пользователе"
+                    title="Изменить подразделение"
                     description={<>Заполните все поля и нажмите кнопку <b>Изменить</b></>}
-                    form={<UserUpdateForm id={row.getValue("id")} />}
+                    form={<UserOfficeUpdateForm id={row.getValue("id")} />}
                 >
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -56,7 +48,7 @@ export const UserTableColumns: ColumnDef<z.infer<typeof UserSchemaForTable>>[] =
                                 <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
                             </AlertDialogTrigger>
                             <DropdownMenuItem onClick={() => {
-                                DeleteRowTable(API_URL + `/user/${row.getValue("id")}`)
+                                DeleteRowTable(API_URL + `/office/${row.getValue("id")}/delete`)
                             }}>
                                 Удалить запись
                             </DropdownMenuItem>
@@ -68,6 +60,5 @@ export const UserTableColumns: ColumnDef<z.infer<typeof UserSchemaForTable>>[] =
     },
     {
         accessorKey: "id",
-        header: "№",
-    },
+    }
 ]

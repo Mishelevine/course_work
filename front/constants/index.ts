@@ -19,7 +19,7 @@ export const sidebarLinks = [
 export const LOWEST_ROLE = 1
 
 export const WebSiteName = 'HSE SATS'
-export const API_URL = 'http://192.168.0.63:8000'
+export const API_URL = 'http://localhost:8000'
 export const WEBSITE_URL = 'http://localhost:3000'
 
 export const PC_CENTER_PAGE = 'https://perm.hse.ru/pc_centre/'

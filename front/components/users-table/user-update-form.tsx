@@ -6,7 +6,7 @@ const UserUpdateForm = ({
     id: number
 }) => {
   return (
-    <div>UserUpdateForm</div>
+    <div>UserUpdateForm</div> // TODO: сделать форму обновления пользователя
   )
 }
 
