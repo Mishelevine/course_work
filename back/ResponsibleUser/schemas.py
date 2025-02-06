@@ -16,3 +16,9 @@ class SResponsibleUser(SResponsibleUserBase):
 
     class Config:
         from_attributes = True
+        
+class SAllResponsibleUser(BaseModel):
+    id: int
+    full_name: str
+    job_name: Optional[str] = None
+    office_name: Optional[str] = None
