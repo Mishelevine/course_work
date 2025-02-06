@@ -1,6 +1,6 @@
 "use client"
 
-import UserJobAddForm from "./user-job-add-form"
+import ResponsibleUserJobAddForm from "./responsible-user-job-add-form"
 
 import * as React from "react"
 import {
@@ -30,15 +30,15 @@ import { CorrectPagesCase } from "../helper-functions"
 import ModalForm from "../modal-form"
 import { AlertDialogTrigger } from "../ui/alert-dialog"
 
-interface UserJobDataTableProps<TData, TValue> {
+interface ResponsibleUserJobDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function UserJobDataTable<TData, TValue>({
+export function ResponsibleUserJobDataTable<TData, TValue>({
   columns,
   data,
-}: UserJobDataTableProps<TData, TValue>) {
+}: ResponsibleUserJobDataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
@@ -66,7 +66,7 @@ export function UserJobDataTable<TData, TValue>({
     <ModalForm
       title="Создать должность"
       description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<UserJobAddForm />}
+      form={<ResponsibleUserJobAddForm />}
     >
       <div className="w-full h-full">
         <div className="flex items-center justify-between py-4">

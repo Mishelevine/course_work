@@ -190,6 +190,7 @@ export const EquipmentSpecsSchema = z.object({
     id: z.number()
 })
 
+// TODO: скорее всего разрешить заполнять не все поля
 export const EquipmentSpecsFormSchema = z.object({
     screen_resolution: z.string().min(1, {
         message: "Пожалуйста, введите разрешение экрана"
@@ -254,21 +255,6 @@ export const ResponsibleUserSchema = z.object({
     id: z.number()
 })
 
-export const ResponsibleUserJobSchema = z.object({
-    job_name: z.string(),
-    id: z.number()
-})
-
-export const ResponsibleUserOfficeSchema = z.object({
-    office_name: z.string(),
-    id: z.number()
-})
-
-export const BuildingSchema = z.object({
-    building_address: z.string(),
-    id: z.number()
-})
-
 export const ResponsibleUserForComboboxSchema = z.object({
     full_info: z.string(),
     id: z.number()
@@ -327,4 +313,59 @@ export const UserOfficeFormSchema = z.object({
     office_name: z.string().min(1, {
         message: "Пожалуйста, введите подразделение"
     })
+})
+
+export const BuildingSchema = z.object({
+    building_address: z.string(),
+    id: z.number()
+})
+
+export const BuildingFormSchema = z.object({
+    building_address: z.string().min(1, {
+        message: "Пожалуйста, введите адрес"
+    })
+})
+
+export const EquipmentStatusTypeSchema = z.object({
+    status_type_name: z.string(),
+    id: z.number()
+})
+
+export const EquipmentStatusTypeFormSchema = z.object({
+    status_type_name: z.string().min(1, {
+        message: "Пожалуйста, введите наименование статуса"
+    })
+})
+
+export const EquipmentTypeSchema = z.object({
+    type_name: z.string(),
+    id: z.number()
+})
+
+export const EquipmentTypeFormSchema = z.object({
+    type_name: z.string().min(1, {
+        message: "Пожалуйста, введите тип оборудования"
+    }),
+})
+
+export const ResponsibleUserJobSchema = z.object({
+    job_name: z.string(),
+    id: z.number()
+})
+
+export const ResponsibleUserJobFormSchema = z.object({
+    job_name: z.string().min(1, {
+        message: "Пожалуйста, введите должность ответственного лица"
+    }),
+})
+
+export const ResponsibleUserOfficeSchema = z.object({
+    office_name: z.string(),
+    id: z.number()
+})
+
+export const ResponsibleUserOfficeFormSchema = z.object({
+    office_name: z.string().min(1, {
+        message: "Пожалуйста, введите подразделение ответственного лица"
+    }),
 })

@@ -28,6 +28,7 @@ const EquipmentStatusAddForm = ({
 
   const { toast } = useToast()
 
+  // TODO: пофиксить, когда миша переделает ручку
   useEffect(() => {
     setLoading(true)
     const fetchData = async () => {

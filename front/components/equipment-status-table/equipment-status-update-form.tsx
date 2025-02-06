@@ -28,6 +28,7 @@ const EquipmentStatusUpdateForm = ({
 
   const { toast } = useToast()
 
+  // TODO: когда миша переделает пофиксить
   useEffect(() => {
     setLoading(true)
     const fetchData = async () => {
@@ -40,6 +41,7 @@ const EquipmentStatusUpdateForm = ({
           } as DataArray
         })) as DataArray[]
         comboboxFields[0].data = statuses_for_combobox
+
 
         const responsible_users = (await axios.get(API_URL + `/responsible_users/all`)).data as z.infer<typeof ResponsibleUserSchema>[]
         const responsible_users_for_combobox = await Promise.all(responsible_users.map(async user => {

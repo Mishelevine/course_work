@@ -12,6 +12,7 @@ import { AlertDialogTrigger } from "../ui/alert-dialog";
 import { DatetimeFromDbForm, DeleteRowTable } from "../helper-functions";
 import { API_URL } from "@/constants";
 
+// TODO: пофиксить, когда миша переделает ручку
 export const EquipmentStatusTableColumns: ColumnDef<z.infer<typeof EquipmentStatusTableSchema>>[] = [
     {
         accessorKey: "status_type_name",

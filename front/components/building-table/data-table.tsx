@@ -1,6 +1,6 @@
 "use client"
 
-import UserJobAddForm from "./user-job-add-form"
+import BuildingAddForm from "./building-add-form"
 
 import * as React from "react"
 import {
@@ -30,15 +30,15 @@ import { CorrectPagesCase } from "../helper-functions"
 import ModalForm from "../modal-form"
 import { AlertDialogTrigger } from "../ui/alert-dialog"
 
-interface UserJobDataTableProps<TData, TValue> {
+interface BuildingDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function UserJobDataTable<TData, TValue>({
+export function BuildingDataTable<TData, TValue>({
   columns,
   data,
-}: UserJobDataTableProps<TData, TValue>) {
+}: BuildingDataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
@@ -64,17 +64,17 @@ export function UserJobDataTable<TData, TValue>({
 
   return (
     <ModalForm
-      title="Создать должность"
+      title="Ввести адрес"
       description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<UserJobAddForm />}
+      form={<BuildingAddForm />}
     >
       <div className="w-full h-full">
         <div className="flex items-center justify-between py-4">
           <Input
-            placeholder="Поиск по наименованию должности..."
-            value={(table.getColumn("job_name")?.getFilterValue() as string) ?? ""}
+            placeholder="Поиск по адресу..."
+            value={(table.getColumn("building_address")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-              table.getColumn("job_name")?.setFilterValue(event.target.value)
+              table.getColumn("building_address")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -121,7 +121,7 @@ export function UserJobDataTable<TData, TValue>({
               ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center">
-                    Нет должностей
+                    Нет адресов
                   </TableCell>
                 </TableRow>
               )}
