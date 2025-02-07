@@ -3,14 +3,8 @@
 import { UserSchemaForTable } from "@/schemas";
 import { ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
-import { Button } from "../ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { DeleteRowTable } from "../helper-functions";
-import ModalForm from "../modal-form";
 import UserUpdateForm from "./user-update-form";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
-import { API_URL } from "@/constants";
+import ActionsButton from "../actions-button";
 
 export const UserTableColumns: ColumnDef<z.infer<typeof UserSchemaForTable>>[] = [
     {
@@ -36,33 +30,17 @@ export const UserTableColumns: ColumnDef<z.infer<typeof UserSchemaForTable>>[] =
     {
         id: "actions",
         cell: ({ row }) => {
+            const actionsData = [
+                {
+                    title: "Изменить данные о пользователе",
+                    description: <>Заполните все поля и нажмите кнопку <b>Изменить</b></>,
+                    submitButtonText: "Изменить",
+                    form: <UserUpdateForm id={row.getValue("id")} />,
+                    dropdownButtonText: "Изменить запись"
+                }
+            ]
             return (
-                <ModalForm
-                    title="Изменить данные о пользователе"
-                    description={<>Заполните все поля и нажмите кнопку <b>Изменить</b></>}
-                    form={<UserUpdateForm id={row.getValue("id")} />}
-                >
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Раскрыть меню</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Действия</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <AlertDialogTrigger asChild>
-                                <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
-                            </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => {
-                                DeleteRowTable(API_URL + `/user/${row.getValue("id")}`)
-                            }}>
-                                Удалить запись
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </ModalForm>
+                <ActionsButton actionsData={actionsData}/>
             )
         },
     },
