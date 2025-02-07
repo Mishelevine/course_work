@@ -1,25 +1,43 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import axios from 'axios'
+import { API_URL } from '@/constants'
+import { Skeleton } from './ui/skeleton'
+import { useUser } from '@/hooks/use-user'
 
 type Tab = {
     value: string,
     tab_text: string,
     description: string,
     children: React.ReactNode
+    min_needed_role: number
 }
 
 export default function TabsShower({
-    tabs
+    tabs,
+    userRole
 } : {
     tabs: Tab[]
+    userRole: number
 }) {
+    const [tabsFiltered, setTabsFiltered] = useState<Tab[]>()
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+
+    useEffect(() => {
+        const tabsFilteredArr = tabs.filter(tab => tab.min_needed_role <= userRole)
+        setTabsFiltered(tabsFilteredArr)
+        setIsLoading(false)
+    }, [userRole])
+
+    if (isLoading || !tabsFiltered?.length) return <Skeleton className='w-full'/>
+
     return (
-        <Tabs defaultValue={tabs[0].value} className="w-full">
-        <TabsList className={`grid w-full gap-x-0.5 h-fit`} style={{ gridTemplateColumns: `repeat(${tabs.length}, 1fr)` }}>
-            {tabs.map(tab => {
+        <Tabs defaultValue={tabsFiltered[0].value} className="w-full">
+        <TabsList className={`grid w-full gap-x-0.5 h-fit`} style={{ gridTemplateColumns: `repeat(${tabsFiltered.length}, 1fr)` }}>
+            {tabsFiltered.map(tab => {
                 return (
                     <TabsTrigger
                         className='data-[state=active]:text-white
@@ -36,7 +54,7 @@ export default function TabsShower({
                 )
             })}
         </TabsList>
-            {tabs.map(tab => {
+            {tabsFiltered.map(tab => {
                 return (
                     <TabsContent key={tab.value} value={tab.value}>
                         <Card>

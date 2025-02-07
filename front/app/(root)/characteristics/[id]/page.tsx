@@ -3,7 +3,7 @@
 import EquipmentSpecsTable from "@/components/equipment-specs-table/equipment-specs-table";
 import EquipmentStatusTable from "@/components/equipment-status-table/equipment-status-table";
 import EquipmentTable from "@/components/equipment-table/equipment-table";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
 
@@ -20,7 +20,7 @@ const EquipmentStatusPage = (props:  {params: Promise<{ id: string }>}) => {
         </CardHeader>
         <Separator className="bg-gray-300"/>
         <CardContent className="space-y-2 py-4">
-          <EquipmentTable forStatus={true} equipmentId={id}/>
+          <EquipmentTable forStatus={true} equipmentId={id} userRole={0}/>
         </CardContent>
       </Card>
       <Card>

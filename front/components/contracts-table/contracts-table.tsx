@@ -89,12 +89,14 @@ async function getContractsData(selected_contract_ids?: number[] | undefined): P
 }
 
 export default function ContractsTable({
+    userRole,
     checkboxes,
     actions,
     data,
     selected_contract_ids,
     onSelectedRowsChange
 } : {
+    userRole: number
     checkboxes: boolean,
     actions: boolean,
     data?: z.infer<typeof ContractSchema>[] | undefined

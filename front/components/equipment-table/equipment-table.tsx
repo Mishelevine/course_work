@@ -10,10 +10,12 @@ import { useEffect, useState } from "react"
 
 export default function EquipmentTable({
     forStatus,
-    equipmentId
+    equipmentId,
+    userRole
 }: {
     forStatus: boolean,
-    equipmentId?: number
+    equipmentId?: number,
+    userRole: number
 }) {
     const [data, setData] = useState<z.infer<typeof EquipmentSchema>[]>([])
     const [loading, setLoading] = useState(true)
@@ -45,5 +47,5 @@ export default function EquipmentTable({
 
     if (loading) return <div>Loading...</div>
 
-    return <EquipmentDataTable columns={EquipmentTableColumns} data={data} forStatus={forStatus} />
+    return <EquipmentDataTable columns={EquipmentTableColumns} data={data} forStatus={forStatus} userRole={userRole}/>
 }

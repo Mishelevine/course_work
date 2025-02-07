@@ -35,14 +35,18 @@ import Action from "../action"
 interface EquipmentDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  forStatus: boolean
+  forStatus: boolean,
+  userRole: number
 }
 
 export function EquipmentDataTable<TData, TValue>({
   columns,
   data,
   forStatus,
+  userRole
 }: EquipmentDataTableProps<TData, TValue>) {
+  const actionsAllowed = userRole >= 3
+
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -50,9 +54,9 @@ export function EquipmentDataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
     id: false,
     remarks: !forStatus,
-    responsible_user_full_name: !forStatus,
-    status: !forStatus,
-    actions: !forStatus
+    responsible_user_full_name: !forStatus && actionsAllowed,
+    status: !forStatus && actionsAllowed,
+    actions: !forStatus && actionsAllowed
   })
   const [currentPageNumber, setCurrentPageNumber] = React.useState<number>(1)
 
@@ -129,15 +133,15 @@ export function EquipmentDataTable<TData, TValue>({
                 }
                 className="w-[300px]"
               />
-              {/*TODO: скрыть для других ролей пользователей*/}
-              <Input
+              {actionsAllowed && <Input
                 placeholder="Фильтр по ФИО ответственного лица..."
                 value={(table.getColumn("responsible_user_full_name")?.getFilterValue() as string) ?? ""}
                 onChange={(event) =>
                   table.getColumn("responsible_user_full_name")?.setFilterValue(event.target.value)
                 }
                 className="w-[300px]"
-              />
+              />}
+              {/* TODO: добавить фильтр по статусу оборудования */}
             </AccordionContent>
             </AccordionItem>
           </Accordion>
@@ -148,12 +152,12 @@ export function EquipmentDataTable<TData, TValue>({
               buttonText="Выгрузить в Excel"
               tableData={table.getFilteredRowModel().rows.map(row => row.original)}
             />
-            <Button
+            {actionsAllowed && <Button
               className="bg-blue-2 hover:bg-blue-700"
               onClick={() => setIsFormOpen(true)}
             >
               Добавить запись
-            </Button>
+            </Button>}
           </div>
         </div>}
         <div className="rounded-md border overflow-y-auto">
@@ -202,7 +206,7 @@ export function EquipmentDataTable<TData, TValue>({
         </div>
         {!forStatus && <div className="flex items-center justify-end space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
-            {currentPageNumber} из {table.getPageOptions().length} {" "} {CorrectPagesCase(table.getPageOptions().length)}
+            {currentPageNumber} из {Math.max(table.getPageOptions().length, 1)} {" "} {CorrectPagesCase(table.getPageOptions().length)}
           </div>
           <Button
             variant="outline"

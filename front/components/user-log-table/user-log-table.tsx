@@ -26,7 +26,7 @@ export default function UserLogTable() {
             try {
                 setLoading(true)
                 setError(null)
-                const logs = (await axios.get(API_URL + "/sessionlog/all")).data
+                const logs = (await axios.get(API_URL + "/sessionlog/all")).data // FIXME: жду мишу и надо редачить
                 setData(logs)
             } catch (e) {
                 console.error("Error fetching logs:", e)

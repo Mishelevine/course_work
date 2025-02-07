@@ -94,6 +94,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                             checkboxes={false}
                             actions={false}
                             data={row.original.contracts}
+                            userRole={0}
                         />
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -108,7 +109,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                     title: "Изменить ПО",
                     description: <>Заполните все поля и нажмите кнопку <b>Изменить</b></>,
                     form: <SoftwareUpdateForm id={row.getValue("id")} />,
-                    dropdownButtonText: "Изменить запись"
+                    dropdownButtonText: "Изменить запись",
                 },
                 {
                     title: "Удалить ПО",
@@ -117,7 +118,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                                 apiEndpoint={API_URL + `/software/${row.getValue("id")}/delete`}
                                 toastText="ПО успешно удалено"
                             />,
-                    dropdownButtonText: "Удалить"
+                    dropdownButtonText: "Удалить",
                 }
             ]
             return (

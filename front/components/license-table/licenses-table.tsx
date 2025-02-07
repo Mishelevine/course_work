@@ -8,7 +8,11 @@ import axios from "axios"
 import { API_URL } from "@/constants"
 import { z } from "zod"
 
-export default function LicensesTable() {
+export default function LicensesTable({
+  userRole
+} : {
+  userRole: number
+}) {
   const [data, setData] = useState<z.infer<typeof LicenseSchema>[]>([])
   const [loading, setLoading] = useState(true)
 

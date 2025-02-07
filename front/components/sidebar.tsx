@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { sidebarLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
@@ -8,15 +8,37 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link';
 import { cn } from '@/lib/utils'
 import Image from 'next/image';
+import { useUser } from '@/hooks/use-user';
+import { Skeleton } from './ui/skeleton';
+
+type SidebarLink = {
+    label: string;
+    route: string;
+    min_needed_role: number;
+}
 
 const Sidebar = () => {
     const pathname = usePathname();
+    const { userRole, isLoadingUser } = useUser()
+
+    const [linksFiltered, setLinksFiltered] = useState<SidebarLink[]>()
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+
+    useEffect(() => {
+        const linksFilteredArr = sidebarLinks.filter(link => link.min_needed_role <= userRole)
+        setLinksFiltered(linksFilteredArr)
+        setIsLoading(false)
+    }, [userRole])
+
+    if (isLoadingUser || isLoading || !linksFiltered?.length) return <Skeleton
+        className='sticky left-0 top-0 flex h-screen w-fit max-sm:hidden lg:w-[264px]'
+    />
 
     return (
         <section className='sticky left-0 top-0 flex h-screen w-fit flex-col justify-between
         bg-light-2 p-6 pt-24 max-sm:hidden lg:w-[264px] shadow-md'>
             <div className='flex flex-1 flex-col gap-6'>
-                {sidebarLinks.map((link) => {
+                {linksFiltered.map((link) => {
                     const isActive = pathname === link.route || pathname.startsWith(`${link.route}/`);
 
                     return (

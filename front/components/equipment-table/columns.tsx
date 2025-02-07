@@ -45,7 +45,7 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
         header: "Статус оборудования",
         cell: ({ row }) => {
             return (
-                <Link href={`equipment/status/${row.getValue("id")}`}>
+                <Link href={`characteristics/${row.getValue("id")}`}>
                     <Button className="h-8 w-fit p-2 bg-gray-100 hover:text-white hover:bg-gray-400
                         border-[1px] border-gray-400 text-black">
                         Показать
