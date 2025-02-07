@@ -154,7 +154,8 @@ export const EquipmentSchema = z.object({
     network_name: z.string(),
     remarks: z.string(),
     id: z.number(),
-    responsible_user_full_name: z.string() // фио ответстветственного лица
+    responsible_user_full_name: z.string(), // фио ответстветственного лица
+    last_status_type: z.string(),
 })
 
 export const EquipmentFormSchema = z.object({

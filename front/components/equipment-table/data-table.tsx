@@ -55,7 +55,8 @@ export function EquipmentDataTable<TData, TValue>({
     id: false,
     remarks: !forStatus,
     responsible_user_full_name: !forStatus && actionsAllowed,
-    status: !forStatus && actionsAllowed,
+    additional_info: !forStatus && actionsAllowed,
+    last_status_type: !forStatus && actionsAllowed,
     actions: !forStatus && actionsAllowed
   })
   const [currentPageNumber, setCurrentPageNumber] = React.useState<number>(1)
@@ -141,7 +142,14 @@ export function EquipmentDataTable<TData, TValue>({
                 }
                 className="w-[300px]"
               />}
-              {/* TODO: добавить фильтр по статусу оборудования */}
+              {actionsAllowed && <Input
+                placeholder="Фильтр по статусу..."
+                value={(table.getColumn("last_status_type")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("last_status_type")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />}
             </AccordionContent>
             </AccordionItem>
           </Accordion>

@@ -41,8 +41,12 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
         header: "ФИО ответственного",
     },
     {
-        id: "status",
-        header: "Статус оборудования",
+        accessorKey: "last_status_type",
+        header: "Статус оборудования"
+    },
+    {
+        id: "additional_info",
+        header: "Подробная информация",
         cell: ({ row }) => {
             return (
                 <Link href={`characteristics/${row.getValue("id")}`}>

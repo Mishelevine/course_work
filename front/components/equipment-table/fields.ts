@@ -23,7 +23,7 @@ export const textFields = [
   {
     name: "network_name",
     label: "Сетевое имя",
-    placeholder: "Сетевое моя добавляемого оборудования",
+    placeholder: "Сетевое имя добавляемого оборудования",
   },
   {
     name: "remarks",
