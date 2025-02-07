@@ -4,7 +4,7 @@ from fastapi.responses import StreamingResponse
 import pandas as pd
 from sqlalchemy import select
 from back.SessionLog.models import SessionLog
-from back.SessionLog.schemas import SSessionLog, SSessionLogCreate
+from back.SessionLog.schemas import SSessionLog, SSessionLogAll, SSessionLogCreate
 from back.SessionLog import crud
 from datetime import datetime, timedelta, timezone
 from typing import List
@@ -19,7 +19,7 @@ router = APIRouter(
 )
 
 @router.get("/all")
-async def get_all_software() -> List[SSessionLog]:
+async def get_all_software() -> List[SSessionLogAll]:
     return await crud.get_log()
 
 @router.get("/to_excel_file")

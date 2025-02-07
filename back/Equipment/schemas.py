@@ -23,6 +23,7 @@ class SEquipment(SEquipmentBase):
         
 class SEquipmentWithResponsible(SEquipment):
     responsible_user_full_name: Optional[str] = None
+    last_status_type: Optional[str] = None
     type_name: Optional[str] = None
     statuses: Optional[List[SEquipmentStatus]] = None
     specifications: Optional[List[SEquipmentSpecification]] = None
