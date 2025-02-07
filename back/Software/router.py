@@ -1,11 +1,11 @@
 import pandas as pd
 import io
 import openpyxl
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from back.Contract.schemas import SContract
 from back.Software.models import Software
-from back.Software.schemas import SSoftware, SSoftwareCreate
+from back.Software.schemas import SSoftware, SSoftwareAll, SSoftwareCreate
 from back.Software import crud
 from back.License import crud as license_crud
 from back.Contract import crud as contract_crud
@@ -14,6 +14,8 @@ from pathlib import Path
 from typing import List
 
 from back.SoftwareContract.models import SoftwareContract
+from back.User.depends import get_current_user
+from back.User.models import User
 
 router = APIRouter(
     prefix="/software",
@@ -42,9 +44,9 @@ async def create_software(software: SSoftwareCreate) -> SSoftware:
             ])
 
 @router.get("/all")
-async def get_all_software() -> List[SSoftware]:
+async def get_all_software() -> List[SSoftwareAll]:
     software_list = await crud.get_all_software()
-    return [SSoftware(
+    return [SSoftwareAll(
         id=software.id,
         name=software.name,
         short_name=software.short_name,
@@ -52,6 +54,7 @@ async def get_all_software() -> List[SSoftware]:
         version=software.version,
         version_date=software.version_date,
         license_id=software.license_id,
+        license_type=software.license.license_type,
         contracts=[
                 SContract(
                     id=software_contract.contract.id,
@@ -63,38 +66,10 @@ async def get_all_software() -> List[SSoftware]:
             ],
     ) for software in software_list]
 
-@router.get("/to_excel_file")
-async def get_software_excel():
-    software_list = await crud.get_all_software()
-    
+@router.post("/to_excel_file")
+async def get_software_excel(software_list: List[SSoftwareAll], user: User = Depends(get_current_user)):
     software_data = []
-    for software in software_list:
-        if software.contracts:
-            for software_contract in software.contracts:
-                if software_contract.contract:
-                    software_data.append({
-                        "ID": software.id,
-                        "Название": software.name,
-                        "Короткое название": software.short_name,
-                        "Ссылка на программу": software.program_link,
-                        "Версия": software.version,
-                        "Дата версии": software.version_date,
-                        "Лицензия": software.license.license_type if software.license else None,
-                        "Договор": software_contract.contract.contract_number,
-                        "Дата договора": software_contract.contract.contract_date,
-                    })
-        else:
-            software_data.append({
-                "ID": software.id,
-                "Название": software.name,
-                "Короткое название": software.short_name,
-                "Ссылка на программу": software.program_link,
-                "Версия": software.version,
-                "Дата версии": software.version_date,
-                "Лицензия": software.license.license_type if software.license else None,
-                "Договор": None,
-                "Дата договора": None,
-            })
+    software_data = await crud.get_software_for_excel(software_list)
     
     df = pd.DataFrame(software_data)
     

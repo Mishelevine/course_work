@@ -1,3 +1,4 @@
+from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
@@ -76,7 +77,37 @@ async def create_user(user: SUserCreate, system_role_id: int):
         await session.commit()
         await session.refresh(db_user)
         return db_user
-    
+
+async def get_users_for_excel(user_list: List[SUserAllSchema]):
+    async with async_session() as session:
+        user_data = []
+        user_ids = [user.id for user in user_list]
+        
+        query = select(User).options(
+            joinedload(User.job),
+            joinedload(User.office),
+            joinedload(User.system_role)
+        )
+        
+        result = await session.execute(query)
+        db_user_list = result.unique().scalars().all()
+        
+        user_status_map = {eq.id: eq for eq in db_user_list}
+        
+        for user in user_list:
+            user_info = {
+                "ID": user.id,
+                "Логин": user.username,
+                "ФИО": user.full_name,
+                "Должность": user.job_name,
+                "Подразделение": user.office_name,
+                "Роль пользователя": user.role_name
+            }
+            
+            user_data.append(user_info)
+            
+        return user_data
+
 async def update_user(updated_user: SUser):
     user = await get_user_by_id(updated_user.id)
     

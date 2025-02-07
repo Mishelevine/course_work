@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import delete, select
@@ -6,7 +7,7 @@ from back.Software.models import Software
 from back.Contract.models import Contract
 from back.License.models import License
 from back.SoftwareContract.models import SoftwareContract
-from back.Software.schemas import SSoftwareCreate, SSoftware
+from back.Software.schemas import SSoftwareAll, SSoftwareCreate, SSoftware
 from back.database import async_session
 from passlib.hash import bcrypt
 from fastapi import Depends
@@ -64,7 +65,52 @@ async def get_all_software() -> list[Software]:
         )
         result = await session.execute(query)
         return result.unique().scalars().all()
-    
+
+async def get_software_for_excel(software_list: List[SSoftwareAll]):
+    async with async_session() as session:
+        software_data = []
+        software_ids = [software.id for software in software_list]
+        
+        query = select(Software).where(Software.id.in_(software_ids)).options(
+            joinedload(Software.contracts).joinedload(SoftwareContract.contract),
+            joinedload(Software.license)
+            )
+        
+        result = await session.execute(query)
+        db_software_list = result.unique().scalars().all()
+        
+        software_status_map = {eq.id: eq for eq in db_software_list}
+        
+        for software in software_list:
+            if software.contracts:
+                for software_contract in software.contracts:
+                    if software_contract:
+                                software_data.append({
+                                    "ID": software.id,
+                                    "Название": software.name,
+                                    "Короткое название": software.short_name,
+                                    "Ссылка на программу": software.program_link,
+                                    "Версия": software.version,
+                                    "Дата версии": software.version_date,
+                                    "Лицензия": software.license_type,
+                                    "Договор": software_contract.contract_number,
+                                    "Дата договора": software_contract.contract_date,
+                                })
+            else:
+                software_data.append({
+                    "ID": software.id,
+                    "Название": software.name,
+                    "Короткое название": software.short_name,
+                    "Ссылка на программу": software.program_link,
+                    "Версия": software.version,
+                    "Дата версии": software.version_date,
+                    "Лицензия": software.license_type,
+                    "Договор": None,
+                    "Дата договора": None,
+                })
+        
+        return software_data
+
 async def delete_software(software_id: int):
     async with async_session() as session:
         job = await get_software_by_id(software_id)
