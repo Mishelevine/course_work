@@ -125,8 +125,8 @@ export const SoftwareSchema = z.object({
 export const UserLogSchema = z.object({
     event_type: z.string(),
     time: z.string(),
-    user_name: z.string(),
-    user_role: z.string()
+    username: z.string(),
+    role_name: z.string()
 })
 
 export const ContractFormSchema = z.object({
@@ -190,6 +190,7 @@ export const EquipmentSpecsSchema = z.object({
     id: z.number()
 })
 
+// TODO: скорее всего разрешить заполнять не все поля
 export const EquipmentSpecsFormSchema = z.object({
     screen_resolution: z.string().min(1, {
         message: "Пожалуйста, введите разрешение экрана"
@@ -246,6 +247,13 @@ export const StatusSchema = z.object({
 })
 
 export const ResponsibleUserSchema = z.object({
+    full_name: z.string(),
+    job_name: z.string(),
+    office_name: z.string(),
+    id: z.number()
+})
+
+export const SingleResponsibleUserSchema = z.object({
     first_name: z.string(),
     last_name: z.string(),
     paternity: z.string(),
@@ -254,19 +262,20 @@ export const ResponsibleUserSchema = z.object({
     id: z.number()
 })
 
-export const ResponsibleUserJobSchema = z.object({
-    job_name: z.string(),
-    id: z.number()
-})
-
-export const ResponsibleUserOfficeSchema = z.object({
-    office_name: z.string(),
-    id: z.number()
-})
-
-export const BuildingSchema = z.object({
-    building_address: z.string(),
-    id: z.number()
+export const SingleResponsibleUserFormSchema = z.object({
+    first_name: z.string().min(1, {
+        message: "Пожалуйста, введите имя"
+    }),
+    last_name: z.string().min(1, {
+        message: "Пожалуйста, введите фамилию"
+    }),
+    paternity: z.string(),
+    job_id: z.number().min(1, {
+        message: "Пожалуйста, выберите должность"
+    }),
+    office_id: z.number().min(1, {
+        message: "Пожалуйста, выберите подразделение"
+    })
 })
 
 export const ResponsibleUserForComboboxSchema = z.object({
@@ -285,4 +294,161 @@ export const EquipmentStatusTableSchema = z.object({
     audience_id: z.string(),
     id: z.number(),
     equipment_id: z.number(),
+})
+
+// export const UserSchemaFromBack = z.object({
+//     first_name: z.string(),
+//     last_name: z.string(),
+//     paternity: z.string(),
+//     username: z.string(),
+//     job_name: z.string(),
+//     office_name: z.string(),
+//     role_name: z.string(),
+//     id: z.number()
+// })
+
+export const UserSchemaForTable = z.object({
+    full_name: z.string(),
+    username: z.string(),
+    job_name: z.string(),
+    office_name: z.string(),
+    role_name: z.string(),
+    id: z.number()
+})
+
+export const UserJobSchema = z.object({
+    job_name: z.string(),
+    id: z.number()
+})
+
+export const UserJobFormSchema = z.object({
+    job_name: z.string().min(1, {
+        message: "Пожалуйста, введите должность"
+    })
+})
+
+export const UserOfficeSchema = z.object({
+    office_name: z.string(),
+    id: z.number()
+})
+
+export const UserOfficeFormSchema = z.object({
+    office_name: z.string().min(1, {
+        message: "Пожалуйста, введите подразделение"
+    })
+})
+
+export const BuildingSchema = z.object({
+    building_address: z.string(),
+    id: z.number()
+})
+
+export const BuildingFormSchema = z.object({
+    building_address: z.string().min(1, {
+        message: "Пожалуйста, введите адрес"
+    })
+})
+
+export const EquipmentStatusTypeSchema = z.object({
+    status_type_name: z.string(),
+    id: z.number()
+})
+
+export const EquipmentStatusTypeFormSchema = z.object({
+    status_type_name: z.string().min(1, {
+        message: "Пожалуйста, введите наименование статуса"
+    })
+})
+
+export const EquipmentTypeSchema = z.object({
+    type_name: z.string(),
+    id: z.number()
+})
+
+export const EquipmentTypeFormSchema = z.object({
+    type_name: z.string().min(1, {
+        message: "Пожалуйста, введите тип оборудования"
+    }),
+})
+
+export const ResponsibleUserJobSchema = z.object({
+    job_name: z.string(),
+    id: z.number()
+})
+
+export const ResponsibleUserJobFormSchema = z.object({
+    job_name: z.string().min(1, {
+        message: "Пожалуйста, введите должность ответственного лица"
+    }),
+})
+
+export const ResponsibleUserOfficeSchema = z.object({
+    office_name: z.string(),
+    id: z.number()
+})
+
+export const ResponsibleUserOfficeFormSchema = z.object({
+    office_name: z.string().min(1, {
+        message: "Пожалуйста, введите подразделение ответственного лица"
+    }),
+})
+
+export const CreateUserFormSchema = z.object({
+    username: z.string().min(1, {
+        message: "Пожалуйста, введите логин"
+    }),
+    hashed_password: z.string().min(1, {
+        message: "Пожалуйста, введите пароль"
+    }),
+    first_name: z.string().min(1, {
+        message: "Пожалуйста, введите имя"
+    }),
+    last_name: z.string().min(1, {
+        message: "Пожалуйста, введите фамилию"
+    }),
+    paternity: z.string(),
+    job_id: z.number().min(1, {
+        message: "Пожалуйста, выберите должность"
+    }),
+    office_id: z.number().min(1, {
+        message: "Пожалуйста, выберите подразделение"
+    }),
+    system_role_id: z.number().min(1, {
+        message: "Пожалуйста, выберите роль в системе"
+    })
+})
+
+export const UpdateUserFormSchema = z.object({
+    username: z.string().min(1, {
+        message: "Пожалуйста, введите логин"
+    }),
+    first_name: z.string().min(1, {
+        message: "Пожалуйста, введите имя"
+    }),
+    last_name: z.string().min(1, {
+        message: "Пожалуйста, введите фамилию"
+    }),
+    paternity: z.string(),
+    job_id: z.number().min(1, {
+        message: "Пожалуйста, выберите должность"
+    }),
+    office_id: z.number().min(1, {
+        message: "Пожалуйста, выберите подразделение"
+    }),
+    system_role_id: z.number().min(1, {
+        message: "Пожалуйста, выберите роль в системе"
+    }),
+    id: z.number()
+})
+
+export const UpdateUserPasswordSchema = z.object({
+    user_id: z.number(),
+    new_password: z.string().min(1, {
+        message: "Пожалуйста, введите пароль"
+    })
+})
+
+export const UserRoleSchema = z.object({
+    role_name: z.string(),
+    id: z.number()
 })

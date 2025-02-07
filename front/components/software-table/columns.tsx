@@ -6,22 +6,18 @@ import { ArrowUpDown } from "lucide-react"
 import { LinkIcon } from "lucide-react";
 import Link from "next/link";
 import { z } from "zod";
-import { MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { DateFromDbForm, DeleteRowTable } from "../helper-functions";
-import ModalForm from "../modal-form";
+import { DateFromDbForm } from "../helper-functions";
 import { SoftwareUpdateForm } from "./software-update-form";
-import { AlertDialogTrigger } from "../ui/alert-dialog";
 import ContractsTable from "../contracts-table/contracts-table";
 import { API_URL } from "@/constants";
+import ActionsButton from "../actions-button";
+import DeleteRowForm from "../delete-row-form";
 
 export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>>[] = [
     {
@@ -79,17 +75,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
     },
     {
         accessorKey: "license_type",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Тип лицензии
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
+        header: "Тип лицензии"
     },
     {
         id: "contracts",
@@ -117,33 +103,25 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
     {
         id: "actions",
         cell: ({ row }) => {
+            const actionsData = [
+                {
+                    title: "Изменить ПО",
+                    description: <>Заполните все поля и нажмите кнопку <b>Изменить</b></>,
+                    form: <SoftwareUpdateForm id={row.getValue("id")} />,
+                    dropdownButtonText: "Изменить запись"
+                },
+                {
+                    title: "Удалить ПО",
+                    description: <>Вы уверены что хотите удалить ПО <b>{row.getValue("name")}</b>?</>,
+                    form:   <DeleteRowForm
+                                apiEndpoint={API_URL + `/software/${row.getValue("id")}/delete`}
+                                toastText="ПО успешно удалено"
+                            />,
+                    dropdownButtonText: "Удалить"
+                }
+            ]
             return (
-                <ModalForm
-                    title="Изменить ПО"
-                    description={<>Заполните все поля и нажмите кнопку <b>Изменить</b></>}
-                    form={<SoftwareUpdateForm id={row.getValue("id")} />}
-                >
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Раскрыть меню</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Действия</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <AlertDialogTrigger asChild>
-                                <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
-                            </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => {
-                                DeleteRowTable(API_URL + `/software/${row.getValue("id")}/delete`)
-                            }}>
-                                Удалить запись
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </ModalForm>
+                <ActionsButton actionsData={actionsData}/>
             )
         },
     },

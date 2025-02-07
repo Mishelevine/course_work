@@ -27,10 +27,10 @@ import {
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "../helper-functions"
 import { SoftwareAddForm } from "./software-add-form"
-import ModalForm from "../modal-form"
 import DownloadButton from "../download-button"
 import { API_URL } from "@/constants"
-import { AlertDialogTrigger } from "../ui/alert-dialog"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
+import Action from "../action"
 
 interface SoftwareDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -66,22 +66,42 @@ export function SoftwareDataTable<TData, TValue>({
     }
   })
 
+  const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false)
+
   return (
-    <ModalForm
-      title="Создать ПО"
-      description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<SoftwareAddForm />}
-    >
+    <>
+      <Action
+        title="Создать ПО"
+        description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
+        form={<SoftwareAddForm />}
+        isOpen={isFormOpen}
+        setIsOpen={setIsFormOpen}
+      />
       <div className="w-full h-full">
-        <div className="flex items-center justify-between py-4">
-          <Input
-            placeholder="Поиск по наименованию ПО..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
+        <div className="flex items-start justify-between py-4">
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1" className="border-0 px-1">
+              <AccordionTrigger className="flex h-[40px] min-w-[100px] max-w-[100px] py-0">Фильтры</AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-2 p-1">
+                <Input
+                  placeholder="Фильтр по наименованию ПО..."
+                  value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+                  onChange={(event) =>
+                    table.getColumn("name")?.setFilterValue(event.target.value)
+                  }
+                  className="w-[300px]"
+                />
+                <Input
+                  placeholder="Фильтр по типу лицензии..."
+                  value={(table.getColumn("license_type")?.getFilterValue() as string) ?? ""}
+                  onChange={(event) =>
+                    table.getColumn("license_type")?.setFilterValue(event.target.value)
+                  }
+                  className="w-[300px]"
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
           <div className="flex gap-2">
             <DownloadButton
               className="bg-blue-2 hover:bg-blue-700"
@@ -89,9 +109,12 @@ export function SoftwareDataTable<TData, TValue>({
               buttonText="Выгрузить в Excel"
               tableData={table.getFilteredRowModel().rows.map(row => row.original)}
             />
-            <AlertDialogTrigger asChild>
-              <Button className="bg-blue-2 hover:bg-blue-700">Добавить запись</Button>
-            </AlertDialogTrigger>
+            <Button
+              className="bg-blue-2 hover:bg-blue-700"
+              onClick={() => setIsFormOpen(true)}
+            >
+              Добавить запись
+            </Button>
           </div>
         </div>
         <div className="rounded-md border overflow-y-auto">
@@ -167,6 +190,6 @@ export function SoftwareDataTable<TData, TValue>({
           </Button>
         </div>
       </div>
-    </ModalForm>
+    </>
   )
 }

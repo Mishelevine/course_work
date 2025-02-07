@@ -11,6 +11,8 @@ import { MoreHorizontal } from "lucide-react";
 import { AlertDialogTrigger } from "../ui/alert-dialog";
 import { DeleteRowTable } from "../helper-functions";
 import { API_URL } from "@/constants";
+import DeleteRowForm from "../delete-row-form";
+import ActionsButton from "../actions-button";
 
 export const EquipmentSpecsTableColumns: ColumnDef<z.infer<typeof EquipmentSpecsSchema>>[] = [
     {
@@ -36,33 +38,25 @@ export const EquipmentSpecsTableColumns: ColumnDef<z.infer<typeof EquipmentSpecs
     {
         id: "actions",
         cell: ({ row }) => {
+            const actionsData = [
+                {
+                    title: "Изменить характеристики ПО",
+                    description: <>Заполните все поля и нажмите кнопку <b>Изменить</b></>,
+                    form: <EquipmentSpecsUpdateForm id={row.getValue("id")} />,
+                    dropdownButtonText: "Изменить"
+                },
+                {
+                    title: "Удалить характеристики ПО",
+                    description: <>Вы уверены что хотите удалить характеристики этого ПО?</>,
+                    form:   <DeleteRowForm
+                                apiEndpoint={API_URL + `/equipment_specs/${row.getValue("id")}`}
+                                toastText="Статус успешно удален"
+                            />,
+                    dropdownButtonText: "Удалить"
+                }
+            ]
             return (
-                <ModalForm
-                    title="Изменить ПО"
-                    description={<>Измените все необходимые поля и нажмите кнопку <b>Изменить</b></>}
-                    form={<EquipmentSpecsUpdateForm id={row.getValue("id")} />}
-                >
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Раскрыть меню</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Действия</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <AlertDialogTrigger asChild>
-                                <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
-                            </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => {
-                                DeleteRowTable(API_URL + `/equipment_specs/${row.getValue("id")}`)
-                            }}>
-                                Удалить запись
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </ModalForm>
+                <ActionsButton actionsData={actionsData}/>
             )
         },
     },

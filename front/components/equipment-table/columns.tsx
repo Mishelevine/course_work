@@ -3,15 +3,12 @@
 import { EquipmentSchema } from "@/schemas";
 import { ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
-import ModalForm from "../modal-form";
 import EquipmentUpdateForm from "./equipment-update-form";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { AlertDialogTrigger } from "../ui/alert-dialog";
-import { DeleteRowTable } from "../helper-functions";
 import Link from "next/link";
 import { API_URL } from "@/constants";
+import DeleteRowForm from "../delete-row-form";
+import ActionsButton from "../actions-button";
 
 export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[] = [
     {
@@ -60,33 +57,25 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
     {
         id: "actions",
         cell: ({ row }) => {
+            const actionsData = [
+                {
+                    title: "Изменить оборудование",
+                    description: <>Заполните все поля и нажмите кнопку <b>Изменить</b></>,
+                    form: <EquipmentUpdateForm id={row.getValue("id")} />,
+                    dropdownButtonText: "Изменить"
+                },
+                {
+                    title: "Удалить оборудование",
+                    description: <>Вы уверены что хотите удалить оборудование <b>{row.getValue("model")}</b>?</>,
+                    form:   <DeleteRowForm
+                                apiEndpoint={API_URL + `/equipment/${row.getValue("id")}`}
+                                toastText="Оборудование успешно удалено"
+                            />,
+                    dropdownButtonText: "Удалить"
+                }
+            ]
             return (
-                <ModalForm
-                    title="Изменить ПО"
-                    description={<>Заполните все поля и нажмите кнопку <b>Изменить</b></>}
-                    form={<EquipmentUpdateForm id={row.getValue("id")} />}
-                >
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Раскрыть меню</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Действия</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <AlertDialogTrigger asChild>
-                                <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
-                            </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => {
-                                DeleteRowTable(API_URL + `/equipment/${row.getValue("id")}`)
-                            }}>
-                                Удалить запись
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </ModalForm>
+                <ActionsButton actionsData={actionsData}/>
             )
         },
     },

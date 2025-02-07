@@ -16,7 +16,17 @@ function DownloadButton<TData>({
     const handleDownload = async () => {
         try {
             console.log(tableData)
-            const response = await axios.get(apiEndpoint, { responseType: 'blob' });
+            axios.defaults.withCredentials = true
+            const response = await axios.post(
+                apiEndpoint,
+                tableData,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    responseType: "blob",
+                }
+            );
             console.log(response.headers)
             const disposition = response.headers['content-disposition'];
             console.log(disposition)

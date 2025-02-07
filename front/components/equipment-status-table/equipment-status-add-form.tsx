@@ -43,11 +43,9 @@ const EquipmentStatusAddForm = ({
 
         const responsible_users = (await axios.get(API_URL + `/responsible_users/all`)).data as z.infer<typeof ResponsibleUserSchema>[]
         const responsible_users_for_combobox = await Promise.all(responsible_users.map(async user => {
-          const user_fio =  user.last_name +
-                            " " + user.first_name +
-                            (user.paternity ? " " + user.paternity: "");
-          const user_job = (await axios.get(API_URL + `/responsible_users/job/${user.job_id}`)).data.job_name
-          const user_office = (await axios.get(API_URL + `/responsible_users/office/${user.office_id}`)).data.office_name
+          const user_fio = user.full_name
+          const user_job = user.job_name
+          const user_office = user.office_name
 
           return {
             value:  user_fio +

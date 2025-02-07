@@ -1,21 +1,9 @@
-FROM node:20.12.0-bullseye AS builder
+FROM node:20.12.0
 
 WORKDIR /app
-
-COPY package*.json ./
-RUN npm install --force
-
 COPY . .
-
+RUN npm i --force
 RUN npm run build
-
-FROM node:20.12.0-bullseye
-
-WORKDIR /app
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-
 EXPOSE 3000
-CMD ["npm", "start", "--host=0.0.0.0", "--port=3000"]
+
+CMD ["npm", "run", "start"]
