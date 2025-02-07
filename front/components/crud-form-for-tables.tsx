@@ -81,7 +81,7 @@ function CRUDFormForTables<TData extends FieldValues, TComboboxData extends Fiel
         </div>
         {children}
         <FormError message={error} />
-        {/* <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">{buttonText}</Button> */}
+        <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">{buttonText}</Button>
       </form>
     </Form>
   )

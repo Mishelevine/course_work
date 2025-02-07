@@ -1,5 +1,3 @@
-import { API_URL } from "@/constants"
-import { useToast } from "@/hooks/use-toast"
 import axios from "axios"
 
 export function CorrectPagesCase(pageNum: number) {
@@ -20,7 +18,6 @@ export function DateToDbForm(date: string) {
 }
 
 export function DeleteRowTable(apiEndpoint: string) {
-
     axios.delete(apiEndpoint)
     .then(() => {
         console.log("Deleted row with by endpoint:", apiEndpoint)

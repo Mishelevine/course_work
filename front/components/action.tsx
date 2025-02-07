@@ -2,20 +2,17 @@
 
 import React from 'react'
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog'
-import { Button } from './ui/button'
 
 const Action = ({
   form,
   title,
   description,
-  submitButtonText,
   isOpen,
   setIsOpen
 }: Readonly<{
   form: React.ReactNode,
   title: string,
   description: React.ReactElement,
-  submitButtonText: string
   isOpen: boolean,
   setIsOpen: (isOpen: boolean) => void
 }>) => {
@@ -35,7 +32,6 @@ const Action = ({
                     >
                         Назад
                     </AlertDialogCancel>
-                    <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">{submitButtonText}</Button>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

@@ -25,8 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import EquipmentSpecsAddForm from "./equipment-specs-add-form"
-import ModalForm from "../modal-form"
-import { AlertDialogTrigger } from "../ui/alert-dialog"
+import Action from "../action"
 
 interface EquipmentSpecsDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -64,19 +63,26 @@ export function EquipmentSpecsDataTable<TData, TValue>({
     }
   })
 
+  const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false)
+
   return (
-    <ModalForm
-      title="Добавить характеристики"
-      description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<EquipmentSpecsAddForm equipmentId={equipmentId}/>}
-    >
+    <>
+      <Action
+        title="Добавить характеристики"
+        description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
+        form={<EquipmentSpecsAddForm equipmentId={equipmentId}/>}
+        isOpen={isFormOpen}
+        setIsOpen={setIsFormOpen}
+      />
       <div className="w-full h-full">
         <div className="flex justify-end py-4">
-          <AlertDialogTrigger asChild>
-            <Button disabled={table.getRowCount() >= 1} className="bg-blue-2 hover:bg-blue-700">
-              {table.getRowCount() < 1 ? "Добавить характеристики" : "Характеристики уже указаны"}
-            </Button>
-          </AlertDialogTrigger>
+          <Button
+            disabled={table.getRowCount() >= 1}
+            className="bg-blue-2 hover:bg-blue-700"
+            onClick={() => setIsFormOpen(true)}
+          >
+            {table.getRowCount() < 1 ? "Добавить характеристики" : "Характеристики уже указаны"}
+          </Button>
         </div>
         <div className="rounded-md border overflow-y-auto">
           <Table>
@@ -123,6 +129,6 @@ export function EquipmentSpecsDataTable<TData, TValue>({
           </Table>
         </div>
       </div>
-    </ModalForm>
+    </>
   )
 }

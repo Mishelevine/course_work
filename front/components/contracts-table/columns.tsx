@@ -4,24 +4,14 @@ import { ContractSchema } from "@/schemas";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react"
 import { z } from "zod";
-import { MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { DateFromDbForm, DeleteRowTable } from "../helper-functions";
-import { AlertDialogTrigger } from "../ui/alert-dialog";
+import { DateFromDbForm } from "../helper-functions";
 import { Checkbox } from "../ui/checkbox";
-import ModalForm from "../modal-form";
 import ContractUpdateForm from "./contract-update-form";
 import { useEffect } from "react";
 import { API_URL } from "@/constants";
-import { useToast } from "@/hooks/use-toast";
+import DeleteRowForm from "../delete-row-form";
+import ActionsButton from "../actions-button";
 
 export const ContractsTableColumns: ColumnDef<z.infer<typeof ContractSchema>>[] = [
     {
@@ -82,33 +72,25 @@ export const ContractsTableColumns: ColumnDef<z.infer<typeof ContractSchema>>[] 
     {
         id: "actions",
         cell: ({ row }) => {
+            const actionsData = [
+                {
+                    title: "Изменить договор",
+                    description: <>Заполните все поля и нажмите кнопку <b>Изменить</b></>,
+                    form: <ContractUpdateForm id={row.getValue("id")} />,
+                    dropdownButtonText: "Изменить"
+                },
+                {
+                    title: "Удалить договор",
+                    description: <>Вы уверены что хотите удалить договор <b>{row.getValue("contract_number")}</b>?</>,
+                    form:   <DeleteRowForm
+                                apiEndpoint={API_URL + `/contract/${row.getValue("id")}/delete`}
+                                toastText="Договор успешно удален"
+                            />,
+                    dropdownButtonText: "Удалить"
+                }
+            ]
             return (
-                <ModalForm
-                    title="Изменить ПО"
-                    description={<>Заполните все поля и нажмите кнопку <b>Изменить</b></>}
-                    form={<ContractUpdateForm id={row.getValue("id")} />}
-                >
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Раскрыть меню</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Действия</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <AlertDialogTrigger asChild>
-                                <DropdownMenuItem onClick={(e) => { e.stopPropagation() }}>Изменить запись</DropdownMenuItem>
-                            </AlertDialogTrigger>
-                            <DropdownMenuItem onClick={() => {
-                                DeleteRowTable(API_URL + `/contract/${row.getValue("id")}/delete`)
-                            }}>
-                                Удалить запись
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </ModalForm>
+                <ActionsButton actionsData={actionsData}/>
             )
         },
     },

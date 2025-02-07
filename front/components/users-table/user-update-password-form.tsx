@@ -35,7 +35,10 @@ const UserUpdatePasswordForm = ({
 
   function UpdateUserPassword(data: z.infer<typeof UpdateUserPasswordSchema>) {
     setError("")
-    axios.post(API_URL + '/auth/change-password', data)
+    axios.defaults.withCredentials = true
+    axios.post(API_URL + '/auth/change-password', null, {
+      params: data
+    })
     .then(() => {
       toast({
         title: "Пароль обновлен",

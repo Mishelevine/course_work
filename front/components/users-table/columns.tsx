@@ -5,6 +5,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
 import UserUpdateForm from "./user-update-form";
 import ActionsButton from "../actions-button";
+import DeleteRowForm from "../delete-row-form";
+import { API_URL } from "@/constants";
+import UserUpdatePasswordForm from "./user-update-password-form";
 
 export const UserTableColumns: ColumnDef<z.infer<typeof UserSchemaForTable>>[] = [
     {
@@ -34,9 +37,23 @@ export const UserTableColumns: ColumnDef<z.infer<typeof UserSchemaForTable>>[] =
                 {
                     title: "Изменить данные о пользователе",
                     description: <>Заполните все поля и нажмите кнопку <b>Изменить</b></>,
-                    submitButtonText: "Изменить",
                     form: <UserUpdateForm id={row.getValue("id")} />,
-                    dropdownButtonText: "Изменить запись"
+                    dropdownButtonText: "Изменить данные пользователя"
+                },
+                {
+                    title: "Изменить пароль пользователя",
+                    description: <>Заполните все поля и нажмите кнопку <b>Изменить</b></>,
+                    form: <UserUpdatePasswordForm id={row.getValue("id")} />,
+                    dropdownButtonText: "Изменить пароль пользователя"
+                },
+                {
+                    title: "Удалить пользователя",
+                    description: <>Вы уверены что хотите удалить пользователя <b>{row.getValue("full_name")}</b>?</>,
+                    form:   <DeleteRowForm
+                                apiEndpoint={API_URL + `/user/${row.getValue("id")}`}
+                                toastText="Пользователь успешно удален"
+                            />,
+                    dropdownButtonText: "Удалить"
                 }
             ]
             return (

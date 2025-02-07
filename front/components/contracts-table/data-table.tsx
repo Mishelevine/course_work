@@ -26,12 +26,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "../helper-functions"
-import ModalForm from "../modal-form"
-import DownloadButton from "../download-button"
-import { API_URL } from "@/constants"
-import { AlertDialogTrigger } from "../ui/alert-dialog"
 import ContractAddForm from "./contract-add-form"
 import { useEffect } from "react"
+import Action from "../action"
 
 interface ContractsDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -86,12 +83,17 @@ export function ContractsDataTable<TData, TValue>({
     }
   }, [rowSelection]);
 
+  const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false)
+
   return (
-    <ModalForm
-      title="Создать договор"
-      description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<ContractAddForm />}
-    >
+    <>
+      <Action
+        title="Добавить договор"
+        description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
+        form={<ContractAddForm />}
+        isOpen={isFormOpen}
+        setIsOpen={setIsFormOpen}
+      />
       <div className="w-full h-full px-1">
         <div className="flex items-center justify-between py-4">
           <Input
@@ -103,14 +105,12 @@ export function ContractsDataTable<TData, TValue>({
             className="max-w-sm"
           />
           {actions && <div className="flex gap-2">
-            {/* <DownloadButton
+            <Button
               className="bg-blue-2 hover:bg-blue-700"
-              apiEndpoint={API_URL + "/contract/to_excel_file"}
-              buttonText="Выгрузить в Excel"
-            /> */}
-            <AlertDialogTrigger asChild>
-              <Button className="bg-blue-2 hover:bg-blue-700">Добавить запись</Button>
-            </AlertDialogTrigger>
+              onClick={() => setIsFormOpen(true)}
+            >
+              Добавить запись
+            </Button>
           </div>}
         </div>
         <div className="rounded-md border overflow-y-auto">
@@ -187,6 +187,6 @@ export function ContractsDataTable<TData, TValue>({
           </Button>
         </div>
       </div>
-    </ModalForm>
+    </>
   )
 }

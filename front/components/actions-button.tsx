@@ -9,7 +9,6 @@ type ActionsData = {
     description: React.ReactElement
     form: React.ReactNode
     dropdownButtonText: string
-    submitButtonText: string
 }
 
 const ActionsButton = ({
@@ -48,7 +47,6 @@ const ActionsButton = ({
                     title={action.title}
                     description={action.description}
                     form={action.form}
-                    submitButtonText={action.submitButtonText}
                     isOpen={actionsStateManager ? actionsStateManager.get(index) || false : false}
                     setIsOpen={(isOpen: boolean) => handleToggleAction(index, isOpen)}
                 />
