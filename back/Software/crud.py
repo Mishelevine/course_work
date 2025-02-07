@@ -87,24 +87,24 @@ async def get_software_for_excel(software_list: List[SSoftwareAll]):
                     if software_contract:
                                 software_data.append({
                                     "ID": software.id,
-                                    "Название": software.name,
-                                    "Короткое название": software.short_name,
+                                    "Наименование ПО": software.name,
+                                    "Сокращенное наименование ПО": software.short_name,
                                     "Ссылка на программу": software.program_link,
                                     "Версия": software.version,
                                     "Дата версии": software.version_date,
-                                    "Лицензия": software.license_type,
+                                    "Тип лицензии": software.license_type,
                                     "Договор": software_contract.contract_number,
                                     "Дата договора": software_contract.contract_date,
                                 })
             else:
                 software_data.append({
                     "ID": software.id,
-                    "Название": software.name,
-                    "Короткое название": software.short_name,
+                    "Наименование ПО": software.name,
+                    "Сокращенное наименование ПО": software.short_name,
                     "Ссылка на программу": software.program_link,
                     "Версия": software.version,
                     "Дата версии": software.version_date,
-                    "Лицензия": software.license_type,
+                    "Тип лицензии": software.license_type,
                     "Договор": None,
                     "Дата договора": None,
                 })

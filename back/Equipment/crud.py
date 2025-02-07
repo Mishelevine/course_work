@@ -24,7 +24,7 @@ async def get_equipment_by_serial_number(serial_number: str):
 
 async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible]:
     async with async_session() as session:
-        if(user_role_id < 3):
+        if(user_role_id < 2):
             raise HTTPException(status_code=403, detail="Forbidden")
         else:
             query = select(Equipment).options(
@@ -41,7 +41,7 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
             for equipment in equipment_list:
                 responsible_user_full_name = None
                 
-                if (user_role_id == 4):
+                if (user_role_id > 2):
                     if equipment.statuses:
                         sorted_statuses = sorted(
                             equipment.statuses, 
@@ -49,6 +49,7 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                             reverse=True
                         )
                         latest_status = sorted_statuses[0]
+                        last_status_type = latest_status.status_type.status_type_name
                         if latest_status.responsible_user:
                             responsible_user_full_name = (
                                 f"{latest_status.responsible_user.first_name} "
@@ -65,6 +66,7 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                         inventory_number=equipment.inventory_number,
                         network_name=equipment.network_name,
                         remarks=equipment.remarks,
+                        last_status_type=last_status_type,
                         responsible_user_full_name=responsible_user_full_name,
                         type_name=equipment.type.type_name
                     )
