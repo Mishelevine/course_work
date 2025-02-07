@@ -17,6 +17,7 @@ from back.EquipmentType.router import router as router_equipment_type
 from back.Equipment.router import router as router_equipment
 from back.EquipmentSpecification.router import router as router_equipment_specs
 from back.EquipmentStatus.router import router as router_equipment_status
+from back.Database.router import router as router_database
 
 app = FastAPI(
     title="SATS"
@@ -38,6 +39,7 @@ app.include_router(router_equipment_type)
 app.include_router(router_equipment)
 app.include_router(router_equipment_specs)
 app.include_router(router_equipment_status)
+app.include_router(router_database)
 
 origins = [
     "http://localhost",

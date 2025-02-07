@@ -17,3 +17,10 @@ class SSessionLog(SSessionLogBase):
 
     class Config:
         from_attributes = True
+        
+class SSessionLogAll(SSessionLog):
+    username: str
+    role_name: str
+
+    class Config:
+        from_attributes = True

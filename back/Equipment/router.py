@@ -17,20 +17,6 @@ router = APIRouter(
 )
 
 @router.post("/to_excel_file")
-async def generate_equipment_excel(equipment_list: List[SEquipmentWithResponsible]):
-    from fastapi import APIRouter, HTTPException
-from fastapi.responses import StreamingResponse
-from typing import List
-import pandas as pd
-import io
-from datetime import datetime, timezone, timedelta
-
-router = APIRouter(
-    prefix="/equipment",
-    tags=["Оборудование"]
-)
-
-@router.post("/to_excel_file")
 async def generate_equipment_excel(equipment_list: List[SEquipmentWithResponsible], user: User = Depends(get_current_user)):
     if user.system_role_id < 3:
         raise HTTPException(status_code=403, detail="Forbidden")
