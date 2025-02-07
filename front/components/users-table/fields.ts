@@ -57,6 +57,14 @@ export const textFieldsForUpdate = [
     }
 ]
 
+export const textFieldsForUpdatePassword = [
+    {
+        name: "new_password",
+        label: "Новый пароль",
+        placeholder: "Введите новый пароль пользователя",
+    }
+]
+
 export const comboboxFields = [
     {
         name: "job_id",

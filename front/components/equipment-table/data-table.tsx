@@ -27,11 +27,10 @@ import {
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "../helper-functions"
 import EquipmentAddForm from "./equipment-add-form"
-import ModalForm from "../modal-form"
 import DownloadButton from "../download-button"
 import { API_URL } from "@/constants"
-import { AlertDialogTrigger } from "../ui/alert-dialog"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
+import Action from "../action"
 
 interface EquipmentDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -73,12 +72,17 @@ export function EquipmentDataTable<TData, TValue>({
     }
   })
 
+  const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false)
+
   return (
-    <ModalForm
-      title="Добавить оборудование"
-      description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<EquipmentAddForm />}
-    >
+    <>
+      <Action
+        title="Создать оборудование"
+        description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
+        form={<EquipmentAddForm />}
+        isOpen={isFormOpen}
+        setIsOpen={setIsFormOpen}
+      />
       <div className="w-full h-full">
         {!forStatus && <div className="flex items-start justify-between py-4">
           <Accordion type="single" collapsible>
@@ -144,9 +148,12 @@ export function EquipmentDataTable<TData, TValue>({
               buttonText="Выгрузить в Excel"
               tableData={table.getFilteredRowModel().rows.map(row => row.original)}
             />
-            <AlertDialogTrigger asChild>
-              <Button className="bg-blue-2 hover:bg-blue-700">Добавить оборудование</Button>
-            </AlertDialogTrigger>
+            <Button
+              className="bg-blue-2 hover:bg-blue-700"
+              onClick={() => setIsFormOpen(true)}
+            >
+              Добавить запись
+            </Button>
           </div>
         </div>}
         <div className="rounded-md border overflow-y-auto">
@@ -221,6 +228,6 @@ export function EquipmentDataTable<TData, TValue>({
           </Button>
         </div>}
       </div>
-    </ModalForm>
+    </>
   )
 }

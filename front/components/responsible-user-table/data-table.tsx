@@ -27,9 +27,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "../helper-functions"
-import ModalForm from "../modal-form"
-import { AlertDialogTrigger } from "../ui/alert-dialog"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
+import Action from "../action"
 
 interface ResponsibleUserDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -63,12 +62,17 @@ export function ResponsibleUserDataTable<TData, TValue>({
     }
   })
 
+  const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false)
+
   return (
-    <ModalForm
-      title="Создать ответственное лицо"
-      description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<ResponsibleUserAddForm />}
-    >
+    <>
+      <Action
+        title="Создать ответственное лицо"
+        description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
+        form={<ResponsibleUserAddForm />}
+        isOpen={isFormOpen}
+        setIsOpen={setIsFormOpen}
+      />
       <div className="w-full h-full">
         <div className="flex items-start justify-between py-4">
             <Accordion type="single" collapsible>
@@ -103,9 +107,12 @@ export function ResponsibleUserDataTable<TData, TValue>({
               </AccordionItem>
             </Accordion>
           <div className="flex gap-2">
-            <AlertDialogTrigger asChild>
-              <Button className="bg-blue-2 hover:bg-blue-700">Добавить запись</Button>
-            </AlertDialogTrigger>
+            <Button
+              className="bg-blue-2 hover:bg-blue-700"
+              onClick={() => setIsFormOpen(true)}
+            >
+              Добавить запись
+            </Button>
           </div>
         </div>
         <div className="rounded-md border overflow-y-auto">
@@ -180,6 +187,6 @@ export function ResponsibleUserDataTable<TData, TValue>({
           </Button>
         </div>
       </div>
-    </ModalForm>
+    </>
   )
 }

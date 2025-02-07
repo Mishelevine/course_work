@@ -26,8 +26,7 @@ import {
 } from "@/components/ui/table"
 import { CorrectPagesCase } from "../helper-functions"
 import LicenseAddForm from "./license-add-form"
-import ModalForm from "../modal-form"
-import { AlertDialogTrigger } from "../ui/alert-dialog"
+import Action from "../action"
 
 interface LicenseDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -61,12 +60,17 @@ export function LicenseDataTable<TData, TValue>({
     }
   })
 
+  const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false)
+
   return (
-    <ModalForm
-      title="Создать лицензию"
-      description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
-      form={<LicenseAddForm />}
-    >
+    <>
+      <Action
+        title="Создать лицензию"
+        description={<>Заполните все поля и нажмите кнопку <b>Создать</b></>}
+        form={<LicenseAddForm />}
+        isOpen={isFormOpen}
+        setIsOpen={setIsFormOpen}
+      />
       <div className="w-full h-full">
         <div className="flex items-center justify-between py-4">
           <Input
@@ -78,9 +82,12 @@ export function LicenseDataTable<TData, TValue>({
             className="max-w-sm"
           />
           <div className="flex gap-2">
-            <AlertDialogTrigger asChild>
-              <Button className="bg-blue-2 hover:bg-blue-700">Добавить запись</Button>
-            </AlertDialogTrigger>
+            <Button
+              className="bg-blue-2 hover:bg-blue-700"
+              onClick={() => setIsFormOpen(true)}
+            >
+              Добавить запись
+            </Button>
           </div>
         </div>
         <div className="rounded-md border overflow-y-auto">
@@ -155,6 +162,6 @@ export function LicenseDataTable<TData, TValue>({
           </Button>
         </div>
       </div>
-    </ModalForm>
+    </>
   )
 }
