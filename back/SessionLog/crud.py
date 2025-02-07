@@ -1,5 +1,5 @@
 from fastapi import Depends, HTTPException, Request
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.orm import joinedload
 from back.database import async_session
 from datetime import datetime, timedelta, timezone
@@ -20,6 +20,9 @@ async def session_log_event(session_log: SSessionLogCreate, user: User = Depends
         session.add(db_session_log)
         await session.commit()
         await session.refresh(db_session_log)
+        
+        await delete_old_session_logs()
+        
         return db_session_log
     
 async def get_log() -> list[SSessionLogAll]:
@@ -48,3 +51,16 @@ async def get_log() -> list[SSessionLogAll]:
             )
         
         return log_data
+    
+async def delete_old_session_logs(max_logs: int = 100):
+    async with async_session() as session:
+        subquery = (
+            select(SessionLog.id)
+            .order_by(SessionLog.time.desc())
+            .limit(max_logs)
+            .subquery()
+        )
+        
+        stmt = delete(SessionLog).where(SessionLog.id.not_in(subquery))
+        await session.execute(stmt)
+        await session.commit()
