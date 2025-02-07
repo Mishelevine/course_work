@@ -22,45 +22,47 @@ email_regex = r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*
 async def get_user_full_name(user_id: int):
     return await crud.get_user_full_name(user_id)
 
-@router.get("/to_excel_file")
-async def get_software_excel():
-    user_list = await crud.get_all_users()
+@router.post("/to_excel_file")
+async def get_user_excel(user_list: List[SUserAllSchema], user: User = Depends(get_current_user)):
+    if user.system_role_id < 4:
+        raise HTTPException(status_code=403, detail="Forbidden")
 
     user_data = []
-    for user in user_list:
-        user_info ={
-            "ID": user.id,
-            "Пользователь": user.username,
-            "Имя": user.first_name,
-            "Фамилия": user.last_name,
-            "Отчество": user.paternity if user.paternity else None,
-            "Должность": user.job.job_name if user.job else None,
-            "Подразделение": user.office.office_name if user.office else None,
-            "Системная роль": user.system_role.role_name if user.system_role else None
-        }
+    try:
+        user_data = await crud.get_users_for_excel(user_list)
+    
+        df = pd.DataFrame(user_data)
         
-        user_data.append(user_info)
-    
-    df = pd.DataFrame(user_data)
-    
-    excel_file = io.BytesIO()
-    
-    excel_file = io.BytesIO()
-    with pd.ExcelWriter(excel_file, engine="openpyxl") as writer:
-        df.to_excel(writer, index=False, sheet_name="Equipment")
-    excel_file.seek(0)
-    
-    file_name = f"user_list_{datetime.now(tz=timezone(timedelta(hours=5))).strftime('%Y%m%d_%H%M%S')}.xlsx"
-    
-    return StreamingResponse(
-        excel_file,
-        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        headers={"Content-Disposition": f"attachment; filename={file_name}"}
-    )
+        excel_file = io.BytesIO()
+        
+        excel_file = io.BytesIO()
+        with pd.ExcelWriter(excel_file, engine="openpyxl") as writer:
+            df.to_excel(writer, index=False, sheet_name="Equipment")
+        excel_file.seek(0)
+        
+        file_name = f"user_list_{datetime.now(tz=timezone(timedelta(hours=5))).strftime('%Y%m%d_%H%M%S')}.xlsx"
+        
+        return StreamingResponse(
+            excel_file,
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={"Content-Disposition": f"attachment; filename={file_name}"}
+        )
+    except Exception as e:
+        print(f"Ошибка при генерации Excel-файла: {e}")
+        raise HTTPException(status_code=500, detail="Ошибка при генерации Excel-файла")
     
 @router.get("/all")
 async def get_all_users() -> List[SUserAllSchema]:
     return await crud.get_all_users()
+
+@router.get("/{user_id}", response_model=SUser)
+async def get_user(user_id: int, user: User = Depends(get_current_user)):
+    if user.system_role_id <= 3:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    user = await crud.get_user_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
 @router.delete("/{user_id}")
 async def delete_user(user_id: int, user: User = Depends(get_current_user)):
