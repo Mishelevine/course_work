@@ -26,6 +26,7 @@ const UserUpdateForm = ({
 }) => {
   const [error, setError] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(true)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -90,6 +91,7 @@ const UserUpdateForm = ({
 
   function UpdateRowUserTable(data: z.infer<typeof UpdateUserFormSchema>) {
     setError("")
+    setIsProcessing(true)
     console.log(data)
     axios.put(API_URL + `/user/${id}`, data)
     .then(() => {
@@ -103,6 +105,7 @@ const UserUpdateForm = ({
       setError("Произошла непредвиденная ошибка при обновлении записи")
       console.log("Error while updating row!")
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -113,6 +116,7 @@ const UserUpdateForm = ({
       id="updateUserForm"
       onSubmit={UpdateRowUserTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFieldsForUpdate}
       comboboxFields={comboboxFields}

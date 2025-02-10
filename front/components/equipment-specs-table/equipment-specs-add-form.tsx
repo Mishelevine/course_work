@@ -20,6 +20,7 @@ const EquipmentSpecsAddForm = ({
   equipmentId: number
 }) => {
   const [error, setError] = useState<string | undefined>("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -37,6 +38,7 @@ const EquipmentSpecsAddForm = ({
 
   function AddRowEquipmentSpecsTable(data: z.infer<typeof EquipmentSpecsFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.post(API_URL + '/equipment_specs/create', data)
     .then(() => {
       console.log("Added row", data)
@@ -51,6 +53,7 @@ const EquipmentSpecsAddForm = ({
       console.log("Unexpected error occured while adding row.")
       console.log(data)
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -61,6 +64,7 @@ const EquipmentSpecsAddForm = ({
       id="addEquipmentSpecsForm"
       onSubmit={AddRowEquipmentSpecsTable}
       error={error}
+      isProcessing={isProcessing}
       textFields={textFields}
     />
   )

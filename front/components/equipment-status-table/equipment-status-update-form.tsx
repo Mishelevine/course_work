@@ -25,11 +25,13 @@ const EquipmentStatusUpdateForm = ({
 }) => {
   const [error, setError] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(true)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
   useEffect(() => {
     setLoading(true)
+    setIsProcessing(true)
     const fetchData = async () => {
       try {
         const statuses = (await axios.get(API_URL + `/equipment_status_type/all`)).data as z.infer<typeof StatusSchema>[]
@@ -134,6 +136,7 @@ const EquipmentStatusUpdateForm = ({
         equipment_id: data.equipment_id,
       })
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -144,6 +147,7 @@ const EquipmentStatusUpdateForm = ({
       id="updateEquipmentStatusForm"
       onSubmit={UpdateRowEquipmentStatusTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFields}
       comboboxFields={comboboxFields}

@@ -22,6 +22,7 @@ const UserUpdatePasswordForm = ({
   id: number
 }) => {
   const [error, setError] = useState<string | undefined>("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -35,6 +36,7 @@ const UserUpdatePasswordForm = ({
 
   function UpdateUserPassword(data: z.infer<typeof UpdateUserPasswordSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.defaults.withCredentials = true
     axios.post(API_URL + '/auth/change-password', null, {
       params: data
@@ -51,6 +53,7 @@ const UserUpdatePasswordForm = ({
       console.log("Unexpected error occured while adding row.")
       console.log(data)
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -61,6 +64,7 @@ const UserUpdatePasswordForm = ({
       id="UpdatePasswordForm"
       onSubmit={UpdateUserPassword}
       error={error}
+      isProcessing={isProcessing}
       textFields={textFieldsForUpdatePassword}
     />
   )

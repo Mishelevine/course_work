@@ -24,6 +24,7 @@ const ResponsibleUserUpdateForm = ({
 }) => {
   const [error, setError] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(true)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -76,6 +77,7 @@ const ResponsibleUserUpdateForm = ({
 
   function UpdateRowResponsibleUserTable(data: z.infer<typeof SingleResponsibleUserFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.put(API_URL + `/responsible_users/${id}/update`, data)
     .then(() => {
       toast({
@@ -88,6 +90,7 @@ const ResponsibleUserUpdateForm = ({
       setError("Произошла непредвиденная ошибка при обновлении записи")
       console.log("Error while updating row!")
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -98,6 +101,7 @@ const ResponsibleUserUpdateForm = ({
       id="updateResponsibleUserForm"
       onSubmit={UpdateRowResponsibleUserTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFields}
       comboboxFields={comboboxFields}

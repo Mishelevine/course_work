@@ -19,6 +19,7 @@ const ContractUpdateForm = ({
 }) => {
   const [error, setError] = useState<string | undefined>("")
   const [loading, setLoading] = useState<boolean>(true)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -50,6 +51,7 @@ const ContractUpdateForm = ({
 
   const UpdateRowContractTable = (data: z.infer<typeof ContractFormSchema>) => {
     setError("")
+    setIsProcessing(true)
     axios.put(API_URL + `/contract/${id}/update`, {
       contract_number: data.contract_number,
       contract_date: DateToDbForm(data.contract_date)
@@ -67,9 +69,14 @@ const ContractUpdateForm = ({
       console.log("Updated!", data)
     })
     .catch((e) => {
-      setError("Произошла непредвиденная ошибка при обновлении записи!")
-      console.log("Error while updating row!")
-      console.log(e)
+      if (e.response.data.detail == "Contract number already exists"){
+        setError("Договор с таким номером уже существует")
+      } else {
+        setError("Произошла непредвиденная ошибка при обновлении записи!")
+        console.log("Error while updating row!")
+        console.log(e)
+      }
+      setIsProcessing(false)
     })
   }
 
@@ -80,6 +87,7 @@ const ContractUpdateForm = ({
       id="updateContractForm"
       onSubmit={UpdateRowContractTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFields}
     />

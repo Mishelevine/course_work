@@ -21,11 +21,13 @@ const EquipmentUpdateForm = ({
 }) => {
   const [error, setError] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(true)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
   useEffect(() => {
     setLoading(true)
+    setIsProcessing(true)
     const fetchData = async () => {
       try {
         const response = (await axios.get(API_URL + `/equipment_types/all`)).data
@@ -37,6 +39,7 @@ const EquipmentUpdateForm = ({
       catch(e) {
         console.log("Ошибка при получении данных о типах оборудования")
         console.log(e)
+        setIsProcessing(false)
       }
     }
 
@@ -80,6 +83,7 @@ const EquipmentUpdateForm = ({
       id="updateEquipmentForm"
       onSubmit={UpdateRowEquipmentTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFields}
       comboboxFields={comboboxFields}

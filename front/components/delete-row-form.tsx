@@ -12,12 +12,15 @@ const DeleteRowForm = ({
   toastText: string
 }) => {
   const [error, setError] = useState<string | undefined>("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
   const form = useForm();
 
   function DeleteRowTable() {
+    setError("")
+    setIsProcessing(true)
     axios.delete(apiEndpoint)
     .then(() => {
       toast({
@@ -30,6 +33,7 @@ const DeleteRowForm = ({
       setError("Произошла непредвиденная ошибка при удалении записи")
       console.log("Error while deleting row")
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -40,6 +44,7 @@ const DeleteRowForm = ({
       id="addUserForm"
       onSubmit={DeleteRowTable}
       error={error}
+      isProcessing={isProcessing}
     />
   )
 }

@@ -18,6 +18,7 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
   const [error, setError] = useState<string | undefined>("")
   const [loading, setLoading] = useState<boolean>(true)
   const [selectedContractIds, setSelectedContractIds] = useState<number[]>([]);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -67,6 +68,7 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
 
   const UpdateRowSoftwareTable = (data: z.infer<typeof SoftwareSchema>) => {
     setError("")
+    setIsProcessing(true)
     axios.put(API_URL + `/software/${id}/update`, {
       name: data.name,
       short_name: data.short_name,
@@ -92,6 +94,7 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
       setError("Произошла непредвиденная ошибка при обновлении записи!")
       console.log("Error while updating row!")
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -102,6 +105,7 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
       id="updateSoftwareForm"
       onSubmit={UpdateRowSoftwareTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFields}
       comboboxFields={comboboxFields}

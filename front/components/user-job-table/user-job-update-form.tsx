@@ -19,6 +19,7 @@ const UserJobUpdateForm = ({
 }) => {
   const [error, setError] = useState<string | undefined>("")
   const [loading, setLoading] = useState<boolean>(true)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -47,6 +48,7 @@ const UserJobUpdateForm = ({
 
   const UpdateRowUserJobTable = (data: z.infer<typeof UserJobFormSchema>) => {
     setError("")
+    setIsProcessing(true)
     axios.put(API_URL + `/job/${id}`,
     data, {
       params: {
@@ -65,6 +67,7 @@ const UserJobUpdateForm = ({
       setError("Произошла непредвиденная ошибка при обновлении записи!")
       console.log("Error while updating row!")
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -75,6 +78,7 @@ const UserJobUpdateForm = ({
       id="updateUserJobForm"
       onSubmit={UpdateRowUserJobTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFields}
     />

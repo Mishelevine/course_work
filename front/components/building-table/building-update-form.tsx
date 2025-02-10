@@ -19,6 +19,7 @@ const BuildingUpdateForm = ({
 }) => {
   const [error, setError] = useState<string | undefined>("")
   const [loading, setLoading] = useState<boolean>(true)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -47,6 +48,7 @@ const BuildingUpdateForm = ({
 
   const UpdateRowBuildingTable = (data: z.infer<typeof BuildingFormSchema>) => {
     setError("")
+    setIsProcessing(true)
     axios.put(API_URL + `/buildings/${id}/update`,
     data, {
       params: {
@@ -62,9 +64,14 @@ const BuildingUpdateForm = ({
       console.log("Updated!", data)
     })
     .catch((e) => {
-      setError("Произошла непредвиденная ошибка при обновлении записи!")
-      console.log("Error while updating row!")
-      console.log(e)
+      if (e.response.data.detail == "Building already exists"){
+        setError("Корпус с таким адресом уже существует")
+      } else {
+        setError("Произошла непредвиденная ошибка при обновлении записи!")
+        console.log("Error while updating row!")
+        console.log(e)
+      }
+      setIsProcessing(false)
     })
   }
 
@@ -75,6 +82,7 @@ const BuildingUpdateForm = ({
       id="updateBuildingForm"
       onSubmit={UpdateRowBuildingTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFields}
     />

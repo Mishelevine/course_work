@@ -14,6 +14,7 @@ import CRUDFormForTables from '../crud-form-for-tables';
 
 const BuildingAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -26,6 +27,7 @@ const BuildingAddForm = () => {
 
   function AddRowBuildingTable(data: z.infer<typeof BuildingFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.post(API_URL + '/buildings/create', data)
     .then(() => {
       console.log("Added row", data)
@@ -36,10 +38,15 @@ const BuildingAddForm = () => {
       })
     })
     .catch((e) => {
-      setError("Во время добавления записи произошла непредвиденная ошибка!")
-      console.log("Unexpected error occured while adding row.")
-      console.log(data)
-      console.log(e)
+      if (e.response.data.detail == "Building already exists"){
+        setError("Корпус с таким адресом уже существует")
+      } else {
+        setError("Во время добавления записи произошла непредвиденная ошибка!")
+        console.log("Unexpected error occured while adding row.")
+        console.log(data)
+        console.log(e)
+      }
+      setIsProcessing(false)
     })
   }
 
@@ -50,6 +57,7 @@ const BuildingAddForm = () => {
       id="addBuildingForm"
       onSubmit={AddRowBuildingTable}
       error={error}
+      isProcessing={isProcessing}
       textFields={textFields}
     />
   )

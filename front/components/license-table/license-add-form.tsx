@@ -13,6 +13,7 @@ import CRUDFormForTables from '../crud-form-for-tables';
 
 const LicenseAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -25,6 +26,7 @@ const LicenseAddForm = () => {
 
   function AddRowLicenseTable(data: z.infer<typeof LicenseFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.post(API_URL + '/license/create', data)
     .then(() => {
       console.log("Added row", data)
@@ -35,10 +37,15 @@ const LicenseAddForm = () => {
       })
     })
     .catch((e) => {
-      setError("Во время добавления записи произошла непредвиденная ошибка!")
-      console.log("Unexpected error occured while adding row.")
-      console.log(data)
-      console.log(e)
+      if (e.response.data.detail == "License already exists") {
+        setError("Такая лицензия уже существует")
+      } else {
+        setError("Во время добавления записи произошла непредвиденная ошибка!")
+        console.log("Unexpected error occured while adding row.")
+        console.log(data)
+        console.log(e)
+      }
+      setIsProcessing(false)
     })
   }
 
@@ -49,6 +56,7 @@ const LicenseAddForm = () => {
       id="addLicenseForm"
       onSubmit={AddRowLicenseTable}
       error={error}
+      isProcessing={isProcessing}
       textFields={textFields}
     />
   )
