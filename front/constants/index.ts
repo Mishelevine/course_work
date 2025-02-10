@@ -16,10 +16,14 @@ export const sidebarLinks = [
         route: '/users',
         min_needed_role: 4,
         // imgUrl: '/icons/organisations.svg'
+    },
+    {
+        label: 'Бэкап БД',
+        route: '/backup',
+        min_needed_role: 4,
+        // imgUrl: '/icons/organisations.svg'
     }
 ]
-
-export const LOWEST_ROLE = 1
 
 export const WebSiteName = 'HSE SATS'
 export const API_URL = 'http://localhost:8000'

@@ -432,3 +432,7 @@ export const UserRoleSchema = z.object({
     role_name: z.string(),
     id: z.number()
 })
+
+export const FileUploadSchema = z.object({
+    file: z.any(),
+})
