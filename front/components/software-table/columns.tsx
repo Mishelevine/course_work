@@ -94,7 +94,6 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                             checkboxes={false}
                             actions={false}
                             data={row.original.contracts}
-                            userRole={0}
                         />
                     </DropdownMenuContent>
                 </DropdownMenu>

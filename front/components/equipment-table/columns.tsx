@@ -9,6 +9,7 @@ import Link from "next/link";
 import { API_URL } from "@/constants";
 import DeleteRowForm from "../delete-row-form";
 import ActionsButton from "../actions-button";
+import { ArrowUpDown } from "lucide-react";
 
 export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[] = [
     {
@@ -25,7 +26,17 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
     },
     {
         accessorKey: "inventory_number",
-        header: "Инвентарный номер",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Инвентарный номер
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
     },
     {
         accessorKey: "network_name",

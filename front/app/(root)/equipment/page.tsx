@@ -41,7 +41,7 @@ const EquipmentPage = () => {
         },
         {
             value: "buildings",
-            tab_text: "Адреса УК",
+            tab_text: "Адреса корпусов",
             description: "Здесь вы можете просмотреть все доступные адреса учебных корпусов",
             children: <BuildingTable/>,
             min_needed_role: 3
@@ -55,14 +55,14 @@ const EquipmentPage = () => {
         },
         {
             value: "responsible_users_jobs",
-            tab_text: "Должности ответственных лиц",
+            tab_text: "Должности",
             description: "Здесь вы можете просмотреть все доступные должности ответственных за оборудование лиц",
             children: <ResponsibleUserJobTable/>,
             min_needed_role: 3
         },
         {
             value: "responsible_users_offices",
-            tab_text: "Подразделения ответственных лиц",
+            tab_text: "Подразделения",
             description: "Здесь вы можете просмотреть все доступные подразделения ответственных за оборудование лиц",
             children: <ResponsibleUserOfficeTable/>,
             min_needed_role: 3

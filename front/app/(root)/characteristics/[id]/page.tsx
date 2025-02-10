@@ -34,7 +34,7 @@ const EquipmentStatusPage = (props:  {params: Promise<{ id: string }>}) => {
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>Статус</CardTitle>
+          <CardTitle>История статусов</CardTitle>
         </CardHeader>
         <Separator className="bg-gray-300"/>
         <CardContent className="space-y-2">

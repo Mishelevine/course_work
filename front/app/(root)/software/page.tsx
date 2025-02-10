@@ -25,14 +25,14 @@ function Home() {
           value: "contracts",
           tab_text: "Договоры",
           description: "Здесь вы можете просмотреть все доступные договоры для ПО",
-          children: <ContractsTable userRole={userRole} checkboxes={false} actions={true}/>,
+          children: <ContractsTable checkboxes={false} actions={true}/>,
           min_needed_role: 3
       },
       {
           value: "licenses",
           tab_text: "Лицензии",
           description: "Здесь вы можете просмотреть все доступные лицензии для ПО",
-          children: <LicensesTable userRole={userRole}/>,
+          children: <LicensesTable/>,
           min_needed_role: 3
       },
   ]

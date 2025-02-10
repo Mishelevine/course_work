@@ -43,7 +43,7 @@ export function SoftwareDataTable<TData, TValue>({
   data,
   userRole
 }: SoftwareDataTableProps<TData, TValue>) {
-
+  const seesContracts = userRole >= 2
   const actionsAllowed = userRole >= 3
 
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -52,6 +52,7 @@ export function SoftwareDataTable<TData, TValue>({
   )
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
     id: false,
+    contracts: seesContracts,
     actions: actionsAllowed
   })
   const [currentPageNumber, setCurrentPageNumber] = React.useState<number>(1)
