@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel
 from typing import List, Optional
 
@@ -11,6 +12,7 @@ class SEquipmentBase(BaseModel):
     network_name: str
     remarks: Optional[str] = None
     type_id: int
+    accepted_date: Optional[datetime] = None
 
 class SEquipmentCreate(SEquipmentBase):
     pass
@@ -23,6 +25,7 @@ class SEquipment(SEquipmentBase):
         
 class SEquipmentWithResponsible(SEquipment):
     responsible_user_full_name: Optional[str] = None
+    building_adress: Optional[str] = None
     last_status_type: Optional[str] = None
     type_name: Optional[str] = None
     statuses: Optional[List[SEquipmentStatus]] = None

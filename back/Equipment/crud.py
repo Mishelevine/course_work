@@ -50,6 +50,7 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                         )
                         latest_status = sorted_statuses[0]
                         last_status_type = latest_status.status_type.status_type_name
+                        last_building_adress = latest_status.building.building_address
                         if latest_status.responsible_user:
                             responsible_user_full_name = (
                                 f"{latest_status.responsible_user.first_name} "
@@ -66,9 +67,11 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                         inventory_number=equipment.inventory_number,
                         network_name=equipment.network_name,
                         remarks=equipment.remarks,
+                        accepted_date=equipment.accepted_date,
                         last_status_type=last_status_type,
                         responsible_user_full_name=responsible_user_full_name,
-                        type_name=equipment.type.type_name
+                        type_name=equipment.type.type_name,
+                        building_adress=last_building_adress,
                     )
                 )
                 
@@ -99,8 +102,8 @@ async def get_equipment_for_excel(user_role_id: int, equipment_list: List[SEquip
                 "Серийный номер": equipment.serial_number,
                 "Инвентарный номер": equipment.inventory_number,
                 "Сетевое имя": equipment.network_name,
+                "Дата принятия к учету": equipment.accepted_date.strftime("%d-%m-%Y"),
                 "Примечания": equipment.remarks,
-                "Ответственный": equipment.responsible_user_full_name,
             }
             if user_role_id > 3:
                 db_equipment = equipment_status_map.get(equipment.id)
@@ -152,7 +155,8 @@ async def create_equipment(equipment: SEquipmentCreate):
             serial_number=equipment.serial_number,
             inventory_number=equipment.inventory_number,
             network_name=equipment.network_name,
-            remarks=equipment.remarks
+            remarks=equipment.remarks,
+            accepted_date=equipment.accepted_date
         )
         session.add(db_equipment)
         await session.commit()
