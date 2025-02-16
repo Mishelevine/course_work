@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta, timezone
 from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint, DateTime
 from sqlalchemy.orm import relationship
 from back.database import Base
@@ -12,6 +13,7 @@ class Equipment(Base):
     inventory_number = Column(String, nullable=False)
     network_name = Column(String, nullable=False)
     remarks = Column(String, nullable=True)
+    accepted_date = Column(DateTime, nullable=True)
 
     type = relationship("EquipmentType", back_populates="equipment")
     equipment_specification = relationship("EquipmentSpecification", back_populates="equipment", cascade="all, delete-orphan")
