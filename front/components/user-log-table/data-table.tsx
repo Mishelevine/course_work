@@ -71,9 +71,9 @@ export function UserLogDataTable<TData, TValue>({
             <AccordionContent className="flex flex-col gap-2 p-1">
               <Input
                 placeholder="Поиск по логину пользователя..."
-                value={(table.getColumn("user_name")?.getFilterValue() as string) ?? ""}
+                value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
                 onChange={(event) =>
-                  table.getColumn("user_name")?.setFilterValue(event.target.value)
+                  table.getColumn("username")?.setFilterValue(event.target.value)
                 }
                 className="w-[300px]"
               />

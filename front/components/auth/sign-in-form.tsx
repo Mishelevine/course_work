@@ -60,7 +60,7 @@ export const SignInForm = () => {
         axios.post(API_URL + "/auth/login", formValues)
         .then((data) => {
             setError("");
-            router.push('/')
+            router.push('/software')
         })
         .catch((e) => {
             if (e && e.response.status !== 401){

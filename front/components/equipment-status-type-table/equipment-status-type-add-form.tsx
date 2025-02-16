@@ -14,6 +14,7 @@ import CRUDFormForTables from '../crud-form-for-tables';
 
 const EquipmentStatusTypeAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -26,6 +27,7 @@ const EquipmentStatusTypeAddForm = () => {
 
   function AddRowEquipmentStatusTypeTable(data: z.infer<typeof EquipmentStatusTypeFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.post(API_URL + '/equipment_status_type/create', data)
     .then(() => {
       console.log("Added row", data)
@@ -40,6 +42,7 @@ const EquipmentStatusTypeAddForm = () => {
       console.log("Unexpected error occured while adding row.")
       console.log(data)
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -50,6 +53,7 @@ const EquipmentStatusTypeAddForm = () => {
       id="addEquipmentStatusTypeForm"
       onSubmit={AddRowEquipmentStatusTypeTable}
       error={error}
+      isProcessing={isProcessing}
       textFields={textFields}
     />
   )

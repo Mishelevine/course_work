@@ -22,6 +22,7 @@ import CRUDFormForTables from '../crud-form-for-tables';
 const UserAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(true)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -83,6 +84,7 @@ const UserAddForm = () => {
 
   function AddRowUserTable(data: z.infer<typeof CreateUserFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.post(API_URL + '/auth/signup', data)
     .then(() => {
       toast({
@@ -96,6 +98,7 @@ const UserAddForm = () => {
       console.log("Unexpected error occured while adding row.")
       console.log(data)
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -106,6 +109,7 @@ const UserAddForm = () => {
       id="addUserForm"
       onSubmit={AddRowUserTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFields}
       comboboxFields={comboboxFields}

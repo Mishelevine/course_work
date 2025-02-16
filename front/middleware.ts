@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { WEBSITE_URL, signingPages, imgExtensions, closedPages, API_URL } from "@/constants"
+import { WEBSITE_URL, signingPages, imgExtensions, closedPages, API_URL, firstRolePages, secondRolePages, thirdRolePages } from "@/constants"
 import axios from "axios";
 
 async function GetAccessToken(req: NextRequest) {
@@ -87,24 +87,34 @@ export default async function middleware(req: NextRequest){
         return NextResponse.next()
     }
 
-    if(!isAuthorized && !signingPages.some(link => url.includes(link))){
-        const res = NextResponse.redirect(WEBSITE_URL + '/sign-in')
-        return SetCookieIfNeeded(res, setCookie, accessToken)
+    if(!isAuthorized && !signingPages.some(link => url.includes(link)))
+        return SetCookieIfNeeded(NextResponse.redirect(WEBSITE_URL + '/sign-in'), setCookie, accessToken)
+
+    if (isAuthorized && signingPages.some(link => url.includes(link)))
+        return SetCookieIfNeeded(NextResponse.redirect(WEBSITE_URL + "/software"), setCookie, accessToken)
+
+    if (isAuthorized && closedPages.some(link => url.includes(link)))
+        return SetCookieIfNeeded(NextResponse.redirect(WEBSITE_URL + "/software"), setCookie, accessToken)
+
+    if (isAuthorized) {
+        const userRole = (await axios.get(API_URL + '/auth/mebytoken', {
+            params: {
+                token: accessToken
+            }
+        })).data["system_role_id"]
+
+        if (
+            (userRole === 1 && !firstRolePages.some(link => url.includes(link))) ||
+            (userRole === 2 && !secondRolePages.some(link => url.includes(link))) ||
+            (userRole === 3 && !thirdRolePages.some(link => url.includes(link))) ||
+            (url === WEBSITE_URL + '/')
+        ) {
+            console.log("Redirect")
+            return SetCookieIfNeeded(NextResponse.redirect(WEBSITE_URL + "/software"), setCookie, accessToken)
+        }
     }
 
-    if (isAuthorized && signingPages.some(link => url.includes(link))){
-        console.log("here")
-        const res = NextResponse.redirect(WEBSITE_URL)
-        return SetCookieIfNeeded(res, setCookie, accessToken)
-    }
-
-    if (isAuthorized && closedPages.some(link => url.includes(link))){
-        const res = NextResponse.redirect(WEBSITE_URL)
-        return SetCookieIfNeeded(res, setCookie, accessToken)
-    }
-
-    const res = NextResponse.next()
-    return SetCookieIfNeeded(res, setCookie, accessToken)
+    return SetCookieIfNeeded(NextResponse.next(), setCookie, accessToken)
 }
 
 export const config = {

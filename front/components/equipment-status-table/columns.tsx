@@ -8,6 +8,8 @@ import { DatetimeFromDbForm } from "../helper-functions";
 import { API_URL } from "@/constants";
 import DeleteRowForm from "../delete-row-form";
 import ActionsButton from "../actions-button";
+import { ArrowUpDown } from "lucide-react";
+import { Button } from "../ui/button";
 
 export const EquipmentStatusTableColumns: ColumnDef<z.infer<typeof EquipmentStatusTableSchema>>[] = [
     {
@@ -20,7 +22,17 @@ export const EquipmentStatusTableColumns: ColumnDef<z.infer<typeof EquipmentStat
     },
     {
         accessorKey: "status_change_date",
-        header: "Дата изменения статуса",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Дата изменения статуса
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
         cell: ({row}) => {
             return DatetimeFromDbForm(row.getValue("status_change_date"))
         }

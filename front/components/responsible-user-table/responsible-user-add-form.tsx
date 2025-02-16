@@ -20,6 +20,7 @@ import CRUDFormForTables from '../crud-form-for-tables';
 const ResponsibleUserAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(true)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -68,6 +69,7 @@ const ResponsibleUserAddForm = () => {
 
   function AddRowResponsibleUserTable(data: z.infer<typeof SingleResponsibleUserFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.post(API_URL + '/responsible_users/create', data)
     .then(() => {
       console.log("Added row", data)
@@ -82,6 +84,7 @@ const ResponsibleUserAddForm = () => {
       console.log("Unexpected error occured while adding row.")
       console.log(data)
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -92,6 +95,7 @@ const ResponsibleUserAddForm = () => {
       id="addResponsibleUserForm"
       onSubmit={AddRowResponsibleUserTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFields}
       comboboxFields={comboboxFields}

@@ -34,19 +34,26 @@ import Action from "../action"
 
 interface SoftwareDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  userRole: number
 }
 
 export function SoftwareDataTable<TData, TValue>({
   columns,
   data,
+  userRole
 }: SoftwareDataTableProps<TData, TValue>) {
+  const seesContracts = userRole >= 2
+  const actionsAllowed = userRole >= 3
+
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
-    id: false
+    id: false,
+    contracts: seesContracts,
+    actions: actionsAllowed
   })
   const [currentPageNumber, setCurrentPageNumber] = React.useState<number>(1)
 
@@ -109,12 +116,12 @@ export function SoftwareDataTable<TData, TValue>({
               buttonText="Выгрузить в Excel"
               tableData={table.getFilteredRowModel().rows.map(row => row.original)}
             />
-            <Button
+            {actionsAllowed && <Button
               className="bg-blue-2 hover:bg-blue-700"
               onClick={() => setIsFormOpen(true)}
             >
               Добавить запись
-            </Button>
+            </Button>}
           </div>
         </div>
         <div className="rounded-md border overflow-y-auto">
@@ -163,8 +170,7 @@ export function SoftwareDataTable<TData, TValue>({
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
-            {currentPageNumber} из{" "}
-            {table.getPageOptions().length} {" "} {CorrectPagesCase(table.getPageOptions().length)}
+            {currentPageNumber} из {table.getPageOptions().length} {" "} {CorrectPagesCase(table.getPageOptions().length)}
           </div>
           <Button
             variant="outline"

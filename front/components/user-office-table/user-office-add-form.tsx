@@ -14,6 +14,7 @@ import CRUDFormForTables from '../crud-form-for-tables';
 
 const UserOfficeAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -26,6 +27,7 @@ const UserOfficeAddForm = () => {
 
   function AddRowUserOfficeTable(data: z.infer<typeof UserOfficeFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.post(API_URL + '/office/create', data)
     .then(() => {
       console.log("Added row", data)
@@ -40,6 +42,7 @@ const UserOfficeAddForm = () => {
       console.log("Unexpected error occured while adding row.")
       console.log(data)
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -50,6 +53,7 @@ const UserOfficeAddForm = () => {
       id="addUserOfficeForm"
       onSubmit={AddRowUserOfficeTable}
       error={error}
+      isProcessing={isProcessing}
       textFields={textFields}
     />
   )

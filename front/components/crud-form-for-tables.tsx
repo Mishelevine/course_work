@@ -5,6 +5,7 @@ import FormComboboxField from './form-combobox-field'
 import { FormError } from './form-error'
 import { Button } from './ui/button'
 import { FieldValues, Path, SubmitHandler, UseFormReturn } from 'react-hook-form'
+import { LoadingSpinner } from './loading-spinner'
 
 type TextField = {
     name: string
@@ -32,6 +33,7 @@ function CRUDFormForTables<TData extends FieldValues, TComboboxData extends Fiel
   loading,
   textFields,
   comboboxFields,
+  isProcessing,
   children
 } : {
   buttonText: string
@@ -41,7 +43,8 @@ function CRUDFormForTables<TData extends FieldValues, TComboboxData extends Fiel
   error: string | undefined
   loading?: boolean | undefined
   textFields?: TextField[]
-  comboboxFields?: ComboboxField<TComboboxData>[],
+  comboboxFields?: ComboboxField<TComboboxData>[]
+  isProcessing?: boolean
   children?: React.ReactNode
 }) {
   if (loading) {
@@ -81,7 +84,14 @@ function CRUDFormForTables<TData extends FieldValues, TComboboxData extends Fiel
         </div>
         {children}
         <FormError message={error} />
-        <Button type="submit" className="w-full bg-blue-3 hover:bg-blue-700">{buttonText}</Button>
+        <Button
+          disabled={isProcessing}
+          type="submit"
+          className="w-full bg-blue-3 hover:bg-blue-700"
+        >
+          {isProcessing && <LoadingSpinner/>}
+          {buttonText}
+        </Button>
       </form>
     </Form>
   )

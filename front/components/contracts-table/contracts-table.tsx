@@ -95,8 +95,8 @@ export default function ContractsTable({
     selected_contract_ids,
     onSelectedRowsChange
 } : {
-    checkboxes: boolean,
-    actions: boolean,
+    checkboxes: boolean
+    actions: boolean
     data?: z.infer<typeof ContractSchema>[] | undefined
     selected_contract_ids?: number[] | undefined
     onSelectedRowsChange?: (selectedIds: number[]) => void

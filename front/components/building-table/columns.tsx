@@ -28,7 +28,7 @@ export const BuildingTableColumns: ColumnDef<z.infer<typeof BuildingSchema>>[] =
                     title: "Удалить адрес",
                     description: <>Вы уверены что хотите удалить адрес <b>{row.getValue("building_address")}</b>?</>,
                     form:   <DeleteRowForm
-                                apiEndpoint={API_URL + `/contract/${row.getValue("id")}/delete`}
+                                apiEndpoint={API_URL + `/buildings/${row.getValue("id")}/delete`}
                                 toastText="Адрес успешно удален"
                             />,
                     dropdownButtonText: "Удалить"

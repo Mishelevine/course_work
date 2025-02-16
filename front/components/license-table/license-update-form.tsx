@@ -18,6 +18,7 @@ const LicenseUpdateForm = ({
 }) => {
   const [error, setError] = useState<string | undefined>("")
   const [loading, setLoading] = useState<boolean>(true)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -30,6 +31,7 @@ const LicenseUpdateForm = ({
 
   useEffect(() => {
     setLoading(true)
+    setIsProcessing(true)
     const fetchData = async () => {
       try {
         const response = await axios.get(API_URL + `/license/${id}`)
@@ -61,9 +63,14 @@ const LicenseUpdateForm = ({
       console.log("Updated!", data)
     })
     .catch((e) => {
-      setError("Произошла непредвиденная ошибка при обновлении записи!")
-      console.log("Error while updating row!")
-      console.log(e)
+      if (e.response.data.detail == "License already exists") {
+        setError("Такая лицензия уже существует")
+      } else {
+        setError("Произошла непредвиденная ошибка при обновлении записи!")
+        console.log("Error while updating row!")
+        console.log(e)
+      }
+      setIsProcessing(false)
     })
   }
 
@@ -75,6 +82,7 @@ const LicenseUpdateForm = ({
       onSubmit={UpdateRowLicenseTable}
       error={error}
       loading={loading}
+      isProcessing={isProcessing}
       textFields={textFields}
     />
   )

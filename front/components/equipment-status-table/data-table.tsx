@@ -81,7 +81,7 @@ export function EquipmentStatusDataTable<TData, TValue>({
             className="bg-blue-2 hover:bg-blue-700"
             onClick={() => setIsFormOpen(true)}
           >
-            {table.getRowCount() < 1 ? "Добавить статус" : "Статус уже указан"}
+            Добавить статус
           </Button>
         </div>
         <div className="rounded-md border overflow-y-auto">

@@ -8,7 +8,11 @@ import axios from "axios"
 import { API_URL } from "@/constants"
 import { z } from "zod"
 
-export default function SoftwareTable() {
+export default function SoftwareTable({
+  userRole
+} : {
+  userRole: number
+}) {
   const [data, setData] = useState<z.infer<typeof SoftwareTableSchema>[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -37,5 +41,5 @@ export default function SoftwareTable() {
     return <div>Loading software data...</div>
   }
 
-  return <SoftwareDataTable columns={SoftwareTableColumns} data={data} />
+  return <SoftwareDataTable columns={SoftwareTableColumns} data={data} userRole={userRole} />
 }

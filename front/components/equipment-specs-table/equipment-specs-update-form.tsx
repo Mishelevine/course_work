@@ -21,6 +21,7 @@ const EquipmentSpecsUpdateForm = ({
 }) => {
   const [error, setError] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(true)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -43,6 +44,7 @@ const EquipmentSpecsUpdateForm = ({
 
   function UpdateRowEquipmentSpecsTable(data: z.infer<typeof EquipmentSpecsFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.put(API_URL + `/equipment_specs/${id}`, data)
     .then(() => {
       console.log("Updated row ID =", data)
@@ -56,6 +58,7 @@ const EquipmentSpecsUpdateForm = ({
       setError("Произошла непредвиденная ошибка при обновлении характеристик")
       console.log("Error while updating row!")
       console.log(e)
+      setIsProcessing(false)
     })
   }
 
@@ -78,6 +81,7 @@ const EquipmentSpecsUpdateForm = ({
       id="updateEquipmentSpecsForm"
       onSubmit={UpdateRowEquipmentSpecsTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFields}
     />

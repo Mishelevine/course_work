@@ -12,7 +12,7 @@ type ActionsData = {
 }
 
 const ActionsButton = ({
-    actionsData
+    actionsData,
 } : {
     actionsData: ActionsData[]
 }) => {
@@ -22,7 +22,7 @@ const ActionsButton = ({
     const [actionsStateManager, setActionsStateManager] = useState<Map<number, boolean>>();
 
     useEffect(() => {
-        const initialState = new Map<number, boolean>()
+        const initialState = new Map<number, boolean>();
         actionsData.map((action, index) => {
             initialState.set(index, false)
         })
@@ -55,9 +55,9 @@ const ActionsButton = ({
 
         setActions(generatedActions)
         setIsLoading(false)
-    }, [actionsData, actionsStateManager])
+    }, [actionsStateManager])
 
-    if (isLoading) return <div>Loading actions...</div>
+    if (isLoading || !actionsData.length) return <div>Loading actions...</div>
 
     return (
         <>

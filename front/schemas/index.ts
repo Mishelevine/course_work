@@ -154,7 +154,8 @@ export const EquipmentSchema = z.object({
     network_name: z.string(),
     remarks: z.string(),
     id: z.number(),
-    responsible_user_full_name: z.string() // фио ответстветственного лица
+    responsible_user_full_name: z.string(),
+    last_status_type: z.string(),
 })
 
 export const EquipmentFormSchema = z.object({
@@ -169,10 +170,11 @@ export const EquipmentFormSchema = z.object({
     }),
     inventory_number: z.string().min(1, {
         message: "Пожалуйста, введите инвентарный номер"
-    }),
-    network_name: z.string().min(1, {
-        message: "Пожалуйста, введите сокращенное сетевое имя"
-    }),
+    }).regex(
+        new RegExp('^\d$'),
+        "Некорректный формат инвентарного номера"
+    ),
+    network_name: z.string(),
     remarks: z.string(),
 })
 
@@ -190,23 +192,12 @@ export const EquipmentSpecsSchema = z.object({
     id: z.number()
 })
 
-// TODO: скорее всего разрешить заполнять не все поля
 export const EquipmentSpecsFormSchema = z.object({
-    screen_resolution: z.string().min(1, {
-        message: "Пожалуйста, введите разрешение экрана"
-    }),
-    processor_type: z.string().min(1, {
-        message: "Пожалуйста, введите тип процессора"
-    }),
-    ram_size: z.string().min(1, {
-        message: "Пожалуйста, введите размер оперативной памяти"
-    }),
-    gpu_info: z.string().min(1, {
-        message: "Пожалуйста, введите характеристики ГП"
-    }),
-    storage: z.string().min(1, {
-        message: "Пожалуйста, введите тип и объём диска"
-    }),
+    screen_resolution: z.string(),
+    processor_type: z.string(),
+    ram_size: z.string(),
+    gpu_info: z.string(),
+    storage: z.string(),
     equipment_id: z.number()
 })
 
@@ -295,17 +286,6 @@ export const EquipmentStatusTableSchema = z.object({
     id: z.number(),
     equipment_id: z.number(),
 })
-
-// export const UserSchemaFromBack = z.object({
-//     first_name: z.string(),
-//     last_name: z.string(),
-//     paternity: z.string(),
-//     username: z.string(),
-//     job_name: z.string(),
-//     office_name: z.string(),
-//     role_name: z.string(),
-//     id: z.number()
-// })
 
 export const UserSchemaForTable = z.object({
     full_name: z.string(),
@@ -451,4 +431,8 @@ export const UpdateUserPasswordSchema = z.object({
 export const UserRoleSchema = z.object({
     role_name: z.string(),
     id: z.number()
+})
+
+export const FileUploadSchema = z.object({
+    file: z.any(),
 })

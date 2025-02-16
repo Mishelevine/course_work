@@ -14,6 +14,7 @@ import CRUDFormForTables from '../crud-form-for-tables';
 
 const ContractAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -27,6 +28,7 @@ const ContractAddForm = () => {
 
   function AddRowContractTable(data: z.infer<typeof ContractFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.post(API_URL + '/contract/create', {
       contract_number: data.contract_number,
       contract_date: DateToDbForm(data.contract_date)
@@ -40,10 +42,18 @@ const ContractAddForm = () => {
       })
     })
     .catch((e) => {
-      setError("Во время добавления записи произошла непредвиденная ошибка!")
-      console.log("Unexpected error occured while adding row.")
-      console.log(data)
-      console.log(e)
+      if (e.response.data.detail == "Contract number already exists"){
+        setError("Договор с таким номером уже существует")
+      } else {
+        setError("Во время добавления записи произошла непредвиденная ошибка")
+        console.log("Unexpected error occured while adding row.")
+        console.log({
+          contract_number: data.contract_number,
+          contract_date: DateToDbForm(data.contract_date)
+        })
+        console.log(e)
+      }
+      setIsProcessing(false)
     })
   }
 
@@ -54,6 +64,7 @@ const ContractAddForm = () => {
       id="addContractForm"
       onSubmit={AddRowContractTable}
       error={error}
+      isProcessing={isProcessing}
       textFields={textFields}
     />
   )

@@ -20,6 +20,7 @@ export const SoftwareAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(true)
   const [selectedContractIds, setSelectedContractIds] = useState<number[]>([]);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { toast } = useToast()
 
@@ -59,6 +60,7 @@ export const SoftwareAddForm = () => {
 
   function AddRowSoftwareTable(data: z.infer<typeof SoftwareSchema>) {
     setError("")
+    setIsProcessing(true)
     if (selectedContractIds.length === 0) {
       setError("Выберите хотя бы один договор")
     }
@@ -93,6 +95,7 @@ export const SoftwareAddForm = () => {
             contract_ids: selectedContractIds,
         })
         console.log(e)
+        setIsProcessing(false)
       })
     }
   }
@@ -104,6 +107,7 @@ export const SoftwareAddForm = () => {
       id="addSoftwareForm"
       onSubmit={AddRowSoftwareTable}
       error={error}
+      isProcessing={isProcessing}
       loading={loading}
       textFields={textFields}
       comboboxFields={comboboxFields}
@@ -133,7 +137,5 @@ export const SoftwareAddForm = () => {
       )}
     />
     </CRUDFormForTables>
-
-
   )
 }
