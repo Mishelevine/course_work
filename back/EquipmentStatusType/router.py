@@ -36,7 +36,7 @@ async def update_equipment_status_type(status_type_id: int, updated_status_type:
     if db_status_type and db_status_type.id != status_type_id:
         raise HTTPException(status_code=400, detail="Equipment status type name already in use by another status type")
     
-    return await crud.update_equipment_status_type(status_type_id=status_type_id, new_status_type_name=updated_status_type.status_type_name)
+    return await crud.update_equipment_status_type(status_type_id=status_type_id, updated_status_type=updated_status_type)
 
 @router.delete("/{status_type_id}/delete", response_model=dict)
 async def delete_equipment_status_type(status_type_id: int):

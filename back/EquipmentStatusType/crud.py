@@ -25,25 +25,26 @@ async def get_all_equipment_status_types() -> list[SEquipmentStatusType]:
 
 async def create_equipment_status_type(status_type: SEquipmentStatusTypeCreate):
     async with async_session() as session:
-        db_status_type = EquipmentStatusType(status_type_name=status_type.status_type_name)
+        db_status_type = EquipmentStatusType(status_type_name=status_type.status_type_name,
+                                             status_type_color=status_type.status_type_color)
         session.add(db_status_type)
         await session.commit()
         await session.refresh(db_status_type)
         return db_status_type
 
-async def update_equipment_status_type(status_type_id: int, new_status_type_name: str):
+async def update_equipment_status_type(status_type_id: int, updated_status_type: SEquipmentStatusTypeCreate):
     status_type = await get_equipment_status_type(status_type_id)
     
     if status_type is None:
         raise HTTPException(status_code=404, detail="Equipment status type not found")
     
-    if status_type.status_type_name != new_status_type_name:
-        status_type.status_type_name = new_status_type_name
+    status_type.status_type_name = updated_status_type.status_type_name
+    status_type.status_type_color = updated_status_type.status_type_color
         
-        async with async_session() as session:
-            session.add(status_type)
-            await session.commit()
-            await session.refresh(status_type)
+    async with async_session() as session:
+        session.add(status_type)
+        await session.commit()
+        await session.refresh(status_type)
     
     return status_type
 
