@@ -27,7 +27,6 @@ const EquipmentUpdateForm = ({
 
   useEffect(() => {
     setLoading(true)
-    setIsProcessing(true)
     const fetchData = async () => {
       try {
         const response = (await axios.get(API_URL + `/equipment_types/all`)).data
@@ -60,6 +59,7 @@ const EquipmentUpdateForm = ({
 
   function UpdateRowEquipmentTable(data: z.infer<typeof EquipmentFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.put(API_URL + `/equipment/${id}`, data)
     .then(() => {
       console.log("Updated row ID =", data)

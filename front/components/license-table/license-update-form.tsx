@@ -31,7 +31,6 @@ const LicenseUpdateForm = ({
 
   useEffect(() => {
     setLoading(true)
-    setIsProcessing(true)
     const fetchData = async () => {
       try {
         const response = await axios.get(API_URL + `/license/${id}`)
@@ -48,6 +47,7 @@ const LicenseUpdateForm = ({
 
   const UpdateRowLicenseTable = (data: z.infer<typeof LicenseFormSchema>) => {
     setError("")
+    setIsProcessing(true)
     axios.put(API_URL + `/license/${id}/update`,
     data, {
       params: {

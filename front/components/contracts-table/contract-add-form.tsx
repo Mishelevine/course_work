@@ -35,6 +35,8 @@ const ContractAddForm = () => {
     })
     .then(() => {
       console.log("Added row", data)
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Договор добавлен",
         description: "Данные записаны в БД",

@@ -31,7 +31,6 @@ const EquipmentStatusUpdateForm = ({
 
   useEffect(() => {
     setLoading(true)
-    setIsProcessing(true)
     const fetchData = async () => {
       try {
         const statuses = (await axios.get(API_URL + `/equipment_status_type/all`)).data as z.infer<typeof StatusSchema>[]
@@ -106,6 +105,7 @@ const EquipmentStatusUpdateForm = ({
 
   function UpdateRowEquipmentStatusTable(data: z.infer<typeof EquipmentStatusFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.put(API_URL + `/equipment_status/${id}`, {
       doc_number: data.doc_number,
       status_change_date: new Date(),

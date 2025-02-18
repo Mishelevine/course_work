@@ -77,7 +77,6 @@ export function EquipmentStatusDataTable<TData, TValue>({
       <div className="w-full h-full">
         <div className="flex justify-end py-4">
           <Button
-            disabled={table.getRowCount() >= 1}
             className="bg-blue-2 hover:bg-blue-700"
             onClick={() => setIsFormOpen(true)}
           >
