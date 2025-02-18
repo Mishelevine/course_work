@@ -156,6 +156,8 @@ export const EquipmentSchema = z.object({
     id: z.number(),
     responsible_user_full_name: z.string(),
     last_status_type: z.string(),
+    building_adress: z.string(), // FIXME МИША ПЕРЕИМЕНУЙ ПОЛЕ (((
+    accepted_date: z.string()
 })
 
 export const EquipmentFormSchema = z.object({
@@ -173,6 +175,10 @@ export const EquipmentFormSchema = z.object({
     }).regex(
         new RegExp('^\d$'),
         "Некорректный формат инвентарного номера"
+    ),
+    accepted_date: z.string().regex(
+        new RegExp('(^(31)[.](0[13578]|1[02])[.]((18|19|20)[0-9]{2})$)|(^(29|30)[.](01|0[3-9]|1[1-2])[.]((18|19|20)[0-9]{2})$)|(^(0[1-9]|1[0-9]|2[0-8])[.](0[1-9]|1[0-2])[.]((18|19|20)[0-9]{2})$)|(^(29)[.](02)[.](((18|19|20)(04|08|[2468][048]|[13579][26]))|2000)$)'),
+        'Некорректный формат даты'
     ),
     network_name: z.string(),
     remarks: z.string(),
@@ -234,6 +240,7 @@ export const EquipmentStatusSchema = z.object({
 
 export const StatusSchema = z.object({
     status_type_name: z.string(),
+    status_type_color: z.string(),
     id: z.number()
 })
 
@@ -276,6 +283,7 @@ export const ResponsibleUserForComboboxSchema = z.object({
 
 export const EquipmentStatusTableSchema = z.object({
     status_type_name: z.string(),
+    status_type_color: z.string(),
     doc_number: z.string(),
     status_change_date: z.string(),
     responsible_user_fio: z.string(),
@@ -331,13 +339,18 @@ export const BuildingFormSchema = z.object({
 
 export const EquipmentStatusTypeSchema = z.object({
     status_type_name: z.string(),
+    status_type_color: z.string(),
     id: z.number()
 })
 
 export const EquipmentStatusTypeFormSchema = z.object({
     status_type_name: z.string().min(1, {
         message: "Пожалуйста, введите наименование статуса"
-    })
+    }),
+    status_type_color: z.string().regex(
+        new RegExp("^#([A-Fa-f0-9]{6})$"),
+        "Некорректный формат ввода цвета"
+    )
 })
 
 export const EquipmentTypeSchema = z.object({

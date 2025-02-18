@@ -47,7 +47,8 @@ const EquipmentSpecsUpdateForm = ({
     setIsProcessing(true)
     axios.put(API_URL + `/equipment_specs/${id}`, data)
     .then(() => {
-      console.log("Updated row ID =", data)
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Характеристики обновлены",
         description: "Данные записаны в БД",

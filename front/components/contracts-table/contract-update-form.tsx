@@ -38,7 +38,6 @@ const ContractUpdateForm = ({
         const response = await axios.get(API_URL + `/contract/${id}`)
         const normalDate = DateFromDbForm(response.data.contract_date)
         response.data.contract_date = normalDate
-        console.log(response.data)
         form.reset(response.data)
         setLoading(false)
       } catch (e) {
@@ -61,12 +60,13 @@ const ContractUpdateForm = ({
       }
     })
     .then(() => {
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Запись обновлена",
         description: "Данные записаны в БД",
         className: "bg-white"
       })
-      console.log("Updated!", data)
     })
     .catch((e) => {
       if (e.response.data.detail == "Contract number already exists"){

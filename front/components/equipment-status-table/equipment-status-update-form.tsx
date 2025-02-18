@@ -66,7 +66,6 @@ const EquipmentStatusUpdateForm = ({
           } as DataArray
         })) as DataArray[]
         comboboxFields[2].data = buildings_for_combobox
-        // console.log(comboboxFields)
         try {
           const status = (await axios.get(API_URL + `/equipment_status/${id}`)).data
           form.reset({
@@ -116,7 +115,8 @@ const EquipmentStatusUpdateForm = ({
       equipment_id: data.equipment_id,
     })
     .then(() => {
-      console.log("Updated row with ID =", id)
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Статус обновлен",
         description: "Данные записаны в БД",
@@ -126,15 +126,6 @@ const EquipmentStatusUpdateForm = ({
     .catch((e) => {
       setError("Во время добавления записи произошла непредвиденная ошибка!")
       console.log("Unexpected error occured while adding row.")
-      console.log({
-        doc_number: data.doc_number,
-        status_change_date: new Date(),
-        audience_id: data.audience_id,
-        status_type_id: data.status_type_id,
-        responsible_user_id: data.responsible_user_id,
-        building_id: data.building_id,
-        equipment_id: data.equipment_id,
-      })
       console.log(e)
       setIsProcessing(false)
     })

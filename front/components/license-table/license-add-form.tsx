@@ -29,7 +29,8 @@ const LicenseAddForm = () => {
     setIsProcessing(true)
     axios.post(API_URL + '/license/create', data)
     .then(() => {
-      console.log("Added row", data)
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Лицензия добавлена",
         description: "Данные записаны в БД",
@@ -42,7 +43,6 @@ const LicenseAddForm = () => {
       } else {
         setError("Во время добавления записи произошла непредвиденная ошибка!")
         console.log("Unexpected error occured while adding row.")
-        console.log(data)
         console.log(e)
       }
       setIsProcessing(false)

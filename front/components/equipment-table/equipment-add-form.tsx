@@ -44,6 +44,7 @@ const EquipmentAddForm = () => {
       model: "",
       serial_number: "",
       inventory_number: "",
+      accepted_date: "",
       network_name: "",
       remarks: "",
       type_id: 0,
@@ -55,7 +56,8 @@ const EquipmentAddForm = () => {
     setIsProcessing(true)
     axios.post(API_URL + '/equipment/create', data)
     .then(() => {
-      console.log("Added row", data)
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Запись добавлена",
         description: "Данные записаны в БД",
@@ -65,7 +67,6 @@ const EquipmentAddForm = () => {
     .catch((e) => {
       setError("Во время добавления записи произошла непредвиденная ошибка!")
       console.log("Unexpected error occured while adding row.")
-      console.log(data)
       console.log(e)
       setIsProcessing(false)
     })

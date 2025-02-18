@@ -34,7 +34,6 @@ const LicenseUpdateForm = ({
     const fetchData = async () => {
       try {
         const response = await axios.get(API_URL + `/license/${id}`)
-        console.log(response.data)
         form.reset(response.data)
         setLoading(false)
       } catch (e) {
@@ -55,12 +54,13 @@ const LicenseUpdateForm = ({
       }
     })
     .then(() => {
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Запись обновлена",
         description: "Данные записаны в БД",
         className: "bg-white"
       })
-      console.log("Updated!", data)
     })
     .catch((e) => {
       if (e.response.data.detail == "License already exists") {

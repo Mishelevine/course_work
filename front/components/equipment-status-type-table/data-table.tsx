@@ -42,7 +42,8 @@ export function EquipmentStatusTypeDataTable<TData, TValue>({
     []
   )
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
-    id: false
+    id: false,
+    status_type_color: false
   })
   const [currentPageNumber, setCurrentPageNumber] = React.useState<number>(1)
 

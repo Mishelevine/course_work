@@ -75,7 +75,8 @@ export const SoftwareAddForm = () => {
         contract_ids: selectedContractIds,
       })
       .then(() => {
-        console.log("Added row", data)
+        // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
         toast({
           title: "Запись добавлена",
           description: "Данные записаны в БД",
@@ -85,15 +86,6 @@ export const SoftwareAddForm = () => {
       .catch((e) => {
         setError("Во время добавления записи произошла непредвиденная ошибка!")
         console.log("Unexpected error occured while adding row.")
-        console.log({
-            name: data.name,
-            short_name: data.short_name,
-            program_link: data.program_link,
-            version: data.version,
-            version_date: DateToDbForm(data.version_date),
-            license_id: data.license_id,
-            contract_ids: selectedContractIds,
-        })
         console.log(e)
         setIsProcessing(false)
       })

@@ -44,7 +44,8 @@ export function EquipmentStatusDataTable<TData, TValue>({
   )
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
     id: false,
-    equipment_id: false
+    equipment_id: false,
+    status_type_color: false
   })
 
   const table = useReactTable({

@@ -26,7 +26,8 @@ const EquipmentStatusTypeUpdateForm = ({
   const form = useForm<z.infer<typeof EquipmentStatusTypeFormSchema>>({
     resolver: zodResolver(EquipmentStatusTypeFormSchema),
     defaultValues: {
-      status_type_name: ""
+      status_type_name: "",
+      status_type_color: ""
     }
   });
 
@@ -56,12 +57,13 @@ const EquipmentStatusTypeUpdateForm = ({
       }
     })
     .then(() => {
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Статус обновлен",
         description: "Данные записаны в БД",
         className: "bg-white"
       })
-      console.log("Updated!", data)
     })
     .catch((e) => {
       setError("Произошла непредвиденная ошибка при обновлении записи!")

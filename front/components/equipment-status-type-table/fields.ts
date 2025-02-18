@@ -6,4 +6,9 @@ export const textFields = [
     label: "Наименование статуса",
     placeholder: "Наименование добавляемого статуса",
   },
+  {
+    name: "status_type_color",
+    label: "Цвет статуса",
+    placeholder: "Шестнадцатеричный код (пример: #FF69B4)",
+  },
 ]

@@ -50,9 +50,12 @@ function FormComboboxField<TFormSchema extends FieldValues, TTextFieldName exten
                   )}
                 >
                   {field.value
-                    ? data.find(
-                      (elem) => elem[id_field] === field.value
-                    )?.[value_field]
+                    ? data.map((elem) => {
+                      if (elem[id_field] === field.value)
+                        return <span key="1" style={{ color: elem["color"] }}>
+                          {elem[value_field]}
+                        </span>
+                    })
                     : frontText
                   }
                   <ChevronsUpDown className="opacity-50" />
@@ -76,7 +79,12 @@ function FormComboboxField<TFormSchema extends FieldValues, TTextFieldName exten
                           form.setValue(name, elem[id_field])
                         }}
                       >
-                        {elem[value_field]}
+                        {!elem["color"] && elem[value_field]}
+                        {elem["color"] &&
+                          <span style={{ color: elem["color"] }}>
+                            {elem[value_field]}
+                          </span>
+                        }
                         <Check
                           className={cn(
                             "ml-auto",

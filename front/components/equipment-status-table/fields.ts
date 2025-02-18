@@ -4,6 +4,7 @@ export type ComboboxFieldName = "status_type_id" | "responsible_user_id" | "buil
 export type DataArray = {
   id: number
   value: string
+  color?: string
 }
 
 export const textFields = [

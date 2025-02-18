@@ -42,6 +42,8 @@ const UserUpdatePasswordForm = ({
       params: data
     })
     .then(() => {
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Пароль обновлен",
         description: "Данные записаны в БД",
@@ -51,7 +53,6 @@ const UserUpdatePasswordForm = ({
     .catch((e) => {
       setError("Во время обновления пароля пользователя произошла непредвиденная ошибка!")
       console.log("Unexpected error occured while adding row.")
-      console.log(data)
       console.log(e)
       setIsProcessing(false)
     })

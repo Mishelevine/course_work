@@ -56,12 +56,13 @@ const BuildingUpdateForm = ({
       }
     })
     .then(() => {
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Адрес корпуса обновлен",
         description: "Данные записаны в БД",
         className: "bg-white"
       })
-      console.log("Updated!", data)
     })
     .catch((e) => {
       if (e.response.data.detail == "Building already exists"){

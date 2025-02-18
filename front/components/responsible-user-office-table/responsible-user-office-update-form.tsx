@@ -56,12 +56,13 @@ const ResponsibleUserOfficeUpdateForm = ({
       }
     })
     .then(() => {
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Подразделение обновлено",
         description: "Данные записаны в БД",
         className: "bg-white"
       })
-      console.log("Updated!", data)
     })
     .catch((e) => {
       setError("Произошла непредвиденная ошибка при обновлении записи!")
