@@ -30,6 +30,7 @@ export const ResponsibleUserOfficeTableColumns: ColumnDef<z.infer<typeof Respons
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/responsible_users/office/${row.getValue("id")}`}
                                 toastText="Подразделение успешно удалено"
+                                calledFrom="responsible_users_offices"
                             />,
                     dropdownButtonText: "Удалить"
                 }

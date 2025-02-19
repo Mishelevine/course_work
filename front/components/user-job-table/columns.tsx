@@ -30,6 +30,7 @@ export const UserJobTableColumns: ColumnDef<z.infer<typeof UserJobSchema>>[] = [
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/job/${row.getValue("id")}`}
                                 toastText="Должность успешно удалена"
+                                calledFrom="user_jobs"
                             />,
                     dropdownButtonText: "Удалить"
                 }

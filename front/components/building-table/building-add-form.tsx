@@ -30,7 +30,7 @@ const BuildingAddForm = () => {
     setIsProcessing(true)
     axios.post(API_URL + '/buildings/create', data)
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      localStorage.setItem("last_tab", "buildings")
       window.location.reload()
       toast({
         title: "Адрес корпуса добавлен",

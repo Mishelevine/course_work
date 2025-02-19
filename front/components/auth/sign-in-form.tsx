@@ -15,6 +15,7 @@ import { FormError } from "../form-error"
 import { useState } from "react"
 import { API_URL } from "@/constants"
 import LoginPageField from "./login-page-field"
+import { LoadingSpinner } from "../loading-spinner";
 
 type UserInfo = {
     username: string,
@@ -39,6 +40,8 @@ const loginFields = [
 
 export const SignInForm = () => {
     const [error, setError] = useState<string | undefined>("");
+    const [isProcessing, setIsProcessing] = useState<boolean>(false)
+
     const router = useRouter();
 
     const form = useForm<z.infer<typeof SignInSchema>>({
@@ -51,7 +54,7 @@ export const SignInForm = () => {
 
     const onSubmit = (data: UserInfo) => {
         setError("");
-
+        setIsProcessing(true)
         const formValues = new FormData();
         formValues.append("username", data.username)
         formValues.append("password", data.password)
@@ -67,11 +70,12 @@ export const SignInForm = () => {
                 throw '';
             }
             setError("Неверный логин или пароль");
-
+            setIsProcessing(false)
         })
         .catch((e) => {
             setError("Произошла непредвиденная ошибка");
             console.log(e)
+            setIsProcessing(false)
         })
     }
 
@@ -100,9 +104,11 @@ export const SignInForm = () => {
                     </div>
                     <FormError message={error}/>
                     <Button
+                        disabled={isProcessing}
                         type="submit"
                         className="w-full"
                     >
+                        {isProcessing && <LoadingSpinner/>}
                         Войти
                     </Button>
                 </form>

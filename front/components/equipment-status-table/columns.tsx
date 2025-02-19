@@ -81,7 +81,7 @@ export const EquipmentStatusTableColumns: ColumnDef<z.infer<typeof EquipmentStat
                     description: <>Вы уверены что хотите удалить статус ПО <b>{row.getValue("status_type_name")}</b>?</>,
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/equipment_status_type/${row.getValue("id")}/delete`}
-                                toastText="Характеристики успешно удалены"
+                                toastText="Статус успешно удален"
                             />,
                     dropdownButtonText: "Удалить"
                 }

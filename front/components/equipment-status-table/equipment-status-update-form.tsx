@@ -115,7 +115,6 @@ const EquipmentStatusUpdateForm = ({
       equipment_id: data.equipment_id,
     })
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
       window.location.reload()
       toast({
         title: "Статус обновлен",

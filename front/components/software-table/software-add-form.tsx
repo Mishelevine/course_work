@@ -75,8 +75,8 @@ export const SoftwareAddForm = () => {
         contract_ids: selectedContractIds,
       })
       .then(() => {
-        // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
-      window.location.reload()
+        localStorage.setItem("last_tab", "software")
+        window.location.reload()
         toast({
           title: "Запись добавлена",
           description: "Данные записаны в БД",

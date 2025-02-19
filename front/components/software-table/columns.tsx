@@ -116,6 +116,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/software/${row.getValue("id")}/delete`}
                                 toastText="ПО успешно удалено"
+                                calledFrom="software"
                             />,
                     dropdownButtonText: "Удалить",
                 }

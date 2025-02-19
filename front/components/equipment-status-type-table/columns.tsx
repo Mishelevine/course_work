@@ -38,6 +38,7 @@ export const EquipmentStatusTypeTableColumns: ColumnDef<z.infer<typeof Equipment
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/equipment_status_type/${row.getValue("id")}/delete`}
                                 toastText="Статус успешно удален"
+                                calledFrom="equipment_statuses"
                             />,
                     dropdownButtonText: "Удалить"
                 }

@@ -41,7 +41,6 @@ const EquipmentSpecsAddForm = ({
     setIsProcessing(true)
     axios.post(API_URL + '/equipment_specs/create', data)
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
       window.location.reload()
       toast({
         title: "Характеристики добавлены",

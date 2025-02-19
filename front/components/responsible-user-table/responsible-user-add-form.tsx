@@ -72,7 +72,7 @@ const ResponsibleUserAddForm = () => {
     setIsProcessing(true)
     axios.post(API_URL + '/responsible_users/create', data)
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      localStorage.setItem("last_tab", "responsible_users")
       window.location.reload()
       toast({
         title: "Ответственное лицо добавлено",

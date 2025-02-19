@@ -3,13 +3,7 @@
 import { EquipmentSpecsSchema } from "@/schemas";
 import { ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
-import ModalForm from "../modal-form";
 import EquipmentSpecsUpdateForm from "./equipment-specs-update-form";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { AlertDialogTrigger } from "../ui/alert-dialog";
-import { DeleteRowTable } from "../helper-functions";
 import { API_URL } from "@/constants";
 import DeleteRowForm from "../delete-row-form";
 import ActionsButton from "../actions-button";

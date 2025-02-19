@@ -57,7 +57,7 @@ const EquipmentStatusTypeUpdateForm = ({
       }
     })
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      localStorage.setItem("last_tab", "equipment_statuses")
       window.location.reload()
       toast({
         title: "Статус обновлен",

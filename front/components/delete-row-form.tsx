@@ -6,10 +6,12 @@ import CRUDFormForTables from './crud-form-for-tables';
 
 const DeleteRowForm = ({
   apiEndpoint,
-  toastText
+  toastText,
+  calledFrom
 } : {
   apiEndpoint: string
   toastText: string
+  calledFrom?: string
 }) => {
   const [error, setError] = useState<string | undefined>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
@@ -23,7 +25,9 @@ const DeleteRowForm = ({
     setIsProcessing(true)
     axios.delete(apiEndpoint)
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      if (calledFrom) {
+        localStorage.setItem("last_tab", calledFrom)
+      }
       window.location.reload()
       toast({
         title: toastText,

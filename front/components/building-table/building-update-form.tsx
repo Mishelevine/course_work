@@ -56,7 +56,7 @@ const BuildingUpdateForm = ({
       }
     })
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      localStorage.setItem("last_tab", "buildings")
       window.location.reload()
       toast({
         title: "Адрес корпуса обновлен",

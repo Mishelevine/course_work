@@ -87,7 +87,7 @@ const UserAddForm = () => {
     setIsProcessing(true)
     axios.post(API_URL + '/auth/signup', data)
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      localStorage.setItem("last_tab", "users")
       window.location.reload()
       toast({
         title: "Пользователь добавлен",
