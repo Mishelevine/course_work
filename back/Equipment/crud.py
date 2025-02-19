@@ -50,6 +50,7 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                         )
                         latest_status = sorted_statuses[0]
                         last_status_type = latest_status.status_type.status_type_name
+                        last_status_color = latest_status.status_type.status_type_color
                         last_building_adress = latest_status.building.building_address
                         if latest_status.responsible_user:
                             responsible_user_full_name = (
@@ -69,6 +70,7 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                         remarks=equipment.remarks,
                         accepted_date=equipment.accepted_date,
                         last_status_type=last_status_type,
+                        last_status_color=last_status_color,
                         responsible_user_full_name=responsible_user_full_name,
                         type_name=equipment.type.type_name,
                         building_adress=last_building_adress,
