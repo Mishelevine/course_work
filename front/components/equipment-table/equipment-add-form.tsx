@@ -13,6 +13,7 @@ import { EquipmentFormSchema, TypeSchema } from "@/schemas";
 import { useToast } from "@/hooks/use-toast";
 import { textFields, comboboxFields } from './fields';
 import CRUDFormForTables from '../crud-form-for-tables';
+import { DateToDbForm } from '../helper-functions';
 
 const EquipmentAddForm = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -54,7 +55,10 @@ const EquipmentAddForm = () => {
   function AddRowEquipmentTable(data: z.infer<typeof EquipmentFormSchema>) {
     setError("")
     setIsProcessing(true)
-    axios.post(API_URL + '/equipment/create', data)
+    axios.post(API_URL + '/equipment/create', {
+      ...data,
+      accepted_date: DateToDbForm(data.accepted_date)
+    })
     .then(() => {
       localStorage.setItem("last_tab", "equipment")
       window.location.reload()
