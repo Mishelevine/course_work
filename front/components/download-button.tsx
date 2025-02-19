@@ -15,7 +15,6 @@ function DownloadButton<TData>({
 }) {
     const handleDownload = async () => {
         try {
-            console.log(tableData)
             axios.defaults.withCredentials = true
             const response = await axios.post(
                 apiEndpoint,
@@ -27,9 +26,7 @@ function DownloadButton<TData>({
                     responseType: "blob",
                 }
             );
-            console.log(response.headers)
             const disposition = response.headers['content-disposition'];
-            console.log(disposition)
             const filename = disposition ? disposition.split('filename=')[1] : 'downloaded_file.xlsx';
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const a = document.createElement('a');

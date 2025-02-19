@@ -10,6 +10,7 @@ import { API_URL } from "@/constants";
 import DeleteRowForm from "../delete-row-form";
 import ActionsButton from "../actions-button";
 import { ArrowUpDown } from "lucide-react";
+import { DateFromDbForm } from "../helper-functions";
 
 export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[] = [
     {
@@ -39,10 +40,26 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
         },
     },
     {
+        accessorKey: "accepted_date",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Дата принятия к учету
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        cell: ({row}) => {
+            return row.getValue("accepted_date") ? DateFromDbForm(row.getValue("accepted_date")) : ""
+        }
+    },
+    {
         accessorKey: "network_name",
         header: "Сетевое имя",
     },
-
     {
         accessorKey: "remarks",
         header: "Примечание",
@@ -54,6 +71,10 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
     {
         accessorKey: "last_status_type",
         header: "Статус оборудования"
+    },
+    {
+        accessorKey: "building_adress", // FIXME МИША ПЕРЕИМЕНУЙ ПОЛЕ (((
+        header: "Адрес корпуса"
     },
     {
         id: "additional_info",

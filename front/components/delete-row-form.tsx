@@ -23,6 +23,8 @@ const DeleteRowForm = ({
     setIsProcessing(true)
     axios.delete(apiEndpoint)
     .then(() => {
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: toastText,
         description: "Данные удалены из БД",

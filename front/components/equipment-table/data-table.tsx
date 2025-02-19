@@ -57,7 +57,8 @@ export function EquipmentDataTable<TData, TValue>({
     responsible_user_full_name: !forStatus && actionsAllowed,
     additional_info: !forStatus && actionsAllowed,
     last_status_type: !forStatus && actionsAllowed,
-    actions: !forStatus && actionsAllowed
+    actions: !forStatus && actionsAllowed,
+    building_adress: !forStatus && actionsAllowed, // FIXME МИША ПЕРЕИМЕНУЙ ПОЛЕ (((
   })
   const [currentPageNumber, setCurrentPageNumber] = React.useState<number>(1)
 
@@ -147,6 +148,14 @@ export function EquipmentDataTable<TData, TValue>({
                 value={(table.getColumn("last_status_type")?.getFilterValue() as string) ?? ""}
                 onChange={(event) =>
                   table.getColumn("last_status_type")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />}
+              {actionsAllowed && <Input
+                placeholder="Фильтр по адресу..."
+                value={(table.getColumn("building_adress")?.getFilterValue() as string) ?? ""} // FIXME МИША ПЕРЕИМЕНУЙ ПОЛЕ (((
+                onChange={(event) =>
+                  table.getColumn("building_adress")?.setFilterValue(event.target.value) // FIXME МИША ПЕРЕИМЕНУЙ ПОЛЕ (((
                 }
                 className="w-[300px]"
               />}

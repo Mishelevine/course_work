@@ -26,9 +26,9 @@ export default function EquipmentStatusTable({
                 )).data as z.infer<typeof EquipmentStatusSchema>[]
 
                 const newData = await Promise.all(statuses_raw.map(async (status) => {
-                    const status_type_name = (await axios.get(
+                    const status_type = (await axios.get(
                         `${API_URL}/equipment_status_type/${status.status_type_id}`
-                    )).data.status_type_name
+                    )).data
 
                     const responsible_user = (await axios.get(
                         `${API_URL}/responsible_users/${status.responsible_user_id}`
@@ -47,7 +47,8 @@ export default function EquipmentStatusTable({
                     ])
 
                     return {
-                        status_type_name: status_type_name,
+                        status_type_name: status_type.status_type_name,
+                        status_type_color: status_type.status_type_color,
                         doc_number: status.doc_number,
                         status_change_date: status.status_change_date,
                         responsible_user_fio: user_fio,

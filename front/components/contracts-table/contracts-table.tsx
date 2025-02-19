@@ -112,7 +112,6 @@ export default function ContractsTable({
                     data = await getContractsData(selected_contract_ids)
                     setTableData(data)
                 })()
-                console.log(tableData)
                 setIsLoading(false);
             }
             catch(e) {
@@ -123,7 +122,6 @@ export default function ContractsTable({
     }, [selected_contract_ids])
 
     if (isLoading || tableData === undefined){
-        console.log("waiting")
         return <div>Loading...</div>
     }
     return (

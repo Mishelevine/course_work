@@ -72,7 +72,8 @@ const ResponsibleUserAddForm = () => {
     setIsProcessing(true)
     axios.post(API_URL + '/responsible_users/create', data)
     .then(() => {
-      console.log("Added row", data)
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Ответственное лицо добавлено",
         description: "Данные записаны в БД",
@@ -82,7 +83,6 @@ const ResponsibleUserAddForm = () => {
     .catch((e) => {
       setError("Во время добавления записи произошла непредвиденная ошибка!")
       console.log("Unexpected error occured while adding row.")
-      console.log(data)
       console.log(e)
       setIsProcessing(false)
     })

@@ -9,7 +9,6 @@ import React from "react";
 
 const EquipmentStatusPage = (props:  {params: Promise<{ id: string }>}) => {
   const id = Number(React.use(props.params).id)
-  console.log(id)
   return (
     <section className='flex size-full flex-col gap-5
       bg-light-3 p-6 rounded-[14px] border shadow-sm max-sm:w-screen'

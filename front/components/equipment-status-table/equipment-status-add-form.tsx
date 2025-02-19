@@ -31,12 +31,12 @@ const EquipmentStatusAddForm = ({
 
   useEffect(() => {
     setLoading(true)
-    setIsProcessing(true)
     const fetchData = async () => {
       try {
         const statuses = (await axios.get(API_URL + `/equipment_status_type/all`)).data as z.infer<typeof StatusSchema>[]
         const statuses_for_combobox = await Promise.all(statuses.map(async status => {
           return {
+            color: status.status_type_color,
             value: status.status_type_name,
             id: status.id
           } as DataArray
@@ -66,7 +66,6 @@ const EquipmentStatusAddForm = ({
           } as DataArray
         })) as DataArray[]
         comboboxFields[2].data = buildings_for_combobox
-        console.log(comboboxFields)
         setLoading(false)
       }
       catch(e) {
@@ -93,6 +92,7 @@ const EquipmentStatusAddForm = ({
 
   function AddRowEquipmentStatusTable(data: z.infer<typeof EquipmentStatusFormSchema>) {
     setError("")
+    setIsProcessing(true)
     axios.post(API_URL + '/equipment_status/create', {
       doc_number: data.doc_number,
       status_change_date: new Date(),
@@ -103,7 +103,8 @@ const EquipmentStatusAddForm = ({
       equipment_id: data.equipment_id,
     })
     .then(() => {
-      console.log("Added row", data)
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Запись добавлена",
         description: "Данные записаны в БД",
@@ -113,15 +114,6 @@ const EquipmentStatusAddForm = ({
     .catch((e) => {
       setError("Во время добавления записи произошла непредвиденная ошибка!")
       console.log("Unexpected error occured while adding row.")
-      console.log({
-        doc_number: data.doc_number,
-        status_change_date: new Date(),
-        audience_id: data.audience_id,
-        status_type_id: data.status_type_id,
-        responsible_user_id: data.responsible_user_id,
-        building_id: data.building_id,
-        equipment_id: data.equipment_id,
-      })
       console.log(e)
       setIsProcessing(false)
     })

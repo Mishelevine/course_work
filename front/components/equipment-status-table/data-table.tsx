@@ -44,7 +44,8 @@ export function EquipmentStatusDataTable<TData, TValue>({
   )
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
     id: false,
-    equipment_id: false
+    equipment_id: false,
+    status_type_color: false
   })
 
   const table = useReactTable({
@@ -77,7 +78,6 @@ export function EquipmentStatusDataTable<TData, TValue>({
       <div className="w-full h-full">
         <div className="flex justify-end py-4">
           <Button
-            disabled={table.getRowCount() >= 1}
             className="bg-blue-2 hover:bg-blue-700"
             onClick={() => setIsFormOpen(true)}
           >

@@ -31,7 +31,6 @@ const ActionsButton = ({
     }, [actionsData])
 
     const handleToggleAction = (index: number, isOpen: boolean) => {
-        console.log(actionsStateManager)
         setActionsStateManager((prev) => {
             const newMap = new Map(prev)
             newMap.set(index, isOpen)

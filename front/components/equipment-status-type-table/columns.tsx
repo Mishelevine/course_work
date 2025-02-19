@@ -12,7 +12,15 @@ import ActionsButton from "../actions-button";
 export const EquipmentStatusTypeTableColumns: ColumnDef<z.infer<typeof EquipmentStatusTypeSchema>>[] = [
     {
         accessorKey: "status_type_name",
-        header: "Наименование статуса"
+        header: "Наименование статуса",
+        cell: ({ row }) => {
+            const color: string = row.getValue("status_type_color");
+            return (
+                <span style={{ color }}>
+                    {row.getValue("status_type_name")}
+                </span>
+            );
+        }
     },
     {
         id: "actions",
@@ -38,6 +46,9 @@ export const EquipmentStatusTypeTableColumns: ColumnDef<z.infer<typeof Equipment
                 <ActionsButton actionsData={actionsData}/>
             )
         },
+    },
+    {
+        accessorKey: "status_type_color",
     },
     {
         accessorKey: "id",

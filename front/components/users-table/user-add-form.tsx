@@ -87,6 +87,8 @@ const UserAddForm = () => {
     setIsProcessing(true)
     axios.post(API_URL + '/auth/signup', data)
     .then(() => {
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Пользователь добавлен",
         description: "Данные записаны в БД",
@@ -96,7 +98,6 @@ const UserAddForm = () => {
     .catch((e) => {
       setError("Во время добавления пользователя произошла непредвиденная ошибка!")
       console.log("Unexpected error occured while adding row.")
-      console.log(data)
       console.log(e)
       setIsProcessing(false)
     })

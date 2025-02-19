@@ -92,9 +92,10 @@ const UserUpdateForm = ({
   function UpdateRowUserTable(data: z.infer<typeof UpdateUserFormSchema>) {
     setError("")
     setIsProcessing(true)
-    console.log(data)
     axios.put(API_URL + `/user/${id}`, data)
     .then(() => {
+      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      window.location.reload()
       toast({
         title: "Запись обновлена",
         description: "Данные записаны в БД",

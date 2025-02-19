@@ -21,6 +21,11 @@ export const textFields = [
     placeholder: "Инвентарный номер добавляемого оборудования",
   },
   {
+    name: "accepted_date",
+    label: "Дата принятия оборудования к учету",
+    placeholder: "Дата в формате DD.MM.YYYY (Пример: 01.01.2020)",
+  },
+  {
     name: "network_name",
     label: "Сетевое имя",
     placeholder: "Сетевое имя добавляемого оборудования",

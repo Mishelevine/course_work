@@ -17,16 +17,6 @@ export function DateToDbForm(date: string) {
     return new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`)
 }
 
-export function DeleteRowTable(apiEndpoint: string) {
-    axios.delete(apiEndpoint)
-    .then(() => {
-        console.log("Deleted row with by endpoint:", apiEndpoint)
-    })
-    .catch((e) => {
-        console.log("Error while deleting row")
-        console.log(e)
-    })
-}
 
 export function DatetimeFromDbForm(date: string) {
     const dateSubstr = date.substring(0, 19)
