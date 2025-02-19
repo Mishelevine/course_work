@@ -4,7 +4,7 @@ import axios from "axios";
 
 async function GetAccessToken(req: NextRequest) {
     const accessToken = req.cookies.get("Authorization")?.value
-    if (accessToken === undefined){
+    if (accessToken === undefined) {
         console.log("No access token!")
         return await RefreshAccessToken(req)
     }
@@ -17,7 +17,7 @@ async function GetAccessToken(req: NextRequest) {
         })
         console.log("Access token auth status: " + getUserInfo.status)
 
-        if (getUserInfo.status === 401){
+        if (getUserInfo.status === 401) {
             console.log("Access token expired, refreshing it.")
             return await RefreshAccessToken(req)
         }
@@ -26,8 +26,12 @@ async function GetAccessToken(req: NextRequest) {
         return [false, accessToken]
     }
     catch (e) {
+        if (e.status === 401) {
+            console.log("Access token expired, refreshing it.")
+            return await RefreshAccessToken(req)
+        }
         console.log("Unexpected error during checking access token!")
-        console.log(e.status, e.message)
+        console.log(e)
     }
 
     return [true, undefined]
@@ -36,17 +40,19 @@ async function GetAccessToken(req: NextRequest) {
 async function RefreshAccessToken(req: NextRequest) {
     const refreshToken = req.cookies.get("refresh_token")?.value
 
-    if (refreshToken === undefined){
+    if (refreshToken === undefined) {
         console.log("No refresh token!")
         return [true, undefined]
     }
 
     try {
-        const getUserInfo = await axios.post(API_URL + '/auth/token/refresh', null, { params: {
-            refresh_token: refreshToken
-        }})
+        const getUserInfo = await axios.post(API_URL + '/auth/token/refresh', null, {
+            params: {
+                refresh_token: refreshToken
+            }
+        })
 
-        if (getUserInfo.status === 401){
+        if (getUserInfo.status === 401) {
             console.log("Refresh token expired!")
             return [true, undefined]
         }
@@ -54,7 +60,7 @@ async function RefreshAccessToken(req: NextRequest) {
         console.log("Access token refreshed")
         return [true, getUserInfo.data["access_token"]]
     }
-    catch(e) {
+    catch (e) {
         console.log("!Unexpected error during refreshing access token!")
         console.log(e.status, e.message)
     }
@@ -75,7 +81,7 @@ async function SetCookieIfNeeded(res: NextResponse, setCookie: boolean, accessTo
     return res
 }
 
-export default async function middleware(req: NextRequest){
+export default async function middleware(req: NextRequest) {
     const resp = await GetAccessToken(req)
     const setCookie = resp[0]
     const accessToken = resp[1]
@@ -83,11 +89,11 @@ export default async function middleware(req: NextRequest){
 
     const url = req.url
 
-    if(imgExtensions.some(elem => url.includes(elem))){
+    if (imgExtensions.some(elem => url.includes(elem))) {
         return NextResponse.next()
     }
 
-    if(!isAuthorized && !signingPages.some(link => url.includes(link)))
+    if (!isAuthorized && !signingPages.some(link => url.includes(link)))
         return SetCookieIfNeeded(NextResponse.redirect(WEBSITE_URL + '/sign-in'), setCookie, accessToken)
 
     if (isAuthorized && signingPages.some(link => url.includes(link)))
@@ -119,13 +125,13 @@ export default async function middleware(req: NextRequest){
 
 export const config = {
     matcher: [
-      /*
-      * Match all request paths except for the ones starting with:
-      * - api (API routes)
-      * - _next/static (static files)
-      * - _next/image (image optimization files)
-      * - favicon.ico (favicon file)
-      */
-      '/((?!api|_next/static|_next/image|favicon.ico).*)',
+        /*
+        * Match all request paths except for the ones starting with:
+        * - api (API routes)
+        * - _next/static (static files)
+        * - _next/image (image optimization files)
+        * - favicon.ico (favicon file)
+        */
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
     ],
 }

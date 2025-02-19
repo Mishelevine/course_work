@@ -56,7 +56,7 @@ const EquipmentAddForm = () => {
     setIsProcessing(true)
     axios.post(API_URL + '/equipment/create', data)
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      localStorage.setItem("last_tab", "equipment")
       window.location.reload()
       toast({
         title: "Запись добавлена",

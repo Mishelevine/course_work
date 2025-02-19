@@ -38,6 +38,7 @@ export const ResponsibleUserTableColumns: ColumnDef<z.infer<typeof ResponsibleUs
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/responsible_users/${row.getValue("id")}/delete`}
                                 toastText="Ответственное лицо успешно удалено"
+                                calledFrom="responsible_users"
                             />,
                     dropdownButtonText: "Удалить"
                 }

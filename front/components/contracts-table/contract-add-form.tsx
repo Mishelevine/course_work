@@ -34,7 +34,7 @@ const ContractAddForm = () => {
       contract_date: DateToDbForm(data.contract_date)
     })
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      localStorage.setItem("last_tab", "contracts")
       window.location.reload()
       toast({
         title: "Договор добавлен",

@@ -63,7 +63,7 @@ const EquipmentUpdateForm = ({
     setIsProcessing(true)
     axios.put(API_URL + `/equipment/${id}`, data)
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      localStorage.setItem("last_tab", "equipment")
       window.location.reload()
       toast({
         title: "Запись обновлена",

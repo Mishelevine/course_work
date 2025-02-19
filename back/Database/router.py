@@ -24,7 +24,7 @@ DB_FILE = Path("sats.db")
 BACKUP_DIR.mkdir(exist_ok=True)
 
 
-@router.get("/download/{backup_id}", summary="Download backup file")
+@router.get("/download", summary="Download backup file")
 async def download_backup_endpoint(user: User = Depends(get_current_user)):
     if user.system_role_id < 4:
         raise HTTPException(status_code=403, detail="Forbidden")

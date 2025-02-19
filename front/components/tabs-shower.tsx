@@ -18,10 +18,12 @@ type Tab = {
 
 export default function TabsShower({
     tabs,
-    userRole
-} : {
+    userRole,
+    startTab
+}: {
     tabs: Tab[]
     userRole: number
+    startTab: string | null
 }) {
     const [tabsFiltered, setTabsFiltered] = useState<Tab[]>()
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -32,28 +34,28 @@ export default function TabsShower({
         setIsLoading(false)
     }, [userRole])
 
-    if (isLoading || !tabsFiltered?.length) return <Skeleton className='w-full'/>
+    if (isLoading || !tabsFiltered?.length) return <Skeleton className='w-full' />
 
     return (
-        <Tabs defaultValue={tabsFiltered[0].value} className="w-full">
-        <TabsList className={`grid w-full gap-x-0.5 h-fit`} style={{ gridTemplateColumns: `repeat(${tabsFiltered.length}, 1fr)` }}>
-            {tabsFiltered.map(tab => {
-                return (
-                    <TabsTrigger
-                        className='data-[state=active]:text-white
+        <Tabs defaultValue={startTab ? startTab : tabsFiltered[0].value} className="w-full">
+            <TabsList className={`grid w-full gap-x-0.5 h-fit`} style={{ gridTemplateColumns: `repeat(${tabsFiltered.length}, 1fr)` }}>
+                {tabsFiltered.map(tab => {
+                    return (
+                        <TabsTrigger
+                            className='data-[state=active]:text-white
                         data-[state=active]:shadow-sm
                         data-[state=active]:bg-blue-2
                         max-md:text-xs
                         h-full
                         whitespace-normal'
-                        key={tab.value}
-                        value={tab.value}
-                    >
-                        {tab.tab_text}
-                    </TabsTrigger>
-                )
-            })}
-        </TabsList>
+                            key={tab.value}
+                            value={tab.value}
+                        >
+                            {tab.tab_text}
+                        </TabsTrigger>
+                    )
+                })}
+            </TabsList>
             {tabsFiltered.map(tab => {
                 return (
                     <TabsContent key={tab.value} value={tab.value}>
@@ -62,7 +64,7 @@ export default function TabsShower({
                                 <CardTitle>{tab.tab_text}</CardTitle>
                                 <CardDescription>{tab.description}</CardDescription>
                             </CardHeader>
-                            <Separator className="bg-gray-300"/>
+                            <Separator className="bg-gray-300" />
                             <CardContent className="space-y-2">{tab.children}</CardContent>
                         </Card>
                     </TabsContent>

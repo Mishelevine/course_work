@@ -85,6 +85,7 @@ export const ContractsTableColumns: ColumnDef<z.infer<typeof ContractSchema>>[] 
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/contract/${row.getValue("id")}/delete`}
                                 toastText="Договор успешно удален"
+                                calledFrom="contracts"
                             />,
                     dropdownButtonText: "Удалить"
                 }

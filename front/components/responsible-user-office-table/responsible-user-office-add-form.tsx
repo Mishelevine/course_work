@@ -30,7 +30,7 @@ const ResponsibleUserOfficeAddForm = () => {
     setIsProcessing(true)
     axios.post(API_URL + '/responsible_users/office/create', data)
     .then(() => {
-      // TODO: придумать как сделать так чтобы оставаться на той же вкладке на которой был до релоада
+      localStorage.setItem("last_tab", "responsible_users_offices")
       window.location.reload()
       toast({
         title: "Подразделение добавлено",

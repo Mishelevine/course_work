@@ -30,6 +30,7 @@ export const BuildingTableColumns: ColumnDef<z.infer<typeof BuildingSchema>>[] =
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/buildings/${row.getValue("id")}/delete`}
                                 toastText="Адрес успешно удален"
+                                calledFrom="buildings"
                             />,
                     dropdownButtonText: "Удалить"
                 }

@@ -30,6 +30,7 @@ export const UserOfficeTableColumns: ColumnDef<z.infer<typeof UserOfficeSchema>>
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/office/${row.getValue("id")}/delete`}
                                 toastText="Подразделение успешно удалено"
+                                calledFrom="user_offices"
                             />,
                     dropdownButtonText: "Удалить"
                 }
