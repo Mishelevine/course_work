@@ -173,7 +173,7 @@ export const EquipmentFormSchema = z.object({
     inventory_number: z.string().min(1, {
         message: "Пожалуйста, введите инвентарный номер"
     }).regex(
-        new RegExp('^\d$'),
+        new RegExp('^[0-9]+$'),
         "Некорректный формат инвентарного номера"
     ),
     accepted_date: z.string().regex(

@@ -13,6 +13,7 @@ import { EquipmentFormSchema, TypeSchema } from "@/schemas";
 import { useToast } from "@/hooks/use-toast";
 import { textFields, comboboxFields } from './fields';
 import CRUDFormForTables from '../crud-form-for-tables';
+import { DateFromDbForm, DateToDbForm } from '../helper-functions';
 
 const EquipmentUpdateForm = ({
     id
@@ -31,7 +32,10 @@ const EquipmentUpdateForm = ({
       try {
         const response = (await axios.get(API_URL + `/equipment_types/all`)).data
         const editedEquipment = (await axios.get(API_URL + `/equipment/${id}`)).data
-        form.reset(editedEquipment)
+        form.reset({
+          ...editedEquipment,
+          accepted_date: DateFromDbForm(editedEquipment.accepted_date)
+        })
         comboboxFields[0].data = response
         setLoading(false)
       }
@@ -61,7 +65,10 @@ const EquipmentUpdateForm = ({
   function UpdateRowEquipmentTable(data: z.infer<typeof EquipmentFormSchema>) {
     setError("")
     setIsProcessing(true)
-    axios.put(API_URL + `/equipment/${id}`, data)
+    axios.put(API_URL + `/equipment/${id}`, {
+        ...data,
+        accepted_date: DateToDbForm(data.accepted_date)
+      })
     .then(() => {
       localStorage.setItem("last_tab", "equipment")
       window.location.reload()
