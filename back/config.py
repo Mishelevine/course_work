@@ -16,10 +16,13 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     REFRESH_TOKEN_EXPIRE_DAYS: int
-    MAX_FILE_SIZE_BYTES: int
-    IMAGEDIR: str
+    APP_CORS_ORIGINS: str
     
-    EMAILPASSWORD: str
+    SERVER_IP: str
+    APP_ENV: str
+
+    NEXT_PUBLIC_API_URL: str
+    NEXT_PUBLIC_WEBSITE_URL: str
 
     class Config:
         env_file = ".env"

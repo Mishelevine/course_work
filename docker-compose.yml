@@ -2,11 +2,23 @@ services:
   backend:
     build: .
     ports:
-      - 8000:8000
+      - "8000:8000"
     environment:
-      - APP_ENV=production
+      - APP_ENV=${APP_ENV}
+      - APP_CORS_ORIGINS=${APP_CORS_ORIGINS}
+    env_file:
+      - .env
 
   frontend:
-    build: ./front
+    build:
+      context: ./front
+      args:
+        - NEXT_PUBLIC_API_URL=http://${SERVER_IP}:8000
+        - NEXT_PUBLIC_WEBSITE_URL=http://${SERVER_IP}:3000
     ports:
-      - 3000:3000
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_WEBSITE_URL=${NEXT_PUBLIC_WEBSITE_URL}
+    env_file:
+      - .env
