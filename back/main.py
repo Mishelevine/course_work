@@ -1,6 +1,8 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+from back.config import settings
 from back.SystemRole.router import router as router_roles
 from back.User.router import router as router_auth
 from back.User.user_router import router as router_users
@@ -41,15 +43,8 @@ app.include_router(router_equipment_specs)
 app.include_router(router_equipment_status)
 app.include_router(router_database)
 
-origins = [
-    "http://localhost",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "http://192.168.56.1:3000",
-    "http://192.168.0.63:3000"
-]
+
+origins = (settings.APP_CORS_ORIGINS).split(",")
 
 app.add_middleware(
     CORSMiddleware,
