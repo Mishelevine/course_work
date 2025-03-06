@@ -2,13 +2,14 @@ from typing import List
 from fastapi import Depends, HTTPException
 from sqlalchemy import select
 from back.EquipmentStatus.models import EquipmentStatus
+from back.ResponsibleUser.models import ResponsibleUser
 from back.User.depends import get_current_user
 from back.User.models import User
 from back.database import async_session
 from sqlalchemy.orm import joinedload
 
 from back.Equipment.models import Equipment
-from back.Equipment.schemas import SEquipment, SEquipmentCreate, SEquipmentWithResponsible
+from back.Equipment.schemas import SEquipment, SEquipmentCreate, SEquipmentWithResponsible, SEquipmentWordCard
 
 async def get_equipment(equipment_id: int):
     async with async_session() as session:
@@ -21,6 +22,60 @@ async def get_equipment_by_serial_number(serial_number: str):
         query = select(Equipment).filter(Equipment.serial_number == serial_number)
         result = await session.execute(query)
         return result.scalar_one_or_none()
+
+async def get_equipment_for_word(equipment_id: int) -> SEquipmentWordCard:
+    async with async_session() as session:
+        query = select(Equipment).options(
+                joinedload(Equipment.type),
+                joinedload(Equipment.statuses).joinedload(EquipmentStatus.status_type),
+                joinedload(Equipment.statuses).joinedload(EquipmentStatus.responsible_user).joinedload(ResponsibleUser.office),
+                joinedload(Equipment.statuses).joinedload(EquipmentStatus.building),
+            ).filter(Equipment.id == equipment_id)
+        
+        result = await session.execute(query)
+        
+        equipment = result.unique().scalar_one_or_none()
+        
+        last_status_type = "Статус отсутствует"
+        last_status_color = "#FFFFFF"
+        last_building_adress = "Адрес не указан"
+        responsible_user_full_name = "Ответственный не указан"
+        responsible_user_office = "Офис не указан"
+        
+        if equipment.statuses:
+                        sorted_statuses = sorted(
+                            equipment.statuses, 
+                            key=lambda x: x.status_change_date, 
+                            reverse=True
+                        )
+                        latest_status = sorted_statuses[0]
+                        last_status_type = latest_status.status_type.status_type_name
+                        last_status_color = latest_status.status_type.status_type_color
+                        last_building_adress = latest_status.building.building_address
+                        if latest_status.responsible_user:
+                            responsible_user_full_name = (
+                                f"{latest_status.responsible_user.first_name} "
+                                f"{latest_status.responsible_user.last_name} "
+                                f"{latest_status.responsible_user.paternity}"
+                            )
+                            responsible_user_office = latest_status.responsible_user.office.office_name
+                            
+        return SEquipmentWordCard(
+            id=equipment.id,
+                        type_id=equipment.type_id,
+                        model=equipment.model,
+                        serial_number=equipment.serial_number,
+                        inventory_number=equipment.inventory_number,
+                        network_name=equipment.network_name,
+                        remarks=equipment.remarks,
+                        accepted_date=equipment.accepted_date,
+                        last_status_type=last_status_type,
+                        last_status_color=last_status_color,
+                        responsible_user_full_name=responsible_user_full_name,
+                        type_name=equipment.type.type_name,
+                        building_adress=last_building_adress,
+                        responsible_user_office=responsible_user_office
+        )
 
 async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible]:
     async with async_session() as session:

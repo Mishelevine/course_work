@@ -5,6 +5,11 @@ import openpyxl
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
+from docx import Document
+from docx.shared import Pt
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 import pandas as pd
 from back.Equipment.schemas import SEquipment, SEquipmentCreate, SEquipmentWithResponsible
 from back.Equipment import crud
@@ -15,6 +20,67 @@ router = APIRouter(
     prefix="/equipment",
     tags=["Оборудование"]
 )
+
+@router.get("/to_word/{equipment_id}")
+async def generate_equipment_word(equipment_id: int, user: User = Depends(get_current_user)):
+    equipment = await crud.get_equipment_for_word(equipment_id)
+    if not equipment:
+        raise HTTPException(status_code=404, detail="Equipment not found")
+
+    doc = Document()
+    
+    def set_font(paragraph, size, bold=False, align=None):
+        run = paragraph.runs[0] if paragraph.runs else paragraph.add_run()
+        font = run.font
+        font.name = "Times New Roman"
+        font.size = Pt(size)
+        font.bold = bold
+        if align:
+            paragraph.alignment = align
+        paragraph.paragraph_format.space_after = Pt(0)
+    
+    p1 = doc.add_paragraph('Национальный исследовательский университет "Высшая школа экономики"\nПермский филиал')
+    set_font(p1, 12, bold=True, align=WD_PARAGRAPH_ALIGNMENT.CENTER)
+    
+    p2 = doc.add_paragraph("\nКАРТОЧКА\nУЧЕТА ОБОРУДОВАНИЯ\n")
+    set_font(p2, 14, bold=True, align=WD_PARAGRAPH_ALIGNMENT.CENTER)
+    
+    fields = [
+        ("Наименование:", equipment.type_name),
+        ("Модель оборудования:", equipment.model),
+        ("Серийный номер:", equipment.serial_number),
+        ("Инвентарный номер:", equipment.inventory_number),
+        ("Кому выдано:", equipment.responsible_user_full_name if equipment.responsible_user_full_name else "Не указано"),
+        ("Подпись:", "_________________________/"),
+        ("Подразделение:", equipment.responsible_user_office)
+    ]
+    
+    for field_name, field_value in fields:
+        p = doc.add_paragraph()
+        run = p.add_run(field_name + " ")
+        run.bold = True
+        run.font.name = "Times New Roman"
+        run.font.size = Pt(12)
+        run2 = p.add_run(field_value)
+        run2.font.name = "Times New Roman"
+        run2.font.size = Pt(12)
+        p.paragraph_format.line_spacing = 1.5
+        p.paragraph_format.space_after = Pt(0)
+    
+    now = datetime.now(tz=timezone(timedelta(hours=5))).strftime("%d/%m/%Y %I:%M:%S %p")
+    p_last = doc.add_paragraph(now)
+    set_font(p_last, 12, align=WD_PARAGRAPH_ALIGNMENT.RIGHT)
+
+    file_stream = io.BytesIO()
+    doc.save(file_stream)
+    file_stream.seek(0)
+
+    file_name = f"{equipment.serial_number}.docx"
+    return StreamingResponse(
+        file_stream,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={"Content-Disposition": f"attachment; filename={file_name}"}
+    )
 
 @router.post("/to_excel_file")
 async def generate_equipment_excel(equipment_list: List[SEquipmentWithResponsible], user: User = Depends(get_current_user)):
