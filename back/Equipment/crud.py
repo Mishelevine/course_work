@@ -9,7 +9,7 @@ from back.database import async_session
 from sqlalchemy.orm import joinedload
 
 from back.Equipment.models import Equipment
-from back.Equipment.schemas import SEquipment, SEquipmentCreate, SEquipmentWithResponsible, SEquipmentWordCard
+from back.Equipment.schemas import SEquipment, SEquipmentCreate, SEquipmentWithResponsible
 
 async def get_equipment(equipment_id: int):
     async with async_session() as session:
@@ -23,7 +23,7 @@ async def get_equipment_by_serial_number(serial_number: str):
         result = await session.execute(query)
         return result.scalar_one_or_none()
 
-async def get_equipment_for_word(equipment_id: int) -> SEquipmentWordCard:
+async def get_equipment_for_word(equipment_id: int) -> SEquipmentWithResponsible:
     async with async_session() as session:
         query = select(Equipment).options(
                 joinedload(Equipment.type),
@@ -60,7 +60,7 @@ async def get_equipment_for_word(equipment_id: int) -> SEquipmentWordCard:
                             )
                             responsible_user_office = latest_status.responsible_user.office.office_name
                             
-        return SEquipmentWordCard(
+        return SEquipmentWithResponsible(
             id=equipment.id,
                         type_id=equipment.type_id,
                         model=equipment.model,
@@ -85,7 +85,7 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
             query = select(Equipment).options(
                 joinedload(Equipment.type),
                 joinedload(Equipment.statuses).joinedload(EquipmentStatus.status_type),
-                joinedload(Equipment.statuses).joinedload(EquipmentStatus.responsible_user),
+                joinedload(Equipment.statuses).joinedload(EquipmentStatus.responsible_user).joinedload(ResponsibleUser.office),
                 joinedload(Equipment.statuses).joinedload(EquipmentStatus.building),
                 joinedload(Equipment.equipment_specification)
             )
@@ -113,6 +113,7 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                                 f"{latest_status.responsible_user.last_name} "
                                 f"{latest_status.responsible_user.paternity}"
                             )
+                            responsible_user_office = latest_status.responsible_user.office.office_name
                             
                 equipment_data.append(
                     SEquipmentWithResponsible(
@@ -129,6 +130,7 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                         responsible_user_full_name=responsible_user_full_name,
                         type_name=equipment.type.type_name,
                         building_adress=last_building_adress,
+                        responsible_user_office=responsible_user_office
                     )
                 )
                 
@@ -141,7 +143,7 @@ async def get_equipment_for_excel(user_role_id: int, equipment_list: List[SEquip
         
         query = select(Equipment).options(
             joinedload(Equipment.statuses).joinedload(EquipmentStatus.status_type),
-            joinedload(Equipment.statuses).joinedload(EquipmentStatus.responsible_user),
+            joinedload(Equipment.statuses).joinedload(EquipmentStatus.responsible_user).joinedload(ResponsibleUser.office),
             joinedload(Equipment.statuses).joinedload(EquipmentStatus.building),
             joinedload(Equipment.equipment_specification)
         ).where(Equipment.id.in_(equipment_ids))
@@ -169,6 +171,7 @@ async def get_equipment_for_excel(user_role_id: int, equipment_list: List[SEquip
                     equipment_info.update({
                         "Статус": latest_status.status_type.status_type_name if latest_status.status_type else None,
                         "Дата изменения статуса": latest_status.status_change_date,
+                        "Подразделение": latest_status.responsible_user.office.office_name,
                         "Ответственный": latest_status.responsible_user.first_name if latest_status.responsible_user else None,
                         "Здание": latest_status.building.building_address if latest_status.building else None,
                         "Аудитория": latest_status.audience_id,

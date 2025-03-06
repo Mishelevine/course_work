@@ -31,8 +31,6 @@ class SEquipmentWithResponsible(SEquipment):
     type_name: Optional[str] = None
     statuses: Optional[List[SEquipmentStatus]] = None
     specifications: Optional[List[SEquipmentSpecification]] = None
-    
-class SEquipmentWordCard(SEquipmentWithResponsible):
     responsible_user_office: Optional[str] = None
 
     class Config:
