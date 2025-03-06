@@ -159,7 +159,7 @@ async def get_equipment_for_excel(user_role_id: int, equipment_list: List[SEquip
                 "Серийный номер": equipment.serial_number,
                 "Инвентарный номер": equipment.inventory_number,
                 "Сетевое имя": equipment.network_name,
-                "Дата принятия к учету": equipment.accepted_date.strftime("%d-%m-%Y"),
+                "Дата принятия к учету": equipment.accepted_date.strftime("%d-%m-%Y") if equipment.accepted_date else None,
                 "Примечания": equipment.remarks,
             }
             if user_role_id > 3:
