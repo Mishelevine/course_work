@@ -25,7 +25,7 @@ async def create_software(software: SSoftwareCreate):
                 short_name=software.short_name,
                 program_link=software.program_link,
                 version=software.version,
-                version_date=software.version_date,
+                version_date=software.version_date if software.version_date else None,
                 license_id=software.license_id
             )
             session.add(db_software)
