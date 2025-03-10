@@ -31,7 +31,7 @@ async def create_software(software: SSoftwareCreate) -> SSoftware:
         short_name=db_software.short_name,
         program_link=db_software.program_link,
         version=db_software.version,
-        version_date=db_software.version_date,
+        version_date=db_software.version_date if db_software.version_date else None,
         license_id=db_software.license_id,
         contracts=[
                 SContract(

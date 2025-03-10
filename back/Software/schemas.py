@@ -7,10 +7,10 @@ from back.License.schemas import SLicense
 
 class SSoftwareBase(BaseModel):
     name: str
-    short_name: str
-    program_link: str
-    version: str
-    version_date: datetime
+    short_name: Optional[str] = None
+    program_link: Optional[str] = None
+    version: Optional[str] = None
+    version_date: Optional[datetime] = None
     license_id: int
 
 class SSoftwareCreate(SSoftwareBase):
