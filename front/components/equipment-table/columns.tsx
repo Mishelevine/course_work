@@ -22,6 +22,20 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
         header: "Модель оборудования",
     },
     {
+        id: "additional_info",
+        header: "Подробная информация",
+        cell: ({ row }) => {
+            return (
+                <Link href={`characteristics/${row.getValue("id")}`}>
+                    <Button className="h-8 w-fit p-2 bg-gray-100 hover:text-white hover:bg-gray-400
+                        border-[1px] border-gray-400 text-black">
+                        Показать
+                    </Button>
+                </Link>
+            )
+        }
+    },
+    {
         accessorKey: "serial_number",
         header: "Серийный номер",
     },
@@ -52,7 +66,7 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
                 </Button>
             )
         },
-        cell: ({row}) => {
+        cell: ({ row }) => {
             return row.getValue("accepted_date") ? DateFromDbForm(row.getValue("accepted_date")) : ""
         }
     },
@@ -87,20 +101,6 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
         header: "Адрес корпуса"
     },
     {
-        id: "additional_info",
-        header: "Подробная информация",
-        cell: ({ row }) => {
-            return (
-                <Link href={`characteristics/${row.getValue("id")}`}>
-                    <Button className="h-8 w-fit p-2 bg-gray-100 hover:text-white hover:bg-gray-400
-                        border-[1px] border-gray-400 text-black">
-                        Показать
-                    </Button>
-                </Link>
-            )
-        }
-    },
-    {
         id: "actions",
         cell: ({ row }) => {
             const actionsData = [
@@ -113,16 +113,16 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
                 {
                     title: "Удалить оборудование",
                     description: <>Вы уверены что хотите удалить оборудование <b>{row.getValue("model")}</b>?</>,
-                    form:   <DeleteRowForm
-                                apiEndpoint={API_URL + `/equipment/${row.getValue("id")}`}
-                                toastText="Оборудование успешно удалено"
-                                calledFrom="equipment"
-                            />,
+                    form: <DeleteRowForm
+                        apiEndpoint={API_URL + `/equipment/${row.getValue("id")}`}
+                        toastText="Оборудование успешно удалено"
+                        calledFrom="equipment"
+                    />,
                     dropdownButtonText: "Удалить"
                 }
             ]
             return (
-                <ActionsButton actionsData={actionsData}/>
+                <ActionsButton actionsData={actionsData} />
             )
         },
     },
