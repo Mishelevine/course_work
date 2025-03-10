@@ -79,7 +79,11 @@ const EquipmentUpdateForm = ({
       })
     })
     .catch((e) => {
-      setError("Произошла непредвиденная ошибка при обновлении записи")
+      if (e.response.status === 400 && e.response.data.detail === "Equipment with this serial number already exists") {
+        setError("Оборудование с таким серийным номером уже существует")
+      } else {
+        setError("Во время добавления записи произошла непредвиденная ошибка!")
+      }
       console.log("Error while updating row!")
       console.log(e)
     })

@@ -59,10 +59,20 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
     {
         accessorKey: "network_name",
         header: "Сетевое имя",
+        cell: ({ row }) => {
+            const network_name = row.getValue("network_name")
+            if (network_name === "") { return "Отсутствует" }
+            return network_name
+        }
     },
     {
         accessorKey: "remarks",
         header: "Примечание",
+        cell: ({ row }) => {
+            const remarks = row.getValue("remarks")
+            if (remarks === "") { return "Отсутствует" }
+            return remarks
+        }
     },
     {
         accessorKey: "responsible_user_full_name",
@@ -73,7 +83,7 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
         header: "Статус оборудования"
     },
     {
-        accessorKey: "building_adress", // FIXME МИША ПЕРЕИМЕНУЙ ПОЛЕ (((
+        accessorKey: "building_adress",
         header: "Адрес корпуса"
     },
     {

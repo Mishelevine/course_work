@@ -42,6 +42,8 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
         accessorKey: "program_link",
         header: "Ссылка на программу",
         cell: ({ row }) => {
+            const link = row.getValue("program_link")
+            if (link === "") { return "Отсутствует" }
             return <Link
                 href={row.getValue("program_link")}
                 className="flex flex-row items-center gap-2
@@ -54,7 +56,12 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
     },
     {
         accessorKey: "version",
-        header: "Версия"
+        header: "Версия",
+        cell: ({ row }) => {
+            const version = row.getValue("version")
+            if (version === "") { return "Отсутствует" }
+            return version
+        }
     },
     {
         accessorKey: "version_date",
@@ -69,7 +76,9 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                 </Button>
             )
         },
-        cell: ({row}) => {
+        cell: ({ row }) => {
+            const date = row.getValue("version_date")
+            if (date === "") { return "Отсутствует" }
             return DateFromDbForm(row.getValue("version_date"))
         }
     },
@@ -113,16 +122,16 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
                 {
                     title: "Удалить ПО",
                     description: <>Вы уверены что хотите удалить ПО <b>{row.getValue("name")}</b>?</>,
-                    form:   <DeleteRowForm
-                                apiEndpoint={API_URL + `/software/${row.getValue("id")}/delete`}
-                                toastText="ПО успешно удалено"
-                                calledFrom="software"
-                            />,
+                    form: <DeleteRowForm
+                        apiEndpoint={API_URL + `/software/${row.getValue("id")}/delete`}
+                        toastText="ПО успешно удалено"
+                        calledFrom="software"
+                    />,
                     dropdownButtonText: "Удалить",
                 }
             ]
             return (
-                <ActionsButton actionsData={actionsData}/>
+                <ActionsButton actionsData={actionsData} />
             )
         },
     },

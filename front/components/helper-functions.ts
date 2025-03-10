@@ -13,12 +13,18 @@ export function CorrectPagesCase(pageNum: number) {
 }
 
 export function DateToDbForm(date: string) {
+    if (date === "" || date === null    ) {
+        return ""
+    }
     const dateParts = date.split('.')
     return new Date(`${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`)
 }
 
 
 export function DatetimeFromDbForm(date: string) {
+    if (date === "" || date === null) {
+        return ""
+    }
     const dateSubstr = date.substring(0, 19)
     const dateTimeSplit = dateSubstr.split('T')
     const dateSplit = dateTimeSplit[0].split('-')
@@ -28,6 +34,9 @@ export function DatetimeFromDbForm(date: string) {
 }
 
 export function DateFromDbForm(date: string) {
+    if (date === "" || date === null) {
+        return ""
+    }
     const dateSubstr = date.substring(0, 19)
     const dateTimeSplit = dateSubstr.split('T')
     const dateSplit = dateTimeSplit[0].split('-')
