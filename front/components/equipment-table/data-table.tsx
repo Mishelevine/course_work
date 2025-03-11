@@ -153,9 +153,17 @@ export function EquipmentDataTable<TData, TValue>({
               />}
               {actionsAllowed && <Input
                 placeholder="Фильтр по адресу..."
-                value={(table.getColumn("building_adress")?.getFilterValue() as string) ?? ""} // FIXME МИША ПЕРЕИМЕНУЙ ПОЛЕ (((
+                value={(table.getColumn("building_adress")?.getFilterValue() as string) ?? ""}
                 onChange={(event) =>
-                  table.getColumn("building_adress")?.setFilterValue(event.target.value) // FIXME МИША ПЕРЕИМЕНУЙ ПОЛЕ (((
+                  table.getColumn("building_adress")?.setFilterValue(event.target.value)
+                }
+                className="w-[300px]"
+              />}
+              {actionsAllowed && <Input
+                placeholder="Фильтр по подразделению..."
+                value={(table.getColumn("responsible_user_office")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("responsible_user_office")?.setFilterValue(event.target.value)
                 }
                 className="w-[300px]"
               />}

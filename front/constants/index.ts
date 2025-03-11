@@ -25,7 +25,7 @@ export const sidebarLinks = [
     }
 ]
 
-export const WebSiteName = 'HSE SATS'
+export const WebSiteName = 'КЦ ВШЭ'
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL;
 

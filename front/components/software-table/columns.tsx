@@ -77,9 +77,7 @@ export const SoftwareTableColumns: ColumnDef<z.infer<typeof SoftwareTableSchema>
             )
         },
         cell: ({ row }) => {
-            const date = row.getValue("version_date")
-            if (date === "") { return "Отсутствует" }
-            return DateFromDbForm(row.getValue("version_date"))
+            return row.getValue("version_date") ? DateFromDbForm(row.getValue("version_date")) : "Отсутствует"
         }
     },
     {

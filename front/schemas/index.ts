@@ -152,8 +152,9 @@ export const EquipmentSchema = z.object({
     id: z.number(),
     responsible_user_full_name: z.string(),
     last_status_type: z.string(),
-    building_adress: z.string(), // FIXME МИША ПЕРЕИМЕНУЙ ПОЛЕ (((
-    accepted_date: z.string()
+    building_adress: z.string(),
+    accepted_date: z.string(),
+    responsible_user_office: z.string()
 })
 
 export const EquipmentFormSchema = z.object({

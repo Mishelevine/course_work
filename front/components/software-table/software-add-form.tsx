@@ -62,15 +62,29 @@ export const SoftwareAddForm = () => {
     setError("")
     setIsProcessing(true)
 
-    axios.post(API_URL + '/software/create', {
-      name: data.name,
-      short_name: data.short_name,
-      program_link: data.program_link,
-      version: data.version,
-      version_date: DateToDbForm(data.version_date),
-      license_id: data.license_id,
-      contract_ids: selectedContractIds,
-    })
+    var toApi
+    if (data.version_date !== "") {
+      toApi = {
+        name: data.name,
+        short_name: data.short_name,
+        program_link: data.program_link,
+        version: data.version,
+        version_date: DateToDbForm(data.version_date),
+        license_id: data.license_id,
+        contract_ids: selectedContractIds,
+      }
+    } else {
+      toApi = {
+        name: data.name,
+        short_name: data.short_name,
+        program_link: data.program_link,
+        version: data.version,
+        license_id: data.license_id,
+        contract_ids: selectedContractIds,
+      }
+    }
+
+    axios.post(API_URL + '/software/create', toApi)
     .then(() => {
       localStorage.setItem("last_tab", "software")
       window.location.reload()
