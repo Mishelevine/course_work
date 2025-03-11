@@ -67,26 +67,26 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
             )
         },
         cell: ({ row }) => {
-            return row.getValue("accepted_date") ? DateFromDbForm(row.getValue("accepted_date")) : ""
+            return row.getValue("accepted_date") ? DateFromDbForm(row.getValue("accepted_date")) : "Отсутствует"
         }
     },
     {
         accessorKey: "network_name",
         header: "Сетевое имя",
         cell: ({ row }) => {
-            const network_name = row.getValue("network_name")
-            if (network_name === "") { return "Отсутствует" }
-            return network_name
+            return row.getValue("network_name") ? row.getValue("network_name") : "Отсутствует"
         }
     },
     {
         accessorKey: "remarks",
         header: "Примечание",
         cell: ({ row }) => {
-            const remarks = row.getValue("remarks")
-            if (remarks === "") { return "Отсутствует" }
-            return remarks
+            return row.getValue("remarks") ? row.getValue("remarks") : "Отсутствует"
         }
+    },
+    {
+        accessorKey: "responsible_user_office",
+        header: "Подразделение ответственного"
     },
     {
         accessorKey: "responsible_user_full_name",

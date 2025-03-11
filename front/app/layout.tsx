@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "HSE SATS",
-  description: "Suprim trusi ))",
+  title: "КЦ ВШЭ",
+  description: "Компьютерный центр",
 };
 
 export default function RootLayout({
