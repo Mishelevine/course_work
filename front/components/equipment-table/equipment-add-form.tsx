@@ -30,7 +30,7 @@ const EquipmentAddForm = () => {
         comboboxFields[0].data = response
         setLoading(false)
       }
-      catch(e) {
+      catch (e) {
         console.log("Ошибка при получении данных о типах оборудования")
         console.log(e)
       }
@@ -59,21 +59,25 @@ const EquipmentAddForm = () => {
       ...data,
       accepted_date: DateToDbForm(data.accepted_date)
     })
-    .then(() => {
-      localStorage.setItem("last_tab", "equipment")
-      window.location.reload()
-      toast({
-        title: "Запись добавлена",
-        description: "Данные записаны в БД",
-        className: "bg-white"
+      .then(() => {
+        localStorage.setItem("last_tab", "equipment")
+        window.location.reload()
+        toast({
+          title: "Запись добавлена",
+          description: "Данные записаны в БД",
+          className: "bg-white"
+        })
       })
-    })
-    .catch((e) => {
-      setError("Во время добавления записи произошла непредвиденная ошибка!")
-      console.log("Unexpected error occured while adding row.")
-      console.log(e)
-      setIsProcessing(false)
-    })
+      .catch((e) => {
+        if (e.response.status === 400 && e.response.data.detail === "Equipment with this serial number already exists") {
+          setError("Оборудование с таким серийным номером уже существует")
+        } else {
+          setError("Во время добавления записи произошла непредвиденная ошибка!")
+        }
+        console.log("Unexpected error occured while adding row.")
+        console.log(e)
+        setIsProcessing(false)
+      })
   }
 
   return (

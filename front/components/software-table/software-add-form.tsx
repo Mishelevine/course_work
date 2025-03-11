@@ -61,35 +61,31 @@ export const SoftwareAddForm = () => {
   function AddRowSoftwareTable(data: z.infer<typeof SoftwareSchema>) {
     setError("")
     setIsProcessing(true)
-    if (selectedContractIds.length === 0) {
-      setError("Выберите хотя бы один договор")
-    }
-    else {
-      axios.post(API_URL + '/software/create', {
-        name: data.name,
-        short_name: data.short_name,
-        program_link: data.program_link,
-        version: data.version,
-        version_date: DateToDbForm(data.version_date),
-        license_id: data.license_id,
-        contract_ids: selectedContractIds,
+
+    axios.post(API_URL + '/software/create', {
+      name: data.name,
+      short_name: data.short_name,
+      program_link: data.program_link,
+      version: data.version,
+      version_date: DateToDbForm(data.version_date),
+      license_id: data.license_id,
+      contract_ids: selectedContractIds,
+    })
+    .then(() => {
+      localStorage.setItem("last_tab", "software")
+      window.location.reload()
+      toast({
+        title: "Запись добавлена",
+        description: "Данные записаны в БД",
+        className: "bg-white"
       })
-      .then(() => {
-        localStorage.setItem("last_tab", "software")
-        window.location.reload()
-        toast({
-          title: "Запись добавлена",
-          description: "Данные записаны в БД",
-          className: "bg-white"
-        })
-      })
-      .catch((e) => {
-        setError("Во время добавления записи произошла непредвиденная ошибка!")
-        console.log("Unexpected error occured while adding row.")
-        console.log(e)
-        setIsProcessing(false)
-      })
-    }
+    })
+    .catch((e) => {
+      setError("Во время добавления записи произошла непредвиденная ошибка!")
+      console.log("Unexpected error occured while adding row.")
+      console.log(e)
+      setIsProcessing(false)
+    })
   }
 
   return (
