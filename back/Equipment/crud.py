@@ -69,12 +69,12 @@ async def get_equipment_for_word(equipment_id: int) -> SEquipmentWithResponsible
                         network_name=equipment.network_name,
                         remarks=equipment.remarks,
                         accepted_date=equipment.accepted_date,
-                        last_status_type=last_status_type,
-                        last_status_color=last_status_color,
-                        responsible_user_full_name=responsible_user_full_name,
+                        last_status_type=last_status_type if last_status_type else None,
+                        last_status_color=last_status_color if last_status_color else None,
+                        responsible_user_full_name=responsible_user_full_name if responsible_user_full_name else None,
                         type_name=equipment.type.type_name,
-                        building_adress=last_building_adress,
-                        responsible_user_office=responsible_user_office
+                        building_adress=last_building_adress if last_building_adress else None,
+                        responsible_user_office=responsible_user_office if responsible_user_office else None
         )
 
 async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible]:
@@ -114,6 +114,14 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                                 f"{latest_status.responsible_user.paternity}"
                             )
                             responsible_user_office = latest_status.responsible_user.office.office_name
+                    else:
+                        latest_status = None
+                        last_status_type = None
+                        last_status_color = None
+                        last_building_adress = None
+                        responsible_user_full_name = None
+                        responsible_user_office = None
+                    
                             
                 equipment_data.append(
                     SEquipmentWithResponsible(
@@ -125,12 +133,12 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                         network_name=equipment.network_name,
                         remarks=equipment.remarks,
                         accepted_date=equipment.accepted_date,
-                        last_status_type=last_status_type,
-                        last_status_color=last_status_color,
-                        responsible_user_full_name=responsible_user_full_name,
+                        last_status_type=last_status_type if last_status_type else None,
+                        last_status_color=last_status_color if last_status_color else None,
+                        responsible_user_full_name=responsible_user_full_name if responsible_user_full_name else None,
                         type_name=equipment.type.type_name,
-                        building_adress=last_building_adress,
-                        responsible_user_office=responsible_user_office
+                        building_adress=last_building_adress if last_building_adress else None,
+                        responsible_user_office=responsible_user_office if responsible_user_office else None
                     )
                 )
                 
