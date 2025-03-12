@@ -94,7 +94,15 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
     },
     {
         accessorKey: "last_status_type",
-        header: "Статус оборудования"
+        header: "Статус оборудования",
+        cell: ({ row }) => {
+            const color: string = row.getValue("last_status_color");
+            return (
+                <span style={{ color }}>
+                    {row.getValue("last_status_type")}
+                </span>
+            );
+        }
     },
     {
         accessorKey: "building_adress",
@@ -128,5 +136,8 @@ export const EquipmentTableColumns: ColumnDef<z.infer<typeof EquipmentSchema>>[]
     },
     {
         accessorKey: "id"
+    },
+    {
+        accessorKey: "last_status_color",
     },
 ]
