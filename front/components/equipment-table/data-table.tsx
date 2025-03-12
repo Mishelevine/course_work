@@ -53,6 +53,7 @@ export function EquipmentDataTable<TData, TValue>({
   )
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
     id: false,
+    last_status_color: false,
     remarks: !forStatus,
     responsible_user_full_name: !forStatus && actionsAllowed,
     additional_info: !forStatus && actionsAllowed,
