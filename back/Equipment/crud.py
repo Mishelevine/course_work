@@ -121,6 +121,13 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                         last_building_adress = None
                         responsible_user_full_name = None
                         responsible_user_office = None
+                else:
+                    latest_status = None
+                    last_status_type = None
+                    last_status_color = None
+                    last_building_adress = None
+                    responsible_user_full_name = None
+                    responsible_user_office = None
                     
                             
                 equipment_data.append(
@@ -243,6 +250,7 @@ async def update_equipment(equipment_id: int, updated_equipment: SEquipmentCreat
     equipment.inventory_number = updated_equipment.inventory_number
     equipment.network_name = updated_equipment.network_name
     equipment.remarks = updated_equipment.remarks
+    equipment.accepted_date = updated_equipment.accepted_date
     
     async with async_session() as session:
         session.add(equipment)
