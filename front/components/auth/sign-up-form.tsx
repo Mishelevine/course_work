@@ -99,8 +99,6 @@ export const SignUpForm = () => {
     return (
         <CardWrapper
             headerLabel="Добавьте нового пользователя!"
-            backButtonLabel="Уже есть аккаунт? Авторизуйтесь!"
-            backButtonHref="/sign-in"
         >
             <Form {...form}>
                 <form
