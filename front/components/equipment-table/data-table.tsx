@@ -55,11 +55,12 @@ export function EquipmentDataTable<TData, TValue>({
     id: false,
     last_status_color: false,
     remarks: !forStatus,
+    responsible_user_office: !forStatus && actionsAllowed,
     responsible_user_full_name: !forStatus && actionsAllowed,
     additional_info: !forStatus && actionsAllowed,
     last_status_type: !forStatus && actionsAllowed,
     actions: !forStatus && actionsAllowed,
-    building_adress: !forStatus && actionsAllowed, // FIXME МИША ПЕРЕИМЕНУЙ ПОЛЕ (((
+    building_adress: !forStatus && actionsAllowed,
   })
   const [currentPageNumber, setCurrentPageNumber] = React.useState<number>(1)
 

@@ -13,7 +13,6 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Separator } from '@radix-ui/react-separator';
-import { Button } from '@/components/ui/button';
 import DownloadButton from '@/components/download-button';
 
 const Backup = () => {
@@ -67,8 +66,8 @@ const Backup = () => {
                 </div>
                 <DownloadButton
                     apiEndpoint={API_URL + '/backup/download'}
-                    buttonText='Скачать дамп БД'
-                    className='className="bg-blue-2 hover:bg-blue-700"'
+                    buttonText='Сохранить копию БД'
+                    className='bg-blue-2 hover:bg-blue-700'
                 />
             </CardHeader>
             <Separator className="bg-gray-300 h-[1px]" />

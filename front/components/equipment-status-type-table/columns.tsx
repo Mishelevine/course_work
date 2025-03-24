@@ -34,7 +34,7 @@ export const EquipmentStatusTypeTableColumns: ColumnDef<z.infer<typeof Equipment
                 },
                 {
                     title: "Удалить наименование статуса",
-                    description: <>Вы уверены что хотите удалить статус <b>{row.getValue("status_type_name")}</b>?</>,
+                    description: <>Вы уверены что хотите удалить статус <b>{row.getValue("status_type_name")}</b>? Это удалит все статусы оборудования, имеющие данный тип статуса.</>,
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/equipment_status_type/${row.getValue("id")}/delete`}
                                 toastText="Статус успешно удален"

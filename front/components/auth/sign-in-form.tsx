@@ -82,8 +82,6 @@ export const SignInForm = () => {
     return (
         <CardWrapper
             headerLabel="Добро пожаловать!"
-            backButtonLabel="Нет аккаунта? Зарегистрируйтесь!"
-            backButtonHref="/sign-up"
         >
             <Form {...form}>
                 <form id="loginForm"

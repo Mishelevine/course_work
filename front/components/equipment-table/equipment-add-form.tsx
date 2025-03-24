@@ -55,10 +55,24 @@ const EquipmentAddForm = () => {
   function AddRowEquipmentTable(data: z.infer<typeof EquipmentFormSchema>) {
     setError("")
     setIsProcessing(true)
-    axios.post(API_URL + '/equipment/create', {
-      ...data,
-      accepted_date: DateToDbForm(data.accepted_date)
-    })
+
+    var toApi
+    if (data.accepted_date !== ""){
+      toApi = {
+        ...data,
+        accepted_date: DateToDbForm(data.accepted_date)
+      }
+    } else {
+      toApi = {
+        type_id: data.type_id,
+        model: data.model,
+        serial_number: data.serial_number,
+        inventory_number: data.inventory_number,
+        network_name: data.network_name,
+        remarks: data.remarks,
+      }
+    }
+    axios.post(API_URL + '/equipment/create', toApi)
       .then(() => {
         localStorage.setItem("last_tab", "equipment")
         window.location.reload()

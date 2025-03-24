@@ -69,7 +69,7 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
   const UpdateRowSoftwareTable = (data: z.infer<typeof SoftwareSchema>) => {
     setError("")
     setIsProcessing(true)
-    
+
     axios.put(API_URL + `/software/${id}/update`, {
       name: data.name,
       short_name: data.short_name,
@@ -138,7 +138,5 @@ export const SoftwareUpdateForm = ({ id }: { id: number }) => {
         )}
       />
     </CRUDFormForTables>
-
-
   )
 }

@@ -26,7 +26,7 @@ export const ResponsibleUserOfficeTableColumns: ColumnDef<z.infer<typeof Respons
                 },
                 {
                     title: "Удалить подразделение",
-                    description: <>Вы уверены что хотите удалить подразделение <b>{row.getValue("office_name")}</b>?</>,
+                    description: <>Вы уверены что хотите удалить подразделение <b>{row.getValue("office_name")}</b>? Это удалит всех ответственных лиц с данным подразделением.</>,
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/responsible_users/office/${row.getValue("id")}`}
                                 toastText="Подразделение успешно удалено"
