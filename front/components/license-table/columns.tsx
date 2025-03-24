@@ -26,7 +26,7 @@ export const LicensesTableColumns: ColumnDef<z.infer<typeof LicenseSchema>>[] = 
                 },
                 {
                     title: "Удалить лицензию",
-                    description: <>Вы уверены что хотите удалить лицензию <b>{row.getValue("license_type")}</b>?</>,
+                    description: <>Вы уверены что хотите удалить лицензию <b>{row.getValue("license_type")}</b>? Это удалит все ПО, связанные с этой лицензией.</>,
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/license/${row.getValue("id")}/delete`}
                                 toastText="Лицензия успешно удалена"

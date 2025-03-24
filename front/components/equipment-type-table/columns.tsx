@@ -26,7 +26,7 @@ export const EquipmentTypeTableColumns: ColumnDef<z.infer<typeof EquipmentTypeSc
                 },
                 {
                     title: "Удалить тип оборудования",
-                    description: <>Вы уверены что хотите удалить тип оборудования <b>{row.getValue("type_name")}</b>?</>,
+                    description: <>Вы уверены что хотите удалить тип оборудования <b>{row.getValue("type_name")}</b>? Это удалит все оборудования, имеющие данный тип оборудования.</>,
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/equipment_types/${row.getValue("id")}`}
                                 toastText="Тип оборудования успешно удален"

@@ -48,7 +48,7 @@ export const UserTableColumns: ColumnDef<z.infer<typeof UserSchemaForTable>>[] =
                 },
                 {
                     title: "Удалить пользователя",
-                    description: <>Вы уверены что хотите удалить пользователя <b>{row.getValue("full_name")}</b>?</>,
+                    description: <>Вы уверены что хотите удалить пользователя <b>{row.getValue("full_name")}</b>? Это удалит все логи пользователя в журнале аудита.</>,
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/user/${row.getValue("id")}`}
                                 toastText="Пользователь успешно удален"

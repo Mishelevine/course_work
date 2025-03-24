@@ -26,7 +26,7 @@ export const UserJobTableColumns: ColumnDef<z.infer<typeof UserJobSchema>>[] = [
                 },
                 {
                     title: "Удалить должность",
-                    description: <>Вы уверены что хотите удалить должность <b>{row.getValue("job_name")}</b>?</>,
+                    description: <>Вы уверены что хотите удалить должность <b>{row.getValue("job_name")}</b>? Это удалит всех пользователей с данной должностью.</>,
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/job/${row.getValue("id")}`}
                                 toastText="Должность успешно удалена"

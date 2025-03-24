@@ -57,7 +57,7 @@ const EquipmentAddForm = () => {
     setIsProcessing(true)
 
     var toApi
-    if (data.accepted_date === ""){
+    if (data.accepted_date !== ""){
       toApi = {
         ...data,
         accepted_date: DateToDbForm(data.accepted_date)

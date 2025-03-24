@@ -26,7 +26,7 @@ export const ResponsibleUserJobTableColumns: ColumnDef<z.infer<typeof Responsibl
                 },
                 {
                     title: "Удалить должность",
-                    description: <>Вы уверены что хотите удалить должность <b>{row.getValue("job_name")}</b>?</>,
+                    description: <>Вы уверены что хотите удалить должность <b>{row.getValue("job_name")}</b>? Это удалит всех ответственных лиц с данной должностью.</>,
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/responsible_users/job/${row.getValue("id")}`}
                                 toastText="Должность успешно удалена"

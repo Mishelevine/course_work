@@ -26,7 +26,7 @@ export const UserOfficeTableColumns: ColumnDef<z.infer<typeof UserOfficeSchema>>
                 },
                 {
                     title: "Удалить подразделение",
-                    description: <>Вы уверены что хотите удалить подразделение <b>{row.getValue("office_name")}</b>?</>,
+                    description: <>Вы уверены что хотите удалить подразделение <b>{row.getValue("office_name")}</b>? Это удалит всех пользователей с данным подразделением.</>,
                     form:   <DeleteRowForm
                                 apiEndpoint={API_URL + `/office/${row.getValue("id")}/delete`}
                                 toastText="Подразделение успешно удалено"

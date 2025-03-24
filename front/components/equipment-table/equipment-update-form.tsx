@@ -67,7 +67,7 @@ const EquipmentUpdateForm = ({
     setIsProcessing(true)
 
     var toApi
-    if (data.accepted_date === ""){
+    if (data.accepted_date !== ""){
       toApi = {
         ...data,
         accepted_date: DateToDbForm(data.accepted_date)
@@ -82,6 +82,7 @@ const EquipmentUpdateForm = ({
         remarks: data.remarks,
       }
     }
+    console.log(toApi)
     axios.put(API_URL + `/equipment/${id}`, toApi)
     .then(() => {
       localStorage.setItem("last_tab", "equipment")
