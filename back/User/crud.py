@@ -56,9 +56,9 @@ async def get_user_full_name(user_id: int):
         raise HTTPException(status_code=401, detail="Invalid user id")
 
     if (user.paternity is None) or (user.paternity == ""):
-        full_name = f"{user.first_name} {user.last_name}"
+        full_name = f"{user.last_name} {user.first_name}"
     else:
-        full_name = f"{user.first_name} {user.last_name} {user.paternity}"
+        full_name = f"{user.last_name} {user.first_name} {user.paternity}"
     return full_name
 
 async def create_user(user: SUserCreate, system_role_id: int):

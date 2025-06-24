@@ -58,7 +58,6 @@ async def delete_old_session_logs(max_logs: int = 100):
             select(SessionLog.id)
             .order_by(SessionLog.time.desc())
             .limit(max_logs)
-            .subquery()
         )
         
         stmt = delete(SessionLog).where(SessionLog.id.not_in(subquery))

@@ -28,7 +28,7 @@ async def get_all_responsible_users() -> list[SAllResponsibleUser]:
             responsible_users_data.append(
                 SAllResponsibleUser(
                     id=responsible_user.id,
-                    full_name=f"{responsible_user.first_name} {responsible_user.last_name} {responsible_user.paternity}",
+                    full_name=f"{responsible_user.last_name} {responsible_user.first_name} {responsible_user.paternity}",
                     job_name=responsible_user.job.job_name,
                     office_name=responsible_user.office.office_name,
                 )
@@ -38,6 +38,22 @@ async def get_all_responsible_users() -> list[SAllResponsibleUser]:
 
 async def create_responsible_user(user: SResponsibleUserCreate):
     async with async_session() as session:
+        query = select(ResponsibleUser).filter(
+            ResponsibleUser.first_name == user.first_name,
+            ResponsibleUser.last_name == user.last_name,
+            ResponsibleUser.paternity == user.paternity,
+            ResponsibleUser.job_id == user.job_id,
+            ResponsibleUser.office_id == user.office_id
+        )
+        result = await session.execute(query)
+        existing_user = result.scalar_one_or_none()
+
+        if existing_user:
+            raise HTTPException(
+                status_code=400,
+                detail="Responsible user already exists"
+            )
+            
         db_user = ResponsibleUser(
             first_name=user.first_name,
             last_name=user.last_name,
@@ -63,6 +79,21 @@ async def update_responsible_user(user_id: int, updated_user: SResponsibleUserCr
     user.office_id = updated_user.office_id
     
     async with async_session() as session:
+        query = select(ResponsibleUser).filter(
+            ResponsibleUser.first_name == user.first_name,
+            ResponsibleUser.last_name == user.last_name,
+            ResponsibleUser.paternity == user.paternity,
+            ResponsibleUser.job_id == user.job_id,
+            ResponsibleUser.office_id == user.office_id
+        )
+        result = await session.execute(query)
+        existing_user = result.scalar_one_or_none()
+
+        if existing_user:
+            raise HTTPException(
+                status_code=400,
+                detail="Responsible user already exists"
+            )
         session.add(user)
         await session.commit()
         await session.refresh(user)

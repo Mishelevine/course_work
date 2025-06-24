@@ -84,7 +84,7 @@ async def generate_equipment_word(equipment_id: int, user: User = Depends(get_cu
 
 @router.post("/to_excel_file")
 async def generate_equipment_excel(equipment_list: List[SEquipmentWithResponsible], user: User = Depends(get_current_user)):
-    if user.system_role_id < 3:
+    if user.system_role_id < 2:
         raise HTTPException(status_code=403, detail="Forbidden")
     
     try:

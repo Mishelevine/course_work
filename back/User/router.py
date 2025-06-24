@@ -64,7 +64,6 @@ async def login_for_access_token(response: Response, form_data: OAuth2PasswordRe
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=True,
         samesite="strict",
         max_age=(refresh_token_expires*60*60*24)
     )
