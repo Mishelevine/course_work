@@ -96,7 +96,15 @@ const UserAddForm = () => {
       })
     })
     .catch((e) => {
-      setError("Во время добавления пользователя произошла непредвиденная ошибка!")
+      const expectedErr = "Username already in use";
+      if (e.response.status !== 400 || e.response.data.detail !== expectedErr) {
+          throw e;
+      }
+      setError("Пользователь с указанным логином уже существует в системе")
+      setIsProcessing(false)
+    })
+    .catch((e) => {
+      setError("Во время добавления пользователя произошла непредвиденная ошибка")
       console.log("Unexpected error occured while adding row.")
       console.log(e)
       setIsProcessing(false)

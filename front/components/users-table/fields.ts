@@ -18,14 +18,14 @@ export const textFields = [
         placeholder: "Пароль добавляемого пользователя",
     },
     {
-        name: "first_name",
-        label: "Имя",
-        placeholder: "Имя добавляемого пользователя",
-    },
-    {
         name: "last_name",
         label: "Фамилия",
         placeholder: "Фамилия добавляемого пользователя",
+    },
+    {
+        name: "first_name",
+        label: "Имя",
+        placeholder: "Имя добавляемого пользователя",
     },
     {
         name: "paternity",
@@ -41,14 +41,14 @@ export const textFieldsForUpdate = [
         placeholder: "Логин добавляемого пользователя",
     },
     {
-        name: "first_name",
-        label: "Имя",
-        placeholder: "Имя добавляемого пользователя",
-    },
-    {
         name: "last_name",
         label: "Фамилия",
         placeholder: "Фамилия добавляемого пользователя",
+    },
+    {
+        name: "first_name",
+        label: "Имя",
+        placeholder: "Имя добавляемого пользователя",
     },
     {
         name: "paternity",
