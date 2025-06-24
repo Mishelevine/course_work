@@ -15,6 +15,12 @@ export const useUser = (
                 const userRole = (await axios.get(`${API_URL}/auth/me`)).data["system_role_id"]
                 setUserRole(userRole)
             } catch(e) {
+                if (e.response.data.detail === "Token absent" && e.response.status === 401) {
+                    console.log("useUser: accessToken absent")
+                } else {
+                    console.log("Unexpected error while getting user info")
+                }
+
                 console.log(e)
             }
         }

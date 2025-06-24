@@ -5,9 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { sidebarLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
 
-import Link from 'next/link';
 import { cn } from '@/lib/utils'
-import Image from 'next/image';
 import { useUser } from '@/hooks/use-user';
 import { Skeleton } from './ui/skeleton';
 
@@ -25,6 +23,7 @@ const Sidebar = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
     useEffect(() => {
+        console.log("In UseEffect")
         const linksFilteredArr = sidebarLinks.filter(link => link.min_needed_role <= userRole)
         setLinksFiltered(linksFilteredArr)
         setIsLoading(false)
@@ -42,12 +41,15 @@ const Sidebar = () => {
                     const isActive = pathname === link.route || pathname.startsWith(`${link.route}/`);
 
                     return (
-                        <Link
+                        <a
                             href={link.route}
                             key={link.label}
-                            className={cn('flex gap-4 items-center p-4 rounded-lg justify-start transition-colors hover:bg-zinc-300', {
+                            className={cn(
+                                'flex gap-4 items-center p-4 rounded-lg justify-start transition-colors hover:bg-zinc-300',
+                                {
                                 'bg-blue-1 hover:bg-blue-500': isActive,
-                            })}
+                                }
+                            )}
                         >
                             {/* <Image
                                 src={link.imgUrl}
@@ -58,7 +60,7 @@ const Sidebar = () => {
                             <p className='text-lg font-semibold max-lg:hidden'>
                                 {link.label}
                             </p>
-                        </Link>
+                        </a>
                     )
                 })}
             </div>

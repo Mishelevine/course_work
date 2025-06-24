@@ -81,6 +81,14 @@ const ResponsibleUserAddForm = () => {
       })
     })
     .catch((e) => {
+      const expectedErr = "Responsible user already exists";
+      if (e.response.status !== 400 || e.response.data.detail !== expectedErr) {
+          throw e;
+      }
+      setError("Ответственное лицо с указанными данными уже существует в системе")
+      setIsProcessing(false)
+    })
+    .catch((e) => {
       setError("Во время добавления записи произошла непредвиденная ошибка!")
       console.log("Unexpected error occured while adding row.")
       console.log(e)

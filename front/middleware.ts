@@ -8,7 +8,6 @@ async function GetAccessToken(req: NextRequest) {
         console.log("No access token!")
         return await RefreshAccessToken(req)
     }
-    debugger;
     try {
         const getUserInfo = await axios.get(API_URL + '/auth/mebytoken', {
             params: {

@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import axios from 'axios'
-import { API_URL } from '@/constants'
 import { Skeleton } from './ui/skeleton'
-import { useUser } from '@/hooks/use-user'
 
 type Tab = {
     value: string,

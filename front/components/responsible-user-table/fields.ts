@@ -8,14 +8,14 @@ export type DataArray = {
 
 export const textFields = [
   {
-    name: "first_name",
-    label: "Имя ответственного лица",
-    placeholder: "Имя добавляемого ответственного лица",
-  },
-  {
     name: "last_name",
     label: "Фамилия ответственного лица",
     placeholder: "Фамилия добавляемого ответственного лица",
+  },
+  {
+    name: "first_name",
+    label: "Имя ответственного лица",
+    placeholder: "Имя добавляемого ответственного лица",
   },
   {
     name: "paternity",
