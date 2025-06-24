@@ -68,7 +68,7 @@ async function RefreshAccessToken(req: NextRequest) {
 }
 
 async function SetCookieIfNeeded(res: NextResponse, setCookie: boolean, accessToken: string) {
-    const maxAgeMinutes = 1
+    const maxAgeMinutes = 60
 
     if (setCookie && accessToken) {
         res.cookies.set("Authorization", accessToken, {
