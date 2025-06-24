@@ -54,8 +54,8 @@ async def get_equipment_for_word(equipment_id: int) -> SEquipmentWithResponsible
                         last_building_adress = latest_status.building.building_address
                         if latest_status.responsible_user:
                             responsible_user_full_name = (
-                                f"{latest_status.responsible_user.first_name} "
                                 f"{latest_status.responsible_user.last_name} "
+                                f"{latest_status.responsible_user.first_name} "
                                 f"{latest_status.responsible_user.paternity}"
                             )
                             responsible_user_office = latest_status.responsible_user.office.office_name
@@ -109,8 +109,8 @@ async def get_all_equipment(user_role_id: int) -> list[SEquipmentWithResponsible
                         last_building_adress = latest_status.building.building_address
                         if latest_status.responsible_user:
                             responsible_user_full_name = (
-                                f"{latest_status.responsible_user.first_name} "
                                 f"{latest_status.responsible_user.last_name} "
+                                f"{latest_status.responsible_user.first_name} "
                                 f"{latest_status.responsible_user.paternity}"
                             )
                             responsible_user_office = latest_status.responsible_user.office.office_name
@@ -187,7 +187,7 @@ async def get_equipment_for_excel(user_role_id: int, equipment_list: List[SEquip
                         "Статус": latest_status.status_type.status_type_name if latest_status.status_type else None,
                         "Дата изменения статуса": latest_status.status_change_date,
                         "Подразделение": latest_status.responsible_user.office.office_name,
-                        "Ответственный": f"{latest_status.responsible_user.first_name} {latest_status.responsible_user.last_name} {latest_status.responsible_user.paternity}" if latest_status.responsible_user else None,
+                        "Ответственный": f"{latest_status.responsible_user.last_name} {latest_status.responsible_user.first_name} {latest_status.responsible_user.paternity}" if latest_status.responsible_user else None,
                         "Здание": latest_status.building.building_address if latest_status.building else None,
                         "Аудитория": latest_status.audience_id,
                     })
