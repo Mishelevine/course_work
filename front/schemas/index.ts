@@ -1,4 +1,16 @@
 import * as z from "zod";
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
+const dateSchema = z
+  .string()
+  .refine((val) => /^\d{2}\.\d{2}\.\d{4}$/.test(val), {
+    message: 'Дата должна быть в формате ДД.ММ.ГГГГ',
+  })
+  .refine((val) => dayjs(val, 'DD.MM.YYYY', true).isValid(), {
+    message: 'Некорректная дата',
+  });
 
 export const SignInSchema = z.object({
     username: z.string().min(1, {
@@ -48,15 +60,11 @@ export const CreateEventSchema = z.object({
     }).max(2000, {
         message: "Длина описания не может превышать 2000 символов"
     }),
-    starting_date: z
-        .string()
-        .regex(new RegExp('(^(31)[.](0[13578]|1[02])[.]((18|19|20)[0-9]{2})$)|(^(29|30)[.](01|0[3-9]|1[1-2])[.]((18|19|20)[0-9]{2})$)|(^(0[1-9]|1[0-9]|2[0-8])[.](0[1-9]|1[0-2])[.]((18|19|20)[0-9]{2})$)|(^(29)[.](02)[.](((18|19|20)(04|08|[2468][048]|[13579][26]))|2000)$)'), 'Введена некорректная дата'),
+    starting_date: dateSchema,
     starting_time: z
         .string()
         .regex(new RegExp('^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'), 'Введено некорректное время'),
-    ending_date: z
-        .string()
-        .regex(new RegExp('(^(31)[.](0[13578]|1[02])[.]((18|19|20)[0-9]{2})$)|(^(29|30)[.](01|0[3-9]|1[1-2])[.]((18|19|20)[0-9]{2})$)|(^(0[1-9]|1[0-9]|2[0-8])[.](0[1-9]|1[0-2])[.]((18|19|20)[0-9]{2})$)|(^(29)[.](02)[.](((18|19|20)(04|08|[2468][048]|[13579][26]))|2000)$)'), 'Введена некорректная дата'),
+    ending_date: dateSchema,
     ending_time: z
         .string()
         .regex(new RegExp('^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'), 'Введено некорректное время'),
@@ -108,10 +116,7 @@ export const SoftwareSchema = z.object({
     }),
     program_link: z.string(),
     version: z.string(),
-    version_date: z.string().regex(
-        new RegExp('^$|(^(31)[.](0[13578]|1[02])[.]((18|19|20)[0-9]{2})$)|(^(29|30)[.](01|0[3-9]|1[1-2])[.]((18|19|20)[0-9]{2})$)|(^(0[1-9]|1[0-9]|2[0-8])[.](0[1-9]|1[0-2])[.]((18|19|20)[0-9]{2})$)|(^(29)[.](02)[.](((18|19|20)(04|08|[2468][048]|[13579][26]))|2000)$)'),
-        'Некорректный формат даты'
-    ),
+    version_date: dateSchema,
     license_id: z.number().min(1, {
         message: "Пожалуйста, выберите лицензию"
     }),
@@ -129,10 +134,7 @@ export const ContractFormSchema = z.object({
     contract_number: z.string().min(1, {
         message: "Пожалуйста, введите номер договора"
     }),
-    contract_date: z.string().regex(
-        new RegExp('(^(31)[.](0[13578]|1[02])[.]((18|19|20)[0-9]{2})$)|(^(29|30)[.](01|0[3-9]|1[1-2])[.]((18|19|20)[0-9]{2})$)|(^(0[1-9]|1[0-9]|2[0-8])[.](0[1-9]|1[0-2])[.]((18|19|20)[0-9]{2})$)|(^(29)[.](02)[.](((18|19|20)(04|08|[2468][048]|[13579][26]))|2000)$)'),
-        'Некорректный формат даты'
-    )
+    contract_date: dateSchema,
 })
 
 export const LicenseFormSchema = z.object({
@@ -159,24 +161,21 @@ export const EquipmentSchema = z.object({
 
 export const EquipmentFormSchema = z.object({
     type_id: z.number().min(1, {
-        message: "Пожалуйста, выберите тип"
+        message: 'Пожалуйста, выберите тип',
     }),
     model: z.string().min(1, {
-        message: "Пожалуйста, введите модель"
+        message: 'Пожалуйста, введите модель',
     }),
     serial_number: z.string().min(1, {
-        message: "Пожалуйста, введите серийный номер"
+        message: 'Пожалуйста, введите серийный номер',
     }),
-    inventory_number: z.string().min(1, {
-        message: "Пожалуйста, введите инвентарный номер"
-    }).regex(
-        new RegExp('^[0-9]+$'),
-        "Некорректный формат инвентарного номера"
-    ),
-    accepted_date: z.string().regex(
-        new RegExp('(^(31)[.](0[13578]|1[02])[.]((18|19|20)[0-9]{2})$)|(^(29|30)[.](01|0[3-9]|1[1-2])[.]((18|19|20)[0-9]{2})$)|(^(0[1-9]|1[0-9]|2[0-8])[.](0[1-9]|1[0-2])[.]((18|19|20)[0-9]{2})$)|(^(29)[.](02)[.](((18|19|20)(04|08|[2468][048]|[13579][26]))|2000)$)'),
-        'Некорректный формат даты'
-    ),
+    inventory_number: z
+        .string()
+        .min(1, {
+        message: 'Пожалуйста, введите инвентарный номер',
+        })
+        .regex(/^[0-9]+$/, 'Некорректный формат инвентарного номера'),
+    accepted_date: dateSchema,
     network_name: z.string(),
     remarks: z.string(),
 })
